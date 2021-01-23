@@ -11,7 +11,8 @@ public class Boss_actions : MonoBehaviour
     private bool moving = false;
     private Vector3 _jumpFactor = new Vector3(0, 20, 0);
     private bool _jumped;
-
+    public GameObject sound;
+    private AudioSource source;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,8 @@ public class Boss_actions : MonoBehaviour
         _transform = GetComponent<Transform>();
         _direction = 0;
         _jumped = false;
+        sound = GameObject.Find("Sound");
+        source = GetComponent<AudioSource>();
         move_left();
 
     }
@@ -74,7 +77,7 @@ public class Boss_actions : MonoBehaviour
         {
             _direction = -1;
         }
-
+        source.Play();
         _jumped = true;
     }
 
@@ -82,6 +85,7 @@ public class Boss_actions : MonoBehaviour
     {
         if (collision.collider.tag == "Player")
         {
+            
             attacked();
         }
     }
