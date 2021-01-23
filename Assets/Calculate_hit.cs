@@ -28,7 +28,7 @@ public class Calculate_hit : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.attachedRigidbody == enemy_rb){
+        if(collision.collider.attachedRigidbody == enemy_rb && enemy_rb != null){
             collide = true;
         }
     }
