@@ -9,17 +9,19 @@ public class Calculate_hit : MonoBehaviour
     public Rigidbody player_rb;
     public Rigidbody enemy_rb;
 
+    public GameObject GameUI;
+
     public int player_health = 100;
     public int enemy_health = 100;
     
     bool collide = false;
     void Start()
     {
-
     }
 
     void FixedUpdate(){
-        if(collide){
+       if(collide){
+           GameUI.GetComponent<HealthManager>().UpdateEnemyScoreText(10);
             enemy_health -= 10;
         }
         collide = false;
