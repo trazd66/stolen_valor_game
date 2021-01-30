@@ -22,6 +22,7 @@ public class move : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             _rigibody.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+            Debug.Log(Input.GetButtonDown("Jump"));
         }
     }
 
