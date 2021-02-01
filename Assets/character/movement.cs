@@ -25,7 +25,7 @@ public class movement : MonoBehaviour
         _animator = GetComponent<Animator>();
         _animator.enabled = true;
         moving_Dirl = 0;
-        walking = false;
+        walking = false; 
     }
 
     // Update is called once per frame
@@ -39,8 +39,7 @@ public class movement : MonoBehaviour
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
         _controller.Move(move * Time.deltaTime * Speed);
         _animator.SetFloat("walking_direction", move.x);
-        _animator.SetInteger("walking", (int)move.x);
-        _animator.SetFloat("direction", move.x);
+        
         _velocity.y += Physics.gravity.y * Time.deltaTime * 1.5f;
         _controller.Move(_velocity * Time.deltaTime);
 
@@ -50,34 +49,32 @@ public class movement : MonoBehaviour
             _velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
             
         }
+        
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            _animator.SetBool("iswalking", true);
+
+            _animator.SetFloat("direction", Input.GetAxis("Horizontal"));
+
+            if (Input.GetAxis("Horizontal") > 0)
+            {
+                _animator.SetFloat("walking_direction", 1);
+            }
+            if (Input.GetAxis("Horizontal") < 0)
+            {
+                _animator.SetFloat("walking_direction", -1);
+            }
+
+
+        }
+
+
+        if (Input.GetAxis("Horizontal") == 0)
+        {
+            _animator.SetBool("iswalking", false);
+        }
 
         
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            //check if direction is op direction
-            moving_Dirl = 1;
-            walking = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            //check if direction is op direction
-            moving_Dirl = -1;
-            walking = true;
-        }
-
-        if (Input.GetKeyUp(KeyCode.D)||Input.GetKeyUp(KeyCode.A))
-        {
-            walking = false;
-        }
-
-        
-
-
-        if (! walking )
-        {
-            _animator.SetFloat("direction",moving_Dirl);
-        }
 
         // steering the character
 
