@@ -81,7 +81,6 @@ namespace Game_Control{
             if (Input.GetButtonDown("Jump"))
             {
                 _velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
-                Debug.Log(Input.GetButtonDown("Jump"));
             }
 
             //apply horizontal movement
@@ -96,9 +95,13 @@ namespace Game_Control{
             _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
             _character_controller.Move(_velocity * Time.deltaTime);
 
+            //for debugging
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Debug.Log(state_controller.curr_state);
+            }
 
         }
-
     }
 
 
