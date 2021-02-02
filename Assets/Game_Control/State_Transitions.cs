@@ -20,7 +20,7 @@ public interface IState_Transition_Func{
     /// <param name="duration"> duration of the state </param>
     /// <param name="input"> player input</param>
     /// <returns>true if the state has been changed </returns>
-    bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.Input input);
+    bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input);
 
     /// <summary>
     ///  Takes in a reference of the current state and the previous_states and the duration variable and the player input

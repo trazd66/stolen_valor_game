@@ -72,12 +72,12 @@ namespace Game_Control
             duration = 0;
         }
 
-        public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.Input input)
+        public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
 
             //an attack input has been issued
             //if we are already attacking, we won't change our state
-            if (input.HasFlag(Player_Input.Input.Attack))
+            if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
                 //if we aren't currently dodging/parrying/attacking, we will be moving into attack state
                 if (curr_state != (int)player_state.parrying || curr_state != (int)player_state.dodging || curr_state != (int)player_state.attacking)
@@ -97,7 +97,7 @@ namespace Game_Control
 
             // a jump input has been issued
             //process double jump if needed
-            if (input.HasFlag(Player_Input.Input.Jump))
+            if (input.HasFlag(Player_Input.PlayerInput.Jump))
             {
 
                 if (curr_state != (int)player_state.parrying ||
@@ -128,7 +128,7 @@ namespace Game_Control
             else
 
             //dodge or parry
-            if (input.HasFlag(Player_Input.Input.Dodge))
+            if (input.HasFlag(Player_Input.PlayerInput.Dodge))
             {
 
                 if (curr_state != (int)player_state.parrying ||
@@ -146,7 +146,7 @@ namespace Game_Control
             else
 
             //trying to parry
-            if (input.HasFlag(Player_Input.Input.Parry))
+            if (input.HasFlag(Player_Input.PlayerInput.Parry))
             {
 
                 if (curr_state != (int)player_state.parrying ||
@@ -163,7 +163,7 @@ namespace Game_Control
             }
 
             //trying to move
-            if (input.HasFlag(Player_Input.Input.Dash) || input.HasFlag(Player_Input.Input.Walk))
+            if (input.HasFlag(Player_Input.PlayerInput.Dash) || input.HasFlag(Player_Input.PlayerInput.Walk))
             {
 
                 if (curr_state != (int)player_state.parrying ||
@@ -173,7 +173,7 @@ namespace Game_Control
                 {
 
                     //if not performing any special action, allow movement
-                    int walk_or_run = (input.HasFlag(Player_Input.Input.Dash)) ? (int)player_state.running : (int)player_state.walking;
+                    int walk_or_run = (input.HasFlag(Player_Input.PlayerInput.Dash)) ? (int)player_state.running : (int)player_state.walking;
                     update_state(walk_or_run, 0, ref curr_state, ref prev_states, ref duration);
                     return true;
                 }

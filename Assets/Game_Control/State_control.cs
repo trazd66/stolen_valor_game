@@ -39,7 +39,7 @@ public class State_controller{
     /*
         Process the state controller using the transition function with the player input
      */
-    public bool process_state(Player_Input.Input input){
+    public bool process_state(Player_Input.PlayerInput input){
         return transition_function.process_state_with_player_input(ref curr_state,ref prev_states,ref state_duratin,input);
 
     }

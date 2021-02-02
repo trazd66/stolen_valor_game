@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Game_Control{
 
@@ -6,7 +7,7 @@ namespace Game_Control{
 public static class Player_Input{
     
     [Flags]
-    public enum Input{
+    public enum PlayerInput{
         None = 0,
         Walk = 256,
         Dash = 1,
@@ -24,9 +25,9 @@ public static class Player_Input{
     /// </summary>
     /// <param name="inputs"></param>
     /// <returns></returns>
-    public static Input get_input(params Input[] inputs){
-        Input input = Input.None;
-        for (int i = 0; i < inputs.Length; i++)
+    public static PlayerInput get_input(List<PlayerInput> inputs){
+        PlayerInput input = PlayerInput.None;
+        for (int i = 0; i < inputs.Count; i++)
         {
             input = input | inputs[i];            
         }
