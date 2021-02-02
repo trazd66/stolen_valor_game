@@ -8,9 +8,34 @@ namespace Game_Control{
     implement this interface for the boss AI and player state transitions
 */
 public interface IState_Transition_Func{
-    //Given the current state and the previous state and what the player input is, determine what the next state is
-    int process_state_with_player_input(int curr_state,List<int> prev_states, Player_Input input);
-    int process_state(int curr_state,List<int> prev_states);
+
+
+    /// <summary>
+    ///  Takes in a reference of the current state and the previous_states and the duration variable and the player input
+    ///  changes the states based on the input
+    ///  will modify the curr_state,prev_states and duration variable if state is changed
+    /// </summary>
+    /// <param name="curr_state">the current state </param>
+    /// <param name="prev_states"> list of previous states </param>
+    /// <param name="duration"> duration of the state </param>
+    /// <param name="input"> player input</param>
+    /// <returns>true if the state has been changed </returns>
+    bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.Input input);
+
+    /// <summary>
+    ///  Takes in a reference of the current state and the previous_states and the duration variable and the player input
+    ///  changes the states based on the input
+    ///  will modify the curr_state,prev_states and duration variable if state is changed
+    /// </summary>
+    /// <param name="curr_state">the current state </param>
+    /// <param name="prev_states"> list of previous states </param>
+    /// <param name="duration"> duration of the state </param>
+    /// <returns>true if the state has been changed </returns>
+    bool process_state(ref int curr_state, ref List<int> prev_states, ref float duration);
+
+
+    
+    void initialize(ref int curr_state, ref List<int> prev_states, ref float duration);
 }
 
 

@@ -7,33 +7,41 @@ namespace Game_Control{
 
 public class State_controller{
 
-    public int curr_state{get; private set;}
+    public int curr_state;
 
-    public List<int> prev_states{get; private set;}
+    /// <summary>
+    /// the state timer determines how long the current state lasts
+    /// </summary>
+    public float state_duratin;
+
+    public List<int> prev_states;
+
+    public State_controller(){
+        prev_states = new List<int>(200);
+    }
+
+    public void initialize(IState_Transition_Func transition_function){
+        this.transition_function = transition_function;
+        transition_function.initialize(ref curr_state,ref prev_states,ref state_duratin);
+    }
 
 
-
-    private IState_Transition_Func transition_function{get; set;}
+    private IState_Transition_Func transition_function;
 
 
     /*
         Process the state controller using the transition function
      */
-    public int process_state(){
-        int new_state = transition_function.process_state(curr_state,prev_states);
-        prev_states.Add(curr_state);
-        curr_state = new_state;        
-        return curr_state;
+    public bool process_state(){
+        return transition_function.process_state(ref curr_state,ref prev_states,ref state_duratin);
     }
 
     /*
         Process the state controller using the transition function with the player input
      */
-    public int process_state(Player_Input input){
-        int new_state = transition_function.process_state_with_player_input(curr_state,prev_states,input);
-        prev_states.Add(curr_state);
-        curr_state = new_state;        
-        return curr_state;
+    public bool process_state(Player_Input.Input input){
+        return transition_function.process_state_with_player_input(ref curr_state,ref prev_states,ref state_duratin,input);
+
     }
     
 }
