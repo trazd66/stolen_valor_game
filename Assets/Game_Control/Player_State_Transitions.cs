@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Game_Control
 {
 
-
+    //TODO: use _character_controller.isGrounded to check when player is airborne or not
 
     /*
     The player and the enemy are always in a state (pretty similar to animation states, but it contains other informaiton as well)
