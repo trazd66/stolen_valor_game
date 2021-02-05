@@ -39,7 +39,7 @@ namespace Game_Control
             //boss is idle and has not attacked in three seconds
             if (curr_state == (int)enemy1_state.idle && duration <= 0)
             {
-                float rand = Random.value;
+                float rand = Random.value * 3;
 
                 //perform run attack in appropriate direction
                 if (rand < 1)
@@ -47,24 +47,22 @@ namespace Game_Control
                     if (direction_facing == 0)
                     {
                         update_state((int)enemy1_state.run_attack_left, 1.6f, ref curr_state, ref prev_states, ref duration);
-                        Debug.Log("state changed 2");
                     }
                     else
                     {
                         update_state((int)enemy1_state.run_attack_right, 1.6f, ref curr_state, ref prev_states, ref duration);
-                        Debug.Log("state changed 1");
                     }
                 }
                 //perform front attack
                 else if (rand < 2)
                 {
-                    update_state((int)enemy1_state.front_attack, 0.5f, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)enemy1_state.front_attack, 1.07f, ref curr_state, ref prev_states, ref duration);
                     Debug.Log("state changed 3");
                 }
                 //perform laser attack
                 else
                 {
-                    update_state((int)enemy1_state.laser_attack, 0.5f, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)enemy1_state.laser_attack, 1.25f, ref curr_state, ref prev_states, ref duration);
                     Debug.Log("state changed 4");
                 }
                 state_changed = true;
