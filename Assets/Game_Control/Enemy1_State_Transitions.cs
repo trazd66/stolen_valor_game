@@ -57,13 +57,13 @@ namespace Game_Control
                 else if (rand < 2)
                 {
                     update_state((int)enemy1_state.front_attack, 1.07f, ref curr_state, ref prev_states, ref duration);
-                    Debug.Log("state changed 3");
+                    //Debug.Log("state changed 3");
                 }
                 //perform laser attack
                 else
                 {
                     update_state((int)enemy1_state.laser_attack, 1.25f, ref curr_state, ref prev_states, ref duration);
-                    Debug.Log("state changed 4");
+                    //Debug.Log("state changed 4");
                 }
                 state_changed = true;
 
@@ -73,7 +73,7 @@ namespace Game_Control
             else if (curr_state == (int)enemy1_state.run_attack_right && duration <= 0)
             {
                 update_state((int)enemy1_state.idle, 3.0f, ref curr_state, ref prev_states, ref duration);
-                Debug.Log("state changed 0");
+                //Debug.Log("state changed 0");
                 direction_facing = 0;
                 state_changed = true;
             }
@@ -81,7 +81,7 @@ namespace Game_Control
             else if (curr_state == (int)enemy1_state.run_attack_left && duration <= 0)
             {
                 update_state((int)enemy1_state.idle, 3.0f, ref curr_state, ref prev_states, ref duration);
-                Debug.Log("state changed 0");
+                //Debug.Log("state changed 0");
                 direction_facing = 1;
                 state_changed = true;
             }
@@ -89,14 +89,14 @@ namespace Game_Control
             else if (curr_state == (int)enemy1_state.front_attack && duration <= 0)
             {
                 update_state((int)enemy1_state.idle, 3.0f, ref curr_state, ref prev_states, ref duration);
-                Debug.Log("state changed 0");
+                //Debug.Log("state changed 0");
                 state_changed = true;
             }
             //boss has completed laser attack
             else if (curr_state == (int)enemy1_state.laser_attack && duration <= 0)
             {
                 update_state((int)enemy1_state.idle, 3.0f, ref curr_state, ref prev_states, ref duration);
-                Debug.Log("state changed 0");
+                //Debug.Log("state changed 0");
                 state_changed = true;
             }
             else
