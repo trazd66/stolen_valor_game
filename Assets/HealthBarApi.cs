@@ -88,4 +88,14 @@ public class HealthBarApi : MonoBehaviour
             Character_health += healPoint;
         }
     }
+
+    public void set_character_Max(float max_heal)
+    {
+        Character_maxHealth = max_heal;
+    }
+
+    public void set_boss_Max(float max_heal)
+    {
+        Boss_maxHealth = max_heal;
+    }
 }
