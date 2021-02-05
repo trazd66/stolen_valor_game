@@ -17,7 +17,8 @@ public class State_controller{
     public List<int> prev_states;
 
     public State_controller(){
-        prev_states = new List<int>(200);
+        prev_states = new List<int>(200); //TODO: make a new class to use here instead of List, that automatically removes old states from the bottom of the stack so that we don't waste
+                                          //memory holding thousands of previous states
     }
 
     public void initialize(IState_Transition_Func transition_function){

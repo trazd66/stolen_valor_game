@@ -80,7 +80,7 @@ namespace Game_Control{
             //apply upwards momentum when jumping
             if (Input.GetButtonDown("Jump"))
             {
-                _velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
+                _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
             }
 
             //apply horizontal movement
