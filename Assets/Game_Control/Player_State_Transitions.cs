@@ -19,6 +19,8 @@ namespace Game_Control
         running,
         jumping,
         attacking,
+        dash_attack,
+        jump_attack,
         dodging,
         attacked,
         parrying,
@@ -48,6 +50,14 @@ namespace Game_Control
         float dodge_timer;
         float parry_cooldown = 1.0f;
         float parry_timer;
+
+        CharacterController player_characterController;
+        // CharacterController enemy_characterController;
+
+
+        public Player_State_Transition_Func(CharacterController player){
+            player_characterController = player;
+        }
 
 
         /// <summary>
@@ -80,9 +90,18 @@ namespace Game_Control
             if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
                 //if we aren't currently dodging/parrying/attacking, we will be moving into attack state
-                if (curr_state != (int)player_state.parrying || curr_state != (int)player_state.dodging || curr_state != (int)player_state.attacking)
+                if (curr_state != (int)player_state.parrying && 
+                curr_state != (int)player_state.dodging && 
+                curr_state != (int)player_state.attacking)
                 {
-                    update_state((int)player_state.attacking, 0, ref curr_state, ref prev_states, ref duration);
+                    if(curr_state == (int)player_state.jumping){
+                        update_state((int)player_state.jump_attack, 0, ref curr_state, ref prev_states, ref duration);
+                    }else 
+                    if(curr_state == (int)player_state.running){
+                        update_state((int)player_state.dash_attack, 0, ref curr_state, ref prev_states, ref duration);
+                    }else{
+                        update_state((int)player_state.attacking, 0, ref curr_state, ref prev_states, ref duration);
+                    }
                     return true;
                 }
                 else
@@ -100,23 +119,25 @@ namespace Game_Control
             if (input.HasFlag(Player_Input.PlayerInput.Jump))
             {
 
-                if (curr_state != (int)player_state.parrying ||
-                    curr_state != (int)player_state.dodging ||
-                    curr_state != (int)player_state.attacking)
+                if (curr_state == (int)player_state.idle ||
+                    curr_state == (int)player_state.walking ||
+                    curr_state == (int)player_state.running)
                 {
+                    Debug.Log("curr_state : "+curr_state);
 
                     //start a new jump
                     jump_count = 1;
-                    update_state((int)player_state.jumping, jump_time, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)player_state.jumping, 0, ref curr_state, ref prev_states, ref duration);
 
                 }
                 else
-                if (curr_state == (int)player_state.jumping && jump_count < maximum_jump_count)
+                if (curr_state == (int)player_state.jumping && jump_count < 2)
                 {
                     //another jump is allowed
                     prev_states.Add(curr_state);
                     jump_count++;
-                    duration += jump_time;
+                    duration = 0;
+                    Debug.Log("jump count : "+jump_count);
                 }
                 else
                 {
@@ -131,9 +152,9 @@ namespace Game_Control
             if (input.HasFlag(Player_Input.PlayerInput.Dodge))
             {
 
-                if (curr_state != (int)player_state.parrying ||
-                    curr_state != (int)player_state.dodging ||
-                    curr_state != (int)player_state.attacking)
+                if (curr_state == (int)player_state.idle ||
+                    curr_state == (int)player_state.walking ||
+                    curr_state == (int)player_state.running)
                 {
                     //dodge!
 
@@ -149,9 +170,9 @@ namespace Game_Control
             if (input.HasFlag(Player_Input.PlayerInput.Parry))
             {
 
-                if (curr_state != (int)player_state.parrying ||
-                    curr_state != (int)player_state.dodging ||
-                    curr_state != (int)player_state.attacking)
+                if (curr_state == (int)player_state.idle ||
+                    curr_state == (int)player_state.walking ||
+                    curr_state == (int)player_state.running)
                 {
                     //parry!
 
@@ -166,10 +187,9 @@ namespace Game_Control
             if (input.HasFlag(Player_Input.PlayerInput.Dash) || input.HasFlag(Player_Input.PlayerInput.Walk))
             {
 
-                if (curr_state != (int)player_state.parrying ||
-                    curr_state != (int)player_state.dodging ||
-                    curr_state != (int)player_state.attacking ||
-                    curr_state != (int)player_state.jumping)
+                if (curr_state == (int)player_state.idle ||
+                    curr_state == (int)player_state.walking ||
+                    curr_state == (int)player_state.running)
                 {
 
                     //if not performing any special action, allow movement
@@ -186,16 +206,25 @@ namespace Game_Control
         {
 
             //set all states back to idle once their duration ends
-            if (curr_state == (int)player_state.parrying ||
-                    curr_state == (int)player_state.dodging ||
-                    curr_state == (int)player_state.attacking ||
-                    curr_state == (int)player_state.jumping)
+            if (!(curr_state == (int)player_state.jumping))
             {
                 if (duration <= 0)
                 {
                     update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
                     return true;
+                }else{
+                    duration -= Time.deltaTime;
+                    return false;
                 }
+            }else            
+            if(curr_state == (int)player_state.jumping && player_characterController.isGrounded){
+                Debug.Log("landed");
+                update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
+                return true;
+            }
+            if(curr_state == (int) player_state.dash_attack){
+                    update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
+                    return true;
             }
 
             return false;
