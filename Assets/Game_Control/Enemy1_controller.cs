@@ -136,11 +136,11 @@ namespace Game_Control{
             //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
 
-            float final_damage = 0;
+            int final_damage = 0;
 
             foreach (Collider c in cols)
             {
-                float damage = 0;
+                int damage = 0;
 
                 //add damage based on what's attacking
                 switch (col.name)
@@ -183,7 +183,7 @@ namespace Game_Control{
             //return true if attack landed, false otherwise
             if (final_damage > 0)
             {
-                Debug.Log(final_damage);
+                cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= final_damage;
                 disable_timer = 0.5f;
             }
         }

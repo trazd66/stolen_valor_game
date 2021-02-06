@@ -10,24 +10,30 @@ public class HealthBarApi : MonoBehaviour
     public float Boss_health, Boss_maxHealth = 100;
     public float Character_health, Character_maxHealth = 100;
 
+    public GameObject Boss;
+    public GameObject Player;
+
     private float lerpSpeed;
     // Start is called before the first frame update
     void Start()
     {
-        Boss_health = Boss_maxHealth;
-        Character_health = Character_maxHealth;
+        Boss_health = Boss.GetComponent<HealthInfo>().max_health;
+        Character_health = Player.GetComponent<HealthInfo>().max_health;
     }
 
     // Update is called once per frame
     void Update()
     {
         lerpSpeed = 3f * Time.deltaTime;
+        Boss_health = Boss.GetComponent<HealthInfo>().curr_health;
+        Character_health = Player.GetComponent<HealthInfo>().curr_health;
         HealthBarFiller();
         ColorChanger();
     }
 
     void HealthBarFiller()
-    {
+    {   
+        
         BossHealthBar.fillAmount = Mathf.Lerp(BossHealthBar.fillAmount, Boss_health / Boss_maxHealth, lerpSpeed);
         CharacterHealthBar.fillAmount = Mathf.Lerp(CharacterHealthBar.fillAmount, Character_health / Character_maxHealth, lerpSpeed);
     }

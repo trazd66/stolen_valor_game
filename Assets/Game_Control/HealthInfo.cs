@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HealthInfo : MonoBehaviour
 {
-    public int max_health = 200;
-    public int curr_health = 200;
+    public int max_health;
+    public int curr_health;
     // Start is called before the first frame update
     void Start()
     {
