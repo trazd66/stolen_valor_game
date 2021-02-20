@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -12,6 +13,10 @@ namespace Game_Control{
 
         public float Speed = 5.0f;
         public float JumpHeight = 1.5f;
+
+        private float dodge_horizontal;
+        private float dodge_vertical;
+        private float dodge_speed = 8.0f;
 
 
         private CharacterController _character_controller;
@@ -64,8 +69,13 @@ namespace Game_Control{
                 obj.transform.localPosition = new Vector3(0,0.7f,0);
 
             }
-            //checked if left or right are inputed
-            if (Input.GetAxis("Horizontal") != 0)
+            //check if player has inputed dash
+            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetMouseButtonDown(1))
+            {
+                inputs.Add(Player_Input.PlayerInput.Dodge);
+            }
+            //otherwise check if left or right are inputed
+            else if (Input.GetAxis("Horizontal") != 0)
             {
                 inputs.Add(Player_Input.PlayerInput.Dash);
             }
@@ -85,20 +95,41 @@ namespace Game_Control{
             Player_Input.PlayerInput total_input = Player_Input.get_input(inputs);
 
             //call the appropriate process_state
-            bool processed = false;
-            if (total_input == Player_Input.PlayerInput.None)
-            {
-                processed = state_controller.process_state();
-            }
-            else
-            {
-                processed = state_controller.process_state(total_input);
-            }
+            bool state_changed = false;
+            state_changed = state_controller.process_state(total_input);
 
+            //check if dodge has been initiated
+
+            if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
+            {
+                dodge_horizontal = Math.Abs(Input.GetAxis("Horizontal"));
+                dodge_vertical = Math.Abs(Input.GetAxis("Vertical"));
+
+                if(dodge_vertical > dodge_horizontal)
+                {
+                    dodge_horizontal = dodge_horizontal * 1 / dodge_vertical;
+                    dodge_vertical = 1;
+                }
+                else
+                {
+                    dodge_vertical = dodge_vertical * 1 / dodge_horizontal;
+                    dodge_horizontal = 1;
+                }
+
+                if (Input.GetAxis("Horizontal") < 0)
+                {
+                    dodge_horizontal = dodge_horizontal * -1;
+                }
+                if (Input.GetAxis("Vertical") < 0)
+                {
+                    dodge_vertical = dodge_vertical * -1;
+                }
+
+            }
 
             //apply movement to the player
 
-
+            Vector3 move = new Vector3(0,0,0);
 
             //stop downward movement when character lands
             if (_character_controller.isGrounded && _velocity.y < 0){
@@ -106,18 +137,26 @@ namespace Game_Control{
             }
 
             //apply upwards momentum when jumping
-            if (Input.GetButtonDown("Jump") && processed)
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.jumping && state_changed)
             {
                 _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
             }
 
-            //apply horizontal movement
-            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
-            _character_controller.Move(move * Time.deltaTime * Speed);
+            //apply dodge movement to the player
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
+            {
+                move += new Vector3(dodge_horizontal, dodge_vertical, 0) * Time.deltaTime * dodge_speed;
+            }
+            //otherwise apply regular movement
+            else
+            {
+                //apply horizontal movement
+                move += new Vector3(Input.GetAxis("Horizontal"), 0, 0) * Time.deltaTime * Speed;
 
-            // steering the character
-            if (move != Vector3.zero)
-                transform.right = move;
+                // steering the character
+                if (move != Vector3.zero)
+                    transform.right = move;
+            }
 
             //attack
             attack_controller.process_state(total_input);
@@ -135,7 +174,9 @@ namespace Game_Control{
             
             //apply gravity
             _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
-            _character_controller.Move(_velocity * Time.deltaTime);
+
+            //apply all movement
+            _character_controller.Move(move + (_velocity * Time.deltaTime));
 
             //for debugging
             if (Input.GetKeyDown(KeyCode.F))
