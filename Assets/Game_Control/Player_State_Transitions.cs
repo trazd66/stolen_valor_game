@@ -33,7 +33,7 @@ namespace Game_Control
             parry_fail
         }
 
-        float dodge_duration = 0.25f;
+        float dodge_duration = 0.1f;
         float parry_duration;
 
         int maximum_jump_count = 1;
@@ -82,16 +82,25 @@ namespace Game_Control
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
 
+            //leave jump state when landed
             if (curr_state == (int)player_state.jumping && player_characterController.isGrounded)
             {
                 update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
-                return true;
+            }
+            //exit attacking state if attack input is no longer being recieved
+            if (curr_state == (int)player_state.attacking && !(input.HasFlag(Player_Input.PlayerInput.Attack)))
+            {
+                update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
             }
 
+            //temporary, to prevent control locking while these attacks are unimplemented
             if (curr_state == (int)player_state.dash_attack)
             {
                 update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
-                return true;
+            }
+            if (curr_state == (int)player_state.jump_attack)
+            {
+                update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
             }
 
             //decrement dodge duration timer, or set state to idle if it has ended
@@ -99,8 +108,13 @@ namespace Game_Control
             {
                 if (duration <= 0)
                 {
-                    update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
-                    return true;
+                    if (player_characterController.isGrounded) { 
+                        update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
+                    }
+                    else
+                    {
+                        update_state((int)player_state.jumping, 0, ref curr_state, ref prev_states, ref duration);
+                    }
                 }
                 else
                 {
@@ -184,7 +198,6 @@ namespace Game_Control
                 {
                     //dodge!
 
-                    //TODO: check for cooldown using a timer
                     update_state((int)player_state.dodging, dodge_duration, ref curr_state, ref prev_states, ref duration);
                     return true;
                 }

@@ -16,7 +16,7 @@ namespace Game_Control{
 
         private float dodge_horizontal;
         private float dodge_vertical;
-        private float dodge_speed = 8.0f;
+        private float dodge_speed = 12.0f;
 
 
         private CharacterController _character_controller;
@@ -61,6 +61,7 @@ namespace Game_Control{
             // and also move the player
 
             List<Player_Input.PlayerInput> inputs = new List<Player_Input.PlayerInput>();//TODO: remove this as it's costly
+            List<Player_Input.PlayerInput> attack_inputs = new List<Player_Input.PlayerInput>();
 
 
             if (Input.GetKeyDown(KeyCode.Q) && !additional_part_0_toggle){
@@ -69,32 +70,44 @@ namespace Game_Control{
                 obj.transform.localPosition = new Vector3(0,0.7f,0);
 
             }
+
             //check if player has inputed dash
             if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetMouseButtonDown(1))
             {
                 inputs.Add(Player_Input.PlayerInput.Dodge);
+                attack_inputs.Add(Player_Input.PlayerInput.Dodge);
             }
             //otherwise check if left or right are inputed
             else if (Input.GetAxis("Horizontal") != 0)
             {
                 inputs.Add(Player_Input.PlayerInput.Dash);
+                attack_inputs.Add(Player_Input.PlayerInput.Dash);
             }
 
             //check if jump is inputed
             if (Input.GetButtonDown("Jump"))
             {
                 inputs.Add((Player_Input.PlayerInput.Jump));
+                attack_inputs.Add(Player_Input.PlayerInput.Dash);
             }
 
-            //check if attack is inputed
-            if(Input.GetMouseButtonDown(0)){
+            //check if attack is inputted
+            if(Input.GetMouseButtonDown(0))
+            {
+                inputs.Add(Player_Input.PlayerInput.Attack);
+                attack_inputs.Add(Player_Input.PlayerInput.Attack);
+            }
+            //if attack is active, only send attack signal to player controller
+            else if (attack_controller.curr_state != (int)Attack_State_Transition_Func.attack_state.not_attacking)
+            {
                 inputs.Add(Player_Input.PlayerInput.Attack);
             }
 
             //get a single PlayerInput to represent the totality of inputs
             Player_Input.PlayerInput total_input = Player_Input.get_input(inputs);
+            Player_Input.PlayerInput total_attack_input = Player_Input.get_input(attack_inputs);
 
-            //call the appropriate process_state
+            //call process_state
             bool state_changed = false;
             state_changed = state_controller.process_state(total_input);
 
@@ -159,7 +172,7 @@ namespace Game_Control{
             }
 
             //attack
-            attack_controller.process_state(total_input);
+            attack_controller.process_state(total_attack_input);
             attack_controller.process_state();
 
             if(attack_controller.curr_state != (int) Attack_State_Transition_Func.attack_state.not_attacking){
@@ -173,7 +186,11 @@ namespace Game_Control{
             }
             
             //apply gravity
-            _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
+            if (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.dodging)
+            {
+                _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
+            }
+            
 
             //apply all movement
             _character_controller.Move(move + (_velocity * Time.deltaTime));

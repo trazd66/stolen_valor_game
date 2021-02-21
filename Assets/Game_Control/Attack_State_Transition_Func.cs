@@ -22,7 +22,7 @@ namespace Game_Control
         }
 
 
-        private float basic_attack_interval = 0.8f;
+        private float basic_attack_interval = 3.0f;
         private float jump_attack_interval = 0.8f;
         private float dash_attack_interval = 0.8f;
 
@@ -58,11 +58,7 @@ namespace Game_Control
                         if(curr_state < 5){
                             curr_state++;
                             duration = basic_attack_interval;
-                        }else 
-                        if (curr_state == 5){
-                            curr_state = 1;
-                            duration = basic_attack_interval;
-                        }
+                        } 
                     }else 
                     //dash attack
                     if(atk == (int) (Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack)){
@@ -87,17 +83,29 @@ namespace Game_Control
                 }
 
             }
+            else
+            {
+                duration -= Time.deltaTime;
+            }
             return false;
         }
 
         //add input to queue, that's it
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
-            if(input.HasFlag(Player_Input.PlayerInput.Attack)){
+            //enqueue attack if attack queue is not full
+            if(input.HasFlag(Player_Input.PlayerInput.Attack) && attack_queue.Count <= 4){
                 attack_queue.Enqueue((int)input);
                 return true;
-            }else 
-            if (!(input == Player_Input.PlayerInput.None)){
+            }else
+            //do nothing if attack is inputted and attack queue is full
+            if (input.HasFlag(Player_Input.PlayerInput.Attack))
+            {
+                return false;
+            }else
+            //clear queue if non-attack action is inputted, and store what action that is
+            if (!(input == Player_Input.PlayerInput.None) && attack_queue.Count > 0)
+            {
                 attack_queue.Clear();
             }
             return false;
