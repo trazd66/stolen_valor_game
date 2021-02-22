@@ -8,8 +8,6 @@ namespace Game_Control{
     {
         State_controller state_controller;
 
-        float disable_timer = 0f;
-
         float run_attack_speed = 5f;
         float front_attack_speed = 1.5f;
         float laser_attack_speed = 8f;
@@ -115,12 +113,8 @@ namespace Game_Control{
             LaunchAttack(AttackHitboxes[0]);
             LaunchAttack(AttackHitboxes[1]);
 
-
-            //deincrement disable timer (invincibility frames for player)
-            if (disable_timer > 0f)
-            {
-                disable_timer -= Time.deltaTime;
-            }
+            //uncomment when you want to use the test attack
+            //LaunchAttack(AttackHitboxes[4]);
 
 
         }
@@ -133,7 +127,7 @@ namespace Game_Control{
         private void LaunchAttack(Collider col)
         {
             //check if attacking is disabled (invincibility period for player)
-            if (disable_timer > 0f)
+            if (ui.get_player_invincible())
             {
                 return;
             }
@@ -161,6 +155,9 @@ namespace Game_Control{
                         break;
                     case "Laser":
                         damage += 50;
+                        break;
+                    case "TestDamage":
+                        damage += 10000;
                         break;
                     default:
                         Debug.Log("Unable to identify attack, make sure switch case matches.");
@@ -190,7 +187,7 @@ namespace Game_Control{
             {
                 //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= final_damage;
                 ui.CharDamage(final_damage);
-                disable_timer = 0.5f;
+                ui.set_player_invincible(0.5f);
             }
         }
     }

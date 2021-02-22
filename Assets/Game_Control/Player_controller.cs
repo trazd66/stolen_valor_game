@@ -128,6 +128,8 @@ namespace Game_Control{
                 dodge_horizontal = Math.Abs(Input.GetAxis("Horizontal"));
                 dodge_vertical = Math.Abs(Input.GetAxis("Vertical"));
 
+                ui.set_player_invincible(0.2f);
+
                 if(dodge_vertical > dodge_horizontal)
                 {
                     dodge_horizontal = dodge_horizontal * 1 / dodge_vertical;
@@ -150,9 +152,9 @@ namespace Game_Control{
 
             }
 
-            //apply colour
 
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
+            //apply colour
+            if (ui.get_player_invincible())
             {
                 for (int i = 0; i < PlayerVisuals.Length; i++)
                 {
@@ -166,6 +168,7 @@ namespace Game_Control{
                     PlayerVisuals[i].material.SetColor("_Color", Color.green);
                 }
             }
+            
 
             //apply movement to the player
 
@@ -203,7 +206,7 @@ namespace Game_Control{
             attack_controller.process_state(total_attack_input);
             attack_controller.process_state();
 
-            if(attack_controller.curr_state != (int) Attack_State_Transition_Func.attack_state.not_attacking){
+            if(attack_controller.curr_state != (int) Attack_State_Transition_Func.attack_state.not_attacking && !(ui.get_enemy_invincible())){
                 Collider col  = AttackHitboxes[0];
                  //check what Colliders on the PlayerHitbox layer overlap col
                 Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));

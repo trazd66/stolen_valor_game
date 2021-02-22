@@ -16,6 +16,9 @@ public class HealthBarApi : MonoBehaviour
     private bool player_invincible = false;
     private bool enemy_invincible = false;
 
+    private float player_invincible_timer = 0f;
+    private float enemy_invincible_timer = 0f;
+
     private float lerpSpeed;
     // Start is called before the first frame update
     void Start()
@@ -32,6 +35,29 @@ public class HealthBarApi : MonoBehaviour
         //Character_health = Player.GetComponent<HealthInfo>().curr_health;
         HealthBarFiller();
         ColorChanger();
+
+        if (player_invincible_timer > 0)
+        {
+            player_invincible_timer -= Time.deltaTime;
+            
+            if (player_invincible_timer <= 0)
+            {
+                player_invincible = false;
+                player_invincible_timer = 0f;
+            }
+        }
+
+        if (enemy_invincible_timer > 0)
+        {
+            enemy_invincible_timer -= Time.deltaTime;
+
+            if (enemy_invincible_timer <= 0)
+            {
+                enemy_invincible = false;
+                enemy_invincible_timer = 0f;
+            }
+        }
+
     }
 
     void HealthBarFiller()
@@ -118,13 +144,15 @@ public class HealthBarApi : MonoBehaviour
         return enemy_invincible;
     }
 
-    public void set_player_invincible(bool new_invincible)
+    public void set_player_invincible(float timer)
     {
-        player_invincible = new_invincible;
+        player_invincible = true;
+        player_invincible_timer = timer;
     }
 
-    public void set_enemy_invincible(bool new_invincible)
+    public void set_enemy_invincible(float timer)
     {
-        enemy_invincible = new_invincible;
+        enemy_invincible = true;
+        enemy_invincible_timer = timer;
     }
 }
