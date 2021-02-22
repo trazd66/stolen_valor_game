@@ -22,8 +22,12 @@ namespace Game_Control{
         private CharacterController _character_controller;
         // private Rigidbody rb;
         private Vector3 _velocity;
-        
+
+        public GameObject GameUI;
+        private HealthBarApi ui;
+
         public Collider[] AttackHitboxes;
+        public Renderer[] PlayerVisuals;
 
         State_controller state_controller;
         State_controller attack_controller;
@@ -37,6 +41,7 @@ namespace Game_Control{
         void Start()
         {
             _character_controller = GetComponent<CharacterController>();
+            ui = GameUI.GetComponent<HealthBarApi>();
 
             state_controller = new State_controller();
             state_controller.initialize(new Player_State_Transition_Func(_character_controller));
@@ -44,9 +49,14 @@ namespace Game_Control{
             attack_controller = new State_controller();
             attack_controller.initialize(new Attack_State_Transition_Func());
 
+            //remove this when someone figures out how to change the default colour in unity lol
+            for(int i = 0; i < PlayerVisuals.Length; i++)
+            {
+                PlayerVisuals[i].material.SetColor("_Color", Color.green);
+            }
             
 
-            }
+        }
 
         void FixedUpdate(){
         }
@@ -140,6 +150,23 @@ namespace Game_Control{
 
             }
 
+            //apply colour
+
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.white);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.green);
+                }
+            }
+
             //apply movement to the player
 
             Vector3 move = new Vector3(0,0,0);
@@ -155,13 +182,14 @@ namespace Game_Control{
                 _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
             }
 
-            //apply dodge movement to the player
+            //apply dodge movement and colourto the player
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
             {
                 move += new Vector3(dodge_horizontal, dodge_vertical, 0) * Time.deltaTime * dodge_speed;
+
             }
             //otherwise apply regular movement
-            else
+            else if (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.attacking)
             {
                 //apply horizontal movement
                 move += new Vector3(Input.GetAxis("Horizontal"), 0, 0) * Time.deltaTime * Speed;
@@ -181,7 +209,8 @@ namespace Game_Control{
                 Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
                 if(cols.Length > 0){
                     Debug.Log("hit");
-                    cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
+                    //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
+                    ui.BossDamage(10f);
                 }
             }
             

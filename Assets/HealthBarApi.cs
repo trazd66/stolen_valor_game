@@ -7,11 +7,14 @@ public class HealthBarApi : MonoBehaviour
     public Image BossHealthBar;
     public Image CharacterHealthBar;
 
-    public float Boss_health, Boss_maxHealth = 100;
-    public float Character_health, Character_maxHealth = 100;
+    public float Boss_health, Boss_maxHealth;
+    public float Character_health, Character_maxHealth;
 
     public GameObject Boss;
     public GameObject Player;
+
+    private bool player_invincible = false;
+    private bool enemy_invincible = false;
 
     private float lerpSpeed;
     // Start is called before the first frame update
@@ -25,8 +28,8 @@ public class HealthBarApi : MonoBehaviour
     void Update()
     {
         lerpSpeed = 3f * Time.deltaTime;
-        Boss_health = Boss.GetComponent<HealthInfo>().curr_health;
-        Character_health = Player.GetComponent<HealthInfo>().curr_health;
+        //Boss_health = Boss.GetComponent<HealthInfo>().curr_health;
+        //Character_health = Player.GetComponent<HealthInfo>().curr_health;
         HealthBarFiller();
         ColorChanger();
     }
@@ -103,5 +106,25 @@ public class HealthBarApi : MonoBehaviour
     public void set_boss_Max(float max_heal)
     {
         Boss_maxHealth = max_heal;
+    }
+
+    public bool get_player_invincible()
+    {
+        return player_invincible;
+    }
+
+    public bool get_enemy_invincible()
+    {
+        return enemy_invincible;
+    }
+
+    public void set_player_invincible(bool new_invincible)
+    {
+        player_invincible = new_invincible;
+    }
+
+    public void set_enemy_invincible(bool new_invincible)
+    {
+        enemy_invincible = new_invincible;
     }
 }

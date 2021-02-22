@@ -14,6 +14,9 @@ namespace Game_Control{
         float front_attack_speed = 1.5f;
         float laser_attack_speed = 8f;
 
+        public GameObject GameUI;
+        private HealthBarApi ui;
+
         public GameObject[] AttackObjects;
 
 
@@ -25,6 +28,8 @@ namespace Game_Control{
         {
             state_controller = new State_controller();
             state_controller.initialize(new Enemy1_State_Transition_Func());
+
+            ui = GameUI.GetComponent<HealthBarApi>();
 
         }
 
@@ -183,7 +188,8 @@ namespace Game_Control{
             //return true if attack landed, false otherwise
             if (final_damage > 0)
             {
-                cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= final_damage;
+                //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= final_damage;
+                ui.CharDamage(final_damage);
                 disable_timer = 0.5f;
             }
         }
