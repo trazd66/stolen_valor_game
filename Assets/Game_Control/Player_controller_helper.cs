@@ -72,7 +72,7 @@ namespace Game_Control
 
             // }
             //Does the same thing as above
-            float normalize = Math.Max(horizontal,vertical);
+            float normalize = Math.Abs(Math.Max(horizontal,vertical));
             return new Vector3(horizontal/normalize,vertical/normalize,0);
         }
 
