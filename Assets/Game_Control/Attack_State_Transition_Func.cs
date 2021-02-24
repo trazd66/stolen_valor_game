@@ -2,7 +2,7 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Game_Util;
 namespace Game_Control
 {
 
@@ -22,9 +22,9 @@ namespace Game_Control
         }
 
 
-        private float basic_attack_interval = 3.0f;
-        private float jump_attack_interval = 0.8f;
-        private float dash_attack_interval = 0.8f;
+        private float basic_attack_interval = 0.8f;
+        private float jump_attack_interval = 0.5f;
+        private float dash_attack_interval = 0.5f;
 
         private Queue<int> attack_queue;
 
@@ -35,11 +35,11 @@ namespace Game_Control
             curr_state = new_state;
         }
 
-        public void initialize(ref int curr_state, ref List<int> prev_states, ref float duration)
+        public void initialize(ref int curr_state, ref List<int> prev_states, ref float duration, ref List<Float_ref> cooldown_timers)
         {
             curr_state = 0;
-            duration = 3.0f;
-            attack_queue = new Queue<int>(200);
+            duration = 0.0f;
+            attack_queue = new Queue<int>(5);
         }
 
         
@@ -47,7 +47,6 @@ namespace Game_Control
         //dequeue from attack queue and proceed with state machine
         public bool process_state(ref int curr_state, ref List<int> prev_states, ref float duration)
         {
-            duration -= Time.deltaTime;
             if(duration <= 0){
                 //finished previous attack
 
@@ -69,23 +68,19 @@ namespace Game_Control
 
                     }else
                     //jump attack
-                    if(atk == (int) (Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack)){
+                    if(atk == (int) (Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack)){
                         if(curr_state < 5){
                             curr_state = (int)attack_state.attack_jump_0;
                             duration = jump_attack_interval;
                         }
 
                     }
-
+                    return true;
                 }else{
                     curr_state = 0;
                     duration = 0;
                 }
 
-            }
-            else
-            {
-                duration -= Time.deltaTime;
             }
             return false;
         }
@@ -97,11 +92,6 @@ namespace Game_Control
             if(input.HasFlag(Player_Input.PlayerInput.Attack) && attack_queue.Count <= 4){
                 attack_queue.Enqueue((int)input);
                 return true;
-            }else
-            //do nothing if attack is inputted and attack queue is full
-            if (input.HasFlag(Player_Input.PlayerInput.Attack))
-            {
-                return false;
             }else
             //clear queue if non-attack action is inputted, and store what action that is
             if (!(input == Player_Input.PlayerInput.None) && attack_queue.Count > 0)

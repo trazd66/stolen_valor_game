@@ -7,26 +7,11 @@ public class HealthBarApi : MonoBehaviour
     public Image BossHealthBar;
     public Image CharacterHealthBar;
 
-    public float Boss_health, Boss_maxHealth;
-    public float Character_health, Character_maxHealth;
-
-    public GameObject Boss;
-    public GameObject Player;
-
-    private bool player_invincible = false;
-    private bool enemy_invincible = false;
-
-    private float player_invincible_timer = 0f;
-    private float enemy_invincible_timer = 0f;
-
     private float lerpSpeed;
-    // Start is called before the first frame update
-    void Start()
-    {
-        Boss_health = Boss.GetComponent<HealthInfo>().max_health;
-        Character_health = Player.GetComponent<HealthInfo>().max_health;
-    }
 
+    public HealthInfo boss_health;
+    public HealthInfo character_health; 
+    
     // Update is called once per frame
     void Update()
     {
@@ -35,124 +20,22 @@ public class HealthBarApi : MonoBehaviour
         //Character_health = Player.GetComponent<HealthInfo>().curr_health;
         HealthBarFiller();
         ColorChanger();
-
-        if (player_invincible_timer > 0)
-        {
-            player_invincible_timer -= Time.deltaTime;
-            
-            if (player_invincible_timer <= 0)
-            {
-                player_invincible = false;
-                player_invincible_timer = 0f;
-            }
-        }
-
-        if (enemy_invincible_timer > 0)
-        {
-            enemy_invincible_timer -= Time.deltaTime;
-
-            if (enemy_invincible_timer <= 0)
-            {
-                enemy_invincible = false;
-                enemy_invincible_timer = 0f;
-            }
-        }
-
     }
 
     void HealthBarFiller()
     {   
         
-        BossHealthBar.fillAmount = Mathf.Lerp(BossHealthBar.fillAmount, Boss_health / Boss_maxHealth, lerpSpeed);
-        CharacterHealthBar.fillAmount = Mathf.Lerp(CharacterHealthBar.fillAmount, Character_health / Character_maxHealth, lerpSpeed);
+        BossHealthBar.fillAmount = Mathf.Lerp(BossHealthBar.fillAmount, boss_health.curr_health / boss_health.max_health, lerpSpeed);
+        CharacterHealthBar.fillAmount = Mathf.Lerp(CharacterHealthBar.fillAmount,  character_health.curr_health / character_health.max_health, lerpSpeed);
     }
 
     void ColorChanger()
     {
-        Color bosshealthColor = Color.Lerp(Color.red, Color.green, (Boss_health / Boss_maxHealth));
-        Color charhealthColor = Color.Lerp(Color.red, Color.green, (Character_health / Character_maxHealth));
+        Color bosshealthColor = Color.Lerp(Color.red, Color.green,  boss_health.curr_health / boss_health.max_health);
+        Color charhealthColor = Color.Lerp(Color.red, Color.green, character_health.curr_health / character_health.max_health);
         BossHealthBar.color = bosshealthColor;
         CharacterHealthBar.color = charhealthColor;
     }
 
 
-
-    /// <summary>
-    /// enter the damage deal to the boss
-    /// </summary>
-    /// <param name="damagePoint"></param>
-    public void BossDamage(float damagePoint)
-    {
-        if (Boss_health>0)
-        {
-            Boss_health -= damagePoint;
-        }
-    }
-
-    /// <summary>
-    /// enter the heal point you want to heal the boss
-    /// </summary>
-    /// <param name="healPoint"></param>
-    public void BossHeal(float healPoint)
-    {
-        if (Boss_health < Boss_maxHealth)
-        {
-            Boss_health += healPoint;
-        }
-    }
-    /// <summary>
-    /// enter the damage deal to the character
-    /// </summary>
-    /// <param name="damagePoint"></param>
-    public void CharDamage(float damagePoint)
-    {
-        if (Character_health > 0)
-        {
-            Character_health -= damagePoint;
-        }
-    }
-
-    /// <summary>
-    /// enter the heal point you want to heal the character
-    /// </summary>
-    /// <param name="healPoint"></param>
-    public void CharHeal(float healPoint)
-    {
-        if (Character_health < Character_maxHealth)
-        {
-            Character_health += healPoint;
-        }
-    }
-
-    public void set_character_Max(float max_heal)
-    {
-        Character_maxHealth = max_heal;
-    }
-
-    public void set_boss_Max(float max_heal)
-    {
-        Boss_maxHealth = max_heal;
-    }
-
-    public bool get_player_invincible()
-    {
-        return player_invincible;
-    }
-
-    public bool get_enemy_invincible()
-    {
-        return enemy_invincible;
-    }
-
-    public void set_player_invincible(float timer)
-    {
-        player_invincible = true;
-        player_invincible_timer = timer;
-    }
-
-    public void set_enemy_invincible(float timer)
-    {
-        enemy_invincible = true;
-        enemy_invincible_timer = timer;
-    }
 }

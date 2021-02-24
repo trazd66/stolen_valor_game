@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using Game_Util;
 
 namespace Game_Control{
 /*
@@ -35,7 +35,7 @@ public interface IState_Transition_Func{
 
 
     
-    void initialize(ref int curr_state, ref List<int> prev_states, ref float duration);
+    void initialize(ref int curr_state, ref List<int> prev_states, ref float duration, ref List<Float_ref> cooldown_timers);
 }
 
 

@@ -9,7 +9,6 @@ public static class Player_Input{
     [Flags]
     public enum PlayerInput{
         None = 0,
-        Walk = 256,
         Dash = 1,
         Jump = 2,
         Attack = 4,
@@ -17,7 +16,8 @@ public static class Player_Input{
         Special_attack_1 = 16,
         Special_attack_2 = 32,
         Dodge = 64,
-        Parry = 128        
+        Parry = 128 ,        
+        Walk = 256,
     }
 
     /// <summary>

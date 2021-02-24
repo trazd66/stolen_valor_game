@@ -12,7 +12,8 @@ namespace Game_Control{
         float front_attack_speed = 1.5f;
         float laser_attack_speed = 8f;
 
-        public GameObject GameUI;
+        public HealthInfo player_healthInfo;
+        public HealthInfo boss_healthInfo;
         private HealthBarApi ui;
 
         public GameObject[] AttackObjects;
@@ -26,8 +27,6 @@ namespace Game_Control{
         {
             state_controller = new State_controller();
             state_controller.initialize(new Enemy1_State_Transition_Func());
-
-            ui = GameUI.GetComponent<HealthBarApi>();
 
         }
 
@@ -126,11 +125,7 @@ namespace Game_Control{
         //called when an attack is launched
         private void LaunchAttack(Collider col)
         {
-            //check if attacking is disabled (invincibility period for player)
-            if (ui.get_player_invincible())
-            {
-                return;
-            }
+
 
             //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
@@ -157,7 +152,7 @@ namespace Game_Control{
                         damage += 50;
                         break;
                     case "TestDamage":
-                        damage += 10000;
+                        damage += 10;
                         break;
                     default:
                         Debug.Log("Unable to identify attack, make sure switch case matches.");
@@ -185,9 +180,8 @@ namespace Game_Control{
             //return true if attack landed, false otherwise
             if (final_damage > 0)
             {
-                //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= final_damage;
-                ui.CharDamage(final_damage);
-                ui.set_player_invincible(0.5f);
+                player_healthInfo.doDamage(final_damage);
+                player_healthInfo.setInvincible(0.5f);
             }
         }
     }
