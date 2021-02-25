@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace Game_Control
@@ -78,6 +79,11 @@ namespace Game_Control
             if (Input.GetKeyDown("f"))
             {
                 Debug.Log("debug key put info here");
+            }
+
+            if (player_health_info.is_dead)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
 
             attack_controller.process_time();

@@ -8,7 +8,7 @@ public class HealthInfo : MonoBehaviour
     public float curr_health;
 
     public bool is_invincible {get {return invincible_timer.Value > 0; }}
-    private bool is_dead {get {return curr_health <= 0; }}
+    public bool is_dead {get {return curr_health <= 0; }}
 
     private Float_ref invincible_timer;
 
