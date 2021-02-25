@@ -20,6 +20,8 @@ namespace Game_Control
         private float dodge_vertical;
         private float dodge_speed = 12.0f;
 
+        private bool paused = false;
+
 
         private CharacterController _character_controller;
         // private Rigidbody rb;
@@ -79,6 +81,24 @@ namespace Game_Control
             if (Input.GetKeyDown("f"))
             {
                 Debug.Log("debug key put info here");
+            }
+
+            if (Input.GetKeyDown("p") && !paused)
+            {
+                Debug.Log("pause");
+                paused = true;
+                Time.timeScale = 0f;
+            }
+            else if (Input.GetKeyDown("p") && paused)
+            {
+                Debug.Log("unpause");
+                paused = false;
+                Time.timeScale = 1f;
+            }
+
+            if (paused)
+            {
+                return;
             }
 
             if (player_health_info.is_dead)

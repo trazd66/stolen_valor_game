@@ -808,6 +808,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1133948831, guid: af4aaf708cd7dc14a9ad4e98f30c8182, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 437468939929972486, guid: af4aaf708cd7dc14a9ad4e98f30c8182, type: 3}
       propertyPath: m_RootOrder
       value: 1
