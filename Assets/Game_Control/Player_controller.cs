@@ -30,6 +30,8 @@ namespace Game_Control
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
 
+        public Laser_Manager laser_manager;
+
         public Renderer[] AttackVisuals;
         public Collider[] AttackHitboxes;
         public Renderer[] PlayerVisuals;
@@ -80,7 +82,8 @@ namespace Game_Control
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput();
             if (Input.GetKeyDown("f"))
             {
-                Debug.Log("debug key put info here");
+                //debug
+
             }
 
             if (Input.GetKeyDown("p") && !paused)
@@ -95,6 +98,19 @@ namespace Game_Control
                 paused = false;
                 Time.timeScale = 1f;
             }
+
+            if (Input.GetKeyDown("l"))
+            {
+                if (transform.right.x >= 0)
+                {
+                    laser_manager.fire_laser(transform.position, false, true);
+                }
+                if (transform.right.x < 0)
+                {
+                    laser_manager.fire_laser(transform.position, false, false);
+                }
+            }
+
 
             if (paused)
             {
