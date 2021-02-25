@@ -34,10 +34,28 @@ namespace Game_Control{
             {
                 direction = transform.right * -1;
             }
-            if (!is_enemy && Physics.SphereCast(position, 1f, direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
+            if (!is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
             {
                 boss_health_info.doDamage(100);
                 boss_health_info.setInvincible(0.3f);
+                GameObject laser_visual = new GameObject();
+                laser_visual.transform.position = position;
+                LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
+                line_renderer.material = new Material(Shader.Find("Sprites/Default"));
+                line_renderer.startColor = Color.red;
+                line_renderer.endColor = Color.red;
+                line_renderer.SetPosition(0, position);
+                if (direction_right)
+                {
+                    line_renderer.SetPosition(1, new Vector3(position.x + hit.distance, position.y, position.z));
+                }
+                else
+                {
+                    line_renderer.SetPosition(1, new Vector3(position.x - hit.distance, position.y, position.z));
+                }
+                
+                line_renderer.widthMultiplier = 0.2f;
+                Destroy(laser_visual, 0.15f);
 
             }
             else if (is_enemy && Physics.SphereCast(position, 1f, direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
