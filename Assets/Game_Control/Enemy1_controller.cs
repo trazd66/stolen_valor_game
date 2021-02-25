@@ -8,13 +8,16 @@ namespace Game_Control{
     {
         State_controller state_controller;
 
-        float disable_timer = 0f;
-
         float run_attack_speed = 5f;
         float front_attack_speed = 1.5f;
         float laser_attack_speed = 8f;
 
-        public GameObject[] AttackObjects;
+        public HealthInfo player_health_info;
+        public HealthInfo boss_health_info;
+        private HealthBarApi ui;
+
+        public GameObject[] AttackVisuals;
+        public Renderer[] BossVisuals;
 
 
         public Collider[] AttackHitboxes;
@@ -51,28 +54,42 @@ namespace Game_Control{
                 //activate front attack hitboxes if front attack state has been entered
                 else if(state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
                 {
-                    AttackObjects[2].SetActive(true);
+                    AttackVisuals[2].SetActive(true);
                 }
                 //remove front attack hitboxes whehn attack ends, and reset them to initial position
                 else if(state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
                 {
-                    AttackObjects[2].transform.localPosition = new Vector3(1.5f, 0.9f, 0f);
-                    AttackObjects[2].SetActive(false);
+                    AttackVisuals[2].transform.localPosition = new Vector3(1.5f, 0.9f, 0f);
+                    AttackVisuals[2].SetActive(false);
                 }
                 //activate laser attack hitboxes if front attack state has been entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
                 {
-                    AttackObjects[3].SetActive(true);
+                    AttackVisuals[3].SetActive(true);
                 }
-                //remove laser attack hitboxes whehn attack ends, and reset them to initial position
+                //remove laser attack hitboxes when attack ends, and reset them to initial position
                 else if (state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
                 {
-                    AttackObjects[3].transform.localPosition = new Vector3(0.7f, 0.75f, 0f);
-                    AttackObjects[3].SetActive(false);
+                    AttackVisuals[3].transform.localPosition = new Vector3(0.7f, 0.75f, 0f);
+                    AttackVisuals[3].SetActive(false);
                 }
             }
 
-
+            //apply colour
+            if (boss_health_info.is_invincible)
+            {
+                for (int i = 0; i < BossVisuals.Length; i++)
+                {
+                    BossVisuals[i].material.SetColor("_Color", Color.red);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < BossVisuals.Length; i++)
+                {
+                    BossVisuals[i].material.SetColor("_Color", Color.gray);
+                }
+            }
 
 
             //enemy is running to the right
@@ -97,25 +114,21 @@ namespace Game_Control{
             else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
             {
                 LaunchAttack(AttackHitboxes[2]);
-                AttackObjects[2].transform.Translate(0, -Time.deltaTime * front_attack_speed, 0);
+                AttackVisuals[2].transform.Translate(0, -Time.deltaTime * front_attack_speed, 0);
             }
             //enemy is laser attacking
             else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
             {
                 LaunchAttack(AttackHitboxes[3]);
-                AttackObjects[3].transform.Translate(Time.deltaTime * laser_attack_speed, 0, 0);
+                AttackVisuals[3].transform.Translate(Time.deltaTime * laser_attack_speed, 0, 0);
             }
 
             //hitbox detecting for player touching enemy body
             LaunchAttack(AttackHitboxes[0]);
             LaunchAttack(AttackHitboxes[1]);
 
-
-            //deincrement disable timer (invincibility frames for player)
-            if (disable_timer > 0f)
-            {
-                disable_timer -= Time.deltaTime;
-            }
+            //uncomment when you want to use the test attack
+            //LaunchAttack(AttackHitboxes[4]);
 
 
         }
@@ -127,11 +140,7 @@ namespace Game_Control{
         //called when an attack is launched
         private void LaunchAttack(Collider col)
         {
-            //check if attacking is disabled (invincibility period for player)
-            if (disable_timer > 0f)
-            {
-                return;
-            }
+
 
             //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
@@ -156,6 +165,9 @@ namespace Game_Control{
                         break;
                     case "Laser":
                         damage += 50;
+                        break;
+                    case "TestDamage":
+                        damage += 10;
                         break;
                     default:
                         Debug.Log("Unable to identify attack, make sure switch case matches.");
@@ -183,8 +195,8 @@ namespace Game_Control{
             //return true if attack landed, false otherwise
             if (final_damage > 0)
             {
-                cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= final_damage;
-                disable_timer = 0.5f;
+                player_health_info.doDamage(final_damage);
+                player_health_info.setInvincible(0.5f);
             }
         }
     }

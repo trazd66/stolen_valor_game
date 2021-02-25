@@ -5,7 +5,8 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace Game_Control{
+namespace Game_Control
+{
     public class Player_controller : MonoBehaviour
     {
 
@@ -16,27 +17,31 @@ namespace Game_Control{
 
         private float dodge_horizontal;
         private float dodge_vertical;
-        private float dodge_speed = 8.0f;
+        private float dodge_speed = 12.0f;
 
 
         private CharacterController _character_controller;
         // private Rigidbody rb;
         private Vector3 _velocity;
-        
+
+        public HealthInfo player_health_info;
+        public HealthInfo boss_health_info;
+
+        public Renderer[] AttackVisuals;
         public Collider[] AttackHitboxes;
+        public Renderer[] PlayerVisuals;
 
         State_controller state_controller;
         State_controller attack_controller;
 
         public GameObject additional_part_0;
-        private bool additional_part_0_toggle;
-
-        public int attack_sequence_num = 0;
-        public int attack_sequence_max = 5;
+        public Vector3 player_state_debug_display;
+        public Vector3 attack_state_debug_display;
         // Start is called before the first frame update
         void Start()
         {
             _character_controller = GetComponent<CharacterController>();
+            _character_controller.minMoveDistance = 0;
 
             state_controller = new State_controller();
             state_controller.initialize(new Player_State_Transition_Func(_character_controller));
@@ -44,111 +49,131 @@ namespace Game_Control{
             attack_controller = new State_controller();
             attack_controller.initialize(new Attack_State_Transition_Func());
 
-            
-
+            //remove this when someone figures out how to change the default colour in unity lol
+            for (int i = 0; i < PlayerVisuals.Length; i++)
+            {
+                PlayerVisuals[i].material.SetColor("_Color", Color.green);
             }
 
-        void FixedUpdate(){
+
+        }
+        void OnDrawGizmos()
+        {
+            if (state_controller != null && attack_controller != null)
+            {
+                Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
+                Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
+            }
+        }
+
+        void FixedUpdate()
+        {
         }
 
         // Update is called once per frame
         void Update()
         {
-            // state_controller.process_state()
-            // actually move the player 
-            // every frame, we need to read plyaer input
-            // and based on the player input, we transition states
-            // and also move the player
 
-            List<Player_Input.PlayerInput> inputs = new List<Player_Input.PlayerInput>();//TODO: remove this as it's costly
-
-
-            if (Input.GetKeyDown(KeyCode.Q) && !additional_part_0_toggle){
-                additional_part_0_toggle = true;
-                GameObject obj = GameObject.Instantiate(additional_part_0,this.gameObject.transform);
-                obj.transform.localPosition = new Vector3(0,0.7f,0);
-
-            }
-            //check if player has inputed dash
-            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetMouseButtonDown(1))
+            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput();
+            if (Input.GetKeyDown("f"))
             {
-                inputs.Add(Player_Input.PlayerInput.Dodge);
+                Debug.Log("debug key put info here");
             }
-            //otherwise check if left or right are inputed
-            else if (Input.GetAxis("Horizontal") != 0)
+
+            attack_controller.process_time();
+            state_controller.process_time();
+            //call process_state
+            // state_controller.process_state();
+            bool state_changed = state_controller.process_state(input);
+
+
+            if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
-                inputs.Add(Player_Input.PlayerInput.Dash);
-            }
-
-            //check if jump is inputed
-            if (Input.GetButtonDown("Jump"))
+                if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_basic)
+                {
+                   attack_controller.process_state(Player_Input.PlayerInput.Attack);
+                }
+                else if (state_changed)
+                {
+                    if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump)
+                    {
+                        attack_controller.process_state(Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack);
+                    }
+                    else if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_dash)
+                    {
+                        attack_controller.process_state(Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack);
+                    }
+                }
+            }else
             {
-                inputs.Add((Player_Input.PlayerInput.Jump));
+                attack_controller.process_state(input);
             }
 
-            //check if attack is inputed
-            if(Input.GetMouseButtonDown(0)){
-                inputs.Add(Player_Input.PlayerInput.Attack);
-            }
-
-            //get a single PlayerInput to represent the totality of inputs
-            Player_Input.PlayerInput total_input = Player_Input.get_input(inputs);
-
-            //call the appropriate process_state
-            bool state_changed = false;
-            state_changed = state_controller.process_state(total_input);
-
-            //check if dodge has been initiated
-
-            if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
+            bool attack_sequence_changed = attack_controller.process_state();
+            if (attack_sequence_changed)
             {
-                dodge_horizontal = Math.Abs(Input.GetAxis("Horizontal"));
-                dodge_vertical = Math.Abs(Input.GetAxis("Vertical"));
-
-                if(dodge_vertical > dodge_horizontal)
+                //if the previous attack state is NOT not_attacking, then remove whatever visuals are left over from the previous attack
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] != (int)Attack_State_Transition_Func.attack_state.not_attacking)
                 {
-                    dodge_horizontal = dodge_horizontal * 1 / dodge_vertical;
-                    dodge_vertical = 1;
+                    AttackVisuals[0].enabled = false;
                 }
-                else
+                //launch attack if new state is NOT not_attacking
+                if (attack_controller.curr_state != (int)Attack_State_Transition_Func.attack_state.not_attacking)
                 {
-                    dodge_vertical = dodge_vertical * 1 / dodge_horizontal;
-                    dodge_horizontal = 1;
+                    state_controller.state_duration = attack_controller.state_duration;
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
                 }
-
-                if (Input.GetAxis("Horizontal") < 0)
-                {
-                    dodge_horizontal = dodge_horizontal * -1;
-                }
-                if (Input.GetAxis("Vertical") < 0)
-                {
-                    dodge_vertical = dodge_vertical * -1;
-                }
-
             }
 
-            //apply movement to the player
 
-            Vector3 move = new Vector3(0,0,0);
+            // if(attack_controller.curr_state != (int) Attack_State_Transition_Func.attack_state.not_attacking && !(ui.get_enemy_invincible())){
+            //     Collider col  = AttackHitboxes[0];
+            //      //check what Colliders on the PlayerHitbox layer overlap col
+            //     Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
+            //     if(cols.Length > 0){
+            //         Debug.Log("hit");
+            //         //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
+            //         ui.BossDamage(10f);
+            //     }
+            // }
 
-            //stop downward movement when character lands
-            if (_character_controller.isGrounded && _velocity.y < 0){
-                _velocity.y = 0f;
+
+            //apply colour
+            if (player_health_info.is_invincible)
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.white);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.green);
+                }
             }
 
-            //apply upwards momentum when jumping
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.jumping && state_changed)
+            Vector3 move = new Vector3(0, 0, 0);
+
+
+
+            //apply upwards momentum when jump
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.jump && state_changed)
             {
                 _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
-            }
+            }else
 
-            //apply dodge movement to the player
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
+            //apply dodge movement and colourto the player
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)
             {
-                move += new Vector3(dodge_horizontal, dodge_vertical, 0) * Time.deltaTime * dodge_speed;
+                player_health_info.setInvincible(0.2f);
+                move += Player_controller_helper.getDodgeVector(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Time.deltaTime * dodge_speed;
+
             }
             //otherwise apply regular movement
-            else
+            else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking)
             {
                 //apply horizontal movement
                 move += new Vector3(Input.GetAxis("Horizontal"), 0, 0) * Time.deltaTime * Speed;
@@ -158,36 +183,24 @@ namespace Game_Control{
                     transform.right = move;
             }
 
-            //attack
-            attack_controller.process_state(total_input);
-            attack_controller.process_state();
 
-            if(attack_controller.curr_state != (int) Attack_State_Transition_Func.attack_state.not_attacking){
-                Collider col  = AttackHitboxes[0];
-                 //check what Colliders on the PlayerHitbox layer overlap col
-                Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
-                if(cols.Length > 0){
-                    Debug.Log("hit");
-                    cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
-                }
-            }
-            
+
             //apply gravity
-            _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
+            if (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.dodge)
+            {
+                _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
+            }
+
+            //stop downward movement when character lands
+            if (_character_controller.isGrounded && _velocity.y < 0)
+            {
+                _velocity.y = -0.001f;
+            }
 
             //apply all movement
             _character_controller.Move(move + (_velocity * Time.deltaTime));
 
-            //for debugging
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Debug.Log(attack_controller.curr_state);
-                Debug.Log(state_controller.curr_state);
-            }
 
-        }
-
-        void OnCollisionEnter(Collision collision){
 
         }
 

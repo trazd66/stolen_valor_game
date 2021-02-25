@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 766515461}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &14282615
 MeshFilter:
@@ -122,7 +122,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1133948829}
   - {fileID: 14282612}
   m_Father: {fileID: 437468939929972486}
   m_RootOrder: 0
@@ -153,11 +152,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133948828}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.551, y: 0.16, z: 0}
-  m_LocalScale: {x: 0.2404, y: 0.46572027, z: 0.779}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.55100006, y: 0.15999977, z: 0}
+  m_LocalScale: {x: 0.2404, y: 0.46572024, z: 0.77900004}
   m_Children: []
-  m_Father: {fileID: 766515461}
+  m_Father: {fileID: 1911106874}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1133948832
@@ -248,7 +247,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1133948829}
   m_Father: {fileID: 437468939929972486}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -383,3 +383,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 10
   JumpHeight: 2
+  AttackHitboxes: []
+  PlayerVisuals: []
+  additional_part_0: {fileID: 0}
+  attack_sequence_num: 0
+  attack_sequence_max: 5
