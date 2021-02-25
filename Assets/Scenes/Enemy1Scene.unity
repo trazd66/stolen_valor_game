@@ -473,6 +473,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7243306801805364060, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
   m_PrefabInstance: {fileID: 7243306800947238655}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &1121114464 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7243306801805364057, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+  m_PrefabInstance: {fileID: 7243306800947238655}
+  m_PrefabAsset: {fileID: 0}
 --- !u!54 &1121114466
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -589,6 +594,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7243306801836141636, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
   m_PrefabInstance: {fileID: 7243306800947238655}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &1321723016 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7243306801836141633, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+  m_PrefabInstance: {fileID: 7243306800947238655}
+  m_PrefabAsset: {fileID: 0}
 --- !u!54 &1321723018
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -627,6 +637,11 @@ MonoBehaviour:
 --- !u!1 &1789009471 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 210130634, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+  m_PrefabInstance: {fileID: 7243306800947238655}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1789009474 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 210130637, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
   m_PrefabInstance: {fileID: 7243306800947238655}
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &1789009476
@@ -920,9 +935,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1806049453}
     - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: boss_health_info
+      value: 
+      objectReference: {fileID: 1806049453}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: player_healthInfo
       value: 
       objectReference: {fileID: 1635380873}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: player_health_info
+      value: 
+      objectReference: {fileID: 1635380873}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: BossVisuals.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: AttackObjects.Array.size
       value: 5
@@ -931,6 +958,18 @@ PrefabInstance:
       propertyPath: AttackHitboxes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: BossVisuals.Array.data[0]
+      value: 
+      objectReference: {fileID: 1121114464}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: BossVisuals.Array.data[1]
+      value: 
+      objectReference: {fileID: 1321723016}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: BossVisuals.Array.data[2]
+      value: 
+      objectReference: {fileID: 1789009474}
     - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: AttackObjects.Array.data[4]
       value: 

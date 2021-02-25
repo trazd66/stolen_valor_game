@@ -4,8 +4,8 @@ using UnityEngine;
 using Game_Util;
 public class HealthInfo : MonoBehaviour
 {
-    public int max_health;
-    public int curr_health;
+    public float max_health;
+    public float curr_health;
 
     public bool is_invincible {get {return invincible_timer.Value > 0; }}
     private bool is_dead {get {return curr_health <= 0; }}

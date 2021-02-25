@@ -27,6 +27,7 @@ namespace Game_Control
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
 
+        public Renderer[] AttackVisuals;
         public Collider[] AttackHitboxes;
         public Renderer[] PlayerVisuals;
 
@@ -34,7 +35,7 @@ namespace Game_Control
         State_controller attack_controller;
 
         public GameObject additional_part_0;
-        public Vector3 player_state_debug_dispaly;
+        public Vector3 player_state_debug_display;
         public Vector3 attack_state_debug_display;
         // Start is called before the first frame update
         void Start()
@@ -60,7 +61,7 @@ namespace Game_Control
         {
             if (state_controller != null && attack_controller != null)
             {
-                Handles.Label(player_state_debug_dispaly, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
+                Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
                 Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
             }
         }
@@ -74,6 +75,11 @@ namespace Game_Control
         {
 
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput();
+            if (Input.GetKeyDown("f"))
+            {
+                Debug.Log("debug key put info here");
+            }
+
             attack_controller.process_time();
             state_controller.process_time();
             //call process_state
@@ -85,7 +91,7 @@ namespace Game_Control
             {
                 if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_basic)
                 {
-                    attack_controller.process_state(Player_Input.PlayerInput.Attack);
+                   attack_controller.process_state(Player_Input.PlayerInput.Attack);
                 }
                 else if (state_changed)
                 {
@@ -106,9 +112,18 @@ namespace Game_Control
             bool attack_sequence_changed = attack_controller.process_state();
             if (attack_sequence_changed)
             {
-                state_controller.state_duration = attack_controller.state_duration;
-                //do attack
-                Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state) attack_controller.curr_state,AttackHitboxes,boss_health_info);
+                //if the previous attack state is NOT not_attacking, then remove whatever visuals are left over from the previous attack
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] != (int)Attack_State_Transition_Func.attack_state.not_attacking)
+                {
+                    AttackVisuals[0].enabled = false;
+                }
+                //launch attack if new state is NOT not_attacking
+                if (attack_controller.curr_state != (int)Attack_State_Transition_Func.attack_state.not_attacking)
+                {
+                    state_controller.state_duration = attack_controller.state_duration;
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                }
             }
 
 

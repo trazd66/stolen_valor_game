@@ -76,18 +76,20 @@ namespace Game_Control
             return new Vector3(horizontal/normalize,vertical/normalize,0);
         }
 
-        public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Collider[] hitboxes, HealthInfo boss_health_info){
+        public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Renderer[] visuals, Collider[] hitboxes, HealthInfo boss_health_info){
             Debug.Log("ATTACK");
 
-            
             Collider col  = hitboxes[0];
+            visuals[0].enabled = true;
                  //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
             if(cols.Length > 0){
                 Debug.Log("hit");
                 //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
                 boss_health_info.doDamage(50);
+                boss_health_info.setInvincible(0.3f);
             }
+
         }
 
 

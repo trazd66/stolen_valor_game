@@ -55,31 +55,30 @@ namespace Game_Control
                     //basic attack
                     if(atk == (int)Player_Input.PlayerInput.Attack){
                         if(curr_state < 5){
-                            curr_state++;
-                            duration = basic_attack_interval;
+                            update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         } 
                     }else 
                     //dash attack
                     if(atk == (int) (Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack)){
                         if(curr_state < 5){
-                            curr_state = (int)attack_state.attack_dash_0;
-                            duration = dash_attack_interval;
+                            update_state((int)attack_state.attack_dash_0, dash_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
 
                     }else
                     //jump attack
                     if(atk == (int) (Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack)){
                         if(curr_state < 5){
-                            curr_state = (int)attack_state.attack_jump_0;
-                            duration = jump_attack_interval;
+                            update_state((int)attack_state.attack_jump_0, jump_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
 
                     }
                     return true;
-                }else{
-                    curr_state = 0;
-                    duration = 0;
                 }
+                else if (curr_state != (int)attack_state.not_attacking) {
+                    update_state((int)attack_state.not_attacking, 0.0f, ref curr_state, ref prev_states, ref duration);
+                    return true;
+                }
+                
 
             }
             return false;
