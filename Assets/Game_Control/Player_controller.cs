@@ -23,7 +23,7 @@ namespace Game_Control
         private float lerpSpeed;
 
         private bool paused = false;
-
+        private Quaternion rot;
 
         private CharacterController _character_controller;
         // private Rigidbody rb;
@@ -62,7 +62,7 @@ namespace Game_Control
             {
                 PlayerVisuals[i].material.SetColor("_Color", Color.green);
             }
-
+            rot = Quaternion.Euler(0, 0, 0);
 
         }
         void OnDrawGizmos()
@@ -331,17 +331,17 @@ namespace Game_Control
 
                 // steering the character
                 lerpSpeed = 20 * Time.deltaTime;
-                Quaternion right_rot = Quaternion.Euler(0, 0, 0);
-                Quaternion left_rot = Quaternion.Euler(0, -180, 0);
                 if (move.x > 0)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, right_rot, lerpSpeed);
+                    rot = Quaternion.Euler(0, 0, 0);
                 }
 
                 if (move.x < 0)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, left_rot, lerpSpeed);
+                    rot = Quaternion.Euler(0, -180, 0);
+
                 }
+                transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
             }
 
             //lerprot = move.x;
