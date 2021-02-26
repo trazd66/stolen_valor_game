@@ -31,6 +31,7 @@ namespace Game_Control
         public HealthInfo boss_health_info;
 
         public Laser_Manager laser_manager;
+        public Pause_Manager pause_manager;
 
         public Renderer[] AttackVisuals;
         public Collider[] AttackHitboxes;
@@ -66,8 +67,8 @@ namespace Game_Control
         {
             if (state_controller != null && attack_controller != null)
             {
-                Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
-                Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
+                //Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
+                //Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
             }
         }
 
@@ -91,12 +92,14 @@ namespace Game_Control
             {
                 Debug.Log("pause");
                 paused = true;
+                pause_manager.ShowPause();
                 Time.timeScale = 0f;
             }
             else if (Input.GetButtonDown("Pause") && paused)
             {
                 Debug.Log("unpause");
                 paused = false;
+                pause_manager.RemovePause();
                 Time.timeScale = 1f;
             }
 

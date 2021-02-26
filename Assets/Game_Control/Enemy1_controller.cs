@@ -35,6 +35,12 @@ namespace Game_Control{
         // Update is called once per frame
         void Update()
         {
+
+            if (boss_health_info.is_dead)
+            {
+                Destroy(gameObject);
+            }
+
             bool state_changed = false;
             state_changed = state_controller.process_state();
 
