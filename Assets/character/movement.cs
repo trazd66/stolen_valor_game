@@ -17,6 +17,7 @@ public class movement : MonoBehaviour
     private bool walking;
     private float lerpSpeed;
     private float lerprot;
+    Quaternion rot;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +26,8 @@ public class movement : MonoBehaviour
         _animator = GetComponent<Animator>();
         _animator.enabled = true;
         moving_Dirl = 0;
-        walking = false; 
+        walking = false;
+        rot = Quaternion.Euler(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -42,25 +44,27 @@ public class movement : MonoBehaviour
         }
 
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+        
         _controller.Move(move * Time.deltaTime * Speed);
         
-        lerpSpeed = 20 * Time.deltaTime;
+        lerpSpeed = 0.02f;
 
 
         // steering the character
         lerprot = move.x;
-        Quaternion right_rot = Quaternion.Euler(0, 0, 0);
-        Quaternion left_rot = Quaternion.Euler(0, -180, 0);
-        if (move.x>0)
+        
+        if (move.x > 0)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, right_rot, lerpSpeed);
+             rot = Quaternion.Euler(0, 0, 0);
         }
 
         if (move.x <0)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, left_rot, lerpSpeed);
+             rot = Quaternion.Euler(0, -180, 0);
+            
         }
-        Debug.Log(transform.right.x);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
+        Debug.Log(move.x);
 
 
 
