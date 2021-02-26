@@ -19,7 +19,7 @@ namespace Game_Control
                 input |= Player_Input.PlayerInput.Dodge;
             }
             //otherwise check if left or right are inputed
-            else if (Math.Abs(Input.GetAxis("Horizontal")) >= 0.9)
+            else if (Math.Abs(Input.GetAxis("Horizontal")) > 0.9)
             {
                 input |= Player_Input.PlayerInput.Dash;
             }
@@ -89,7 +89,7 @@ namespace Game_Control
             Collider col = hitboxes[0];
             Renderer vis = visuals[0];
 
-            //eventually this will be used to select hurtbox
+            //select hurtbox based on state
             if (attack_state == Attack_State_Transition_Func.attack_state.attack_basic_0 ||
                 attack_state == Attack_State_Transition_Func.attack_state.attack_basic_1 ||
                 attack_state == Attack_State_Transition_Func.attack_state.attack_basic_2 ||
@@ -99,10 +99,29 @@ namespace Game_Control
                 col = hitboxes[0];
                 vis = visuals[0];
             }
+            else
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_dash_0){
+                col = hitboxes[5];
+                vis = visuals[5];
+            }
+            else
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_dash_1)
+            {
+                col = hitboxes[6];
+                vis = visuals[6];
+            }
+            else
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_dash_2)
+            {
+                col = hitboxes[7];
+                vis = visuals[7];
+            }
+
             vis.enabled = true;
 
             int damage = 0;
-                 //check what Colliders on the PlayerHitbox layer overlap col
+                 
+            //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
             if(cols.Length > 0){
                 Debug.Log("hit");
@@ -111,8 +130,14 @@ namespace Game_Control
                     case "BasicAttack":
                         damage += 50;
                         break;
-                    case "DashAttack":
-                        damage += 80;
+                    case "DashAttack1":
+                        damage += 30;
+                        break;
+                    case "DashAttack2":
+                        damage += 70;
+                        break;
+                    case "DashAttack3":
+                        damage += 70;
                         break;
                     case "JumpAttack":
                         damage += 40;
@@ -125,7 +150,7 @@ namespace Game_Control
             if (damage > 0)
             {
                 boss_health_info.doDamage(damage);
-                boss_health_info.setInvincible(0.3f);
+                boss_health_info.setInvincible(0.4f);
             }
 
         }

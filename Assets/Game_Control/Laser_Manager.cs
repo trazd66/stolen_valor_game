@@ -47,9 +47,9 @@ namespace Game_Control{
 
             }
             //check collision with player
-            else if (is_enemy && Physics.SphereCast(position, 1f, direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
+            else if (is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
             {
-                player_health_info.doDamage(100);
+                player_health_info.doDamage(50);
                 boss_health_info.setInvincible(0.5f);
                 successful_hit = true;
             }

@@ -16,15 +16,17 @@ namespace Game_Control
             attack_basic_2, 
             attack_basic_3,
             attack_basic_4,
-            attack_jump_0,
             attack_dash_0,
+            attack_dash_1,
+            attack_dash_2,
+            attack_jump_0,
             attack_special_0,
         }
 
 
         private float basic_attack_interval = 0.5f;
         private float jump_attack_interval = 0.2f;
-        private float dash_attack_interval = 0.2f;
+        private float dash_attack_interval = 0.3f;
         private float special_attack_interval_0 = 0.3f;
 
         private Queue<int> attack_queue;
@@ -53,11 +55,17 @@ namespace Game_Control
 
                 if (attack_queue.Count > 0){
                     int atk = attack_queue.Dequeue();
+
                     //basic attack
                     if(atk == (int)Player_Input.PlayerInput.Attack){
-                        if(curr_state < 5){
+                        if(curr_state < (int)attack_state.attack_basic_4)
+                        {
                             update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         } 
+                        else if (curr_state == (int)attack_state.attack_basic_4)
+                        {
+                           update_state((int)attack_state.attack_basic_0, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
+                        }
                     }else
                     //special attack 0
                     if(atk == (int) (Player_Input.PlayerInput.Attack | Player_Input.PlayerInput.Special_attack_0))
@@ -67,14 +75,20 @@ namespace Game_Control
                     //dash attack
                     else
                     if(atk == (int) (Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack)){
-                        if(curr_state < 5){
+                        if(curr_state == (int)attack_state.not_attacking)
+                        {
                             update_state((int)attack_state.attack_dash_0, dash_attack_interval, ref curr_state, ref prev_states, ref duration);
+                        }
+                        else if (curr_state < (int)attack_state.attack_dash_2)
+                        {
+                            update_state(curr_state + 1, dash_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
 
                     }else
                     //jump attack
                     if(atk == (int) (Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack)){
-                        if(curr_state < 5){
+                        if(curr_state < (int)attack_state.attack_basic_4)
+                        {
                             update_state((int)attack_state.attack_jump_0, jump_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
 
@@ -94,16 +108,31 @@ namespace Game_Control
         //add input to queue, that's it
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
-            //enqueue attack if attack queue is not full
-            if(input.HasFlag(Player_Input.PlayerInput.Attack) && attack_queue.Count <= 4){
+            //enqueue three phases of dash attack if dash attack input is received
+            if (input == (Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack) && attack_queue.Count <= 2)
+            {
+                attack_queue.Enqueue((int)input);
+                attack_queue.Enqueue((int)input);
                 attack_queue.Enqueue((int)input);
                 return true;
-            }else
-            //clear queue if non-attack action is inputted, and store what action that is
-            if (!(input == Player_Input.PlayerInput.None) && attack_queue.Count > 0)
-            {
-                attack_queue.Clear();
             }
+
+            if (curr_state <= (int)attack_state.attack_basic_4)
+            {
+                //enqueue attack if attack queue is not full
+                if (input.HasFlag(Player_Input.PlayerInput.Attack) && attack_queue.Count <= 4)
+                {
+                    attack_queue.Enqueue((int)input);
+                    return true;
+                }
+                //clear queue if non-attack action is inputted, and store what action that is
+                else
+                if (!(input == Player_Input.PlayerInput.None) && attack_queue.Count > 0)
+                {
+                    attack_queue.Clear();
+                }
+            }
+            
             return false;
         }
     }

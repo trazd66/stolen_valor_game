@@ -10,7 +10,6 @@ namespace Game_Control{
 
         float run_attack_speed = 5f;
         float front_attack_speed = 1.5f;
-        float laser_attack_speed = 8f;
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
@@ -21,6 +20,8 @@ namespace Game_Control{
 
 
         public Collider[] AttackHitboxes;
+
+        public Laser_Manager laser_manager;
 
 
         // Start is called before the first frame update
@@ -62,16 +63,17 @@ namespace Game_Control{
                     AttackVisuals[2].transform.localPosition = new Vector3(1.5f, 0.9f, 0f);
                     AttackVisuals[2].SetActive(false);
                 }
-                //activate laser attack hitboxes if front attack state has been entered
+                //call laser function if laser attack state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
                 {
-                    AttackVisuals[3].SetActive(true);
-                }
-                //remove laser attack hitboxes when attack ends, and reset them to initial position
-                else if (state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
-                {
-                    AttackVisuals[3].transform.localPosition = new Vector3(0.7f, 0.75f, 0f);
-                    AttackVisuals[3].SetActive(false);
+                    if (transform.right.x >= 0)
+                    {
+                        laser_manager.fire_laser(transform.position, true, true);
+                    }
+                    if (transform.right.x < 0)
+                    {
+                        laser_manager.fire_laser(transform.position, true, false);
+                    }
                 }
             }
 
@@ -81,6 +83,14 @@ namespace Game_Control{
                 for (int i = 0; i < BossVisuals.Length; i++)
                 {
                     BossVisuals[i].material.SetColor("_Color", Color.red);
+                }
+            }
+            else
+            if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
+            {
+                for (int i = 0; i < BossVisuals.Length; i++)
+                {
+                    BossVisuals[i].material.SetColor("_Color", Color.black);
                 }
             }
             else
@@ -115,12 +125,6 @@ namespace Game_Control{
             {
                 LaunchAttack(AttackHitboxes[2]);
                 AttackVisuals[2].transform.Translate(0, -Time.deltaTime * front_attack_speed, 0);
-            }
-            //enemy is laser attacking
-            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
-            {
-                LaunchAttack(AttackHitboxes[3]);
-                AttackVisuals[3].transform.Translate(Time.deltaTime * laser_attack_speed, 0, 0);
             }
 
             //hitbox detecting for player touching enemy body

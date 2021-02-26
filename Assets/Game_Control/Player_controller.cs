@@ -105,7 +105,7 @@ namespace Game_Control
                 return;
             }
 
-            if (player_health_info.is_dead)
+            if (player_health_info.is_dead || transform.position.y <= -2)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
@@ -173,12 +173,28 @@ namespace Game_Control
                 {
                     AttackVisuals[0].enabled = false;
                 }
+                else
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
+                {
+                    AttackVisuals[5].enabled = false;
+                }
+                else
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
+                {
+                    AttackVisuals[6].enabled = false;
+                }
+                else
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
+                {
+                    AttackVisuals[7].enabled = false;
+                }
 
 
                 //launch attack if new state is basic attack
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_0)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
                 }
@@ -186,6 +202,7 @@ namespace Game_Control
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_1)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
                 }
@@ -193,6 +210,7 @@ namespace Game_Control
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_2)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
                 }
@@ -200,6 +218,7 @@ namespace Game_Control
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
                 }
@@ -207,6 +226,32 @@ namespace Game_Control
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                }
+                else
+                //launch dash attack
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
+                {
+                    state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                }
+                else
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
+                {
+                    state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                }
+                else
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
+                {
+                    state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
                 }

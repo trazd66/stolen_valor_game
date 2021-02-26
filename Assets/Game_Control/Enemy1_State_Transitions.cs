@@ -13,6 +13,7 @@ namespace Game_Control
             run_attack_right,
             run_attack_left,
             front_attack,
+            laser_charge,
             laser_attack
         }
 
@@ -62,7 +63,7 @@ namespace Game_Control
                 //perform laser attack
                 else
                 {
-                    update_state((int)enemy1_state.laser_attack, 1.25f, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)enemy1_state.laser_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
                     //Debug.Log("state changed 4");
                 }
                 state_changed = true;
@@ -89,6 +90,13 @@ namespace Game_Control
             else if (curr_state == (int)enemy1_state.front_attack && duration <= 0)
             {
                 update_state((int)enemy1_state.idle, 3.0f, ref curr_state, ref prev_states, ref duration);
+                //Debug.Log("state changed 0");
+                state_changed = true;
+            }
+            //boss has completed laser charge
+            else if (curr_state == (int)enemy1_state.laser_charge && duration <= 0)
+            {
+                update_state((int)enemy1_state.laser_attack, 0.5f, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
                 state_changed = true;
             }
