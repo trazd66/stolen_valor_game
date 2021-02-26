@@ -15,8 +15,8 @@ public class movement : MonoBehaviour
     private Animator _animator;
     private int moving_Dirl;
     private bool walking;
-
-
+    private float lerpSpeed;
+    private float lerprot;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,46 +35,40 @@ public class movement : MonoBehaviour
         if (_controller.isGrounded && _velocity.y < 0)
             _velocity.y = 0f;
 
+        if (Input.GetButtonDown("Jump"))
+        {
+            _velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
+            Debug.Log(Input.GetButtonDown("Jump"));
+        }
 
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
         _controller.Move(move * Time.deltaTime * Speed);
-        _animator.SetFloat("walking_direction", move.x);
         
-        _velocity.y += Physics.gravity.y * Time.deltaTime * 1.5f;
+        lerpSpeed = 20 * Time.deltaTime;
+
+
+        // steering the character
+        lerprot = move.x;
+        Quaternion right_rot = Quaternion.Euler(0, 0, 0);
+        Quaternion left_rot = Quaternion.Euler(0, -180, 0);
+        if (move.x>0)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, right_rot, lerpSpeed);
+        }
+
+        if (move.x <0)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, left_rot, lerpSpeed);
+        }
+        Debug.Log(transform.right.x);
+
+
+
+
+        _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
         _controller.Move(_velocity * Time.deltaTime);
+         
 
-
-        if (Input.GetButtonDown("Jump") )
-        {
-            _velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
-            
-        }
-        
-        if (Input.GetAxis("Horizontal") != 0)
-        {
-            _animator.SetBool("iswalking", true);
-
-            _animator.SetFloat("direction", Input.GetAxis("Horizontal"));
-
-            if (Input.GetAxis("Horizontal") > 0)
-            {
-                _animator.SetFloat("walking_direction", 1);
-            }
-            if (Input.GetAxis("Horizontal") < 0)
-            {
-                _animator.SetFloat("walking_direction", -1);
-            }
-
-
-        }
-
-
-        if (Input.GetAxis("Horizontal") == 0)
-        {
-            _animator.SetBool("iswalking", false);
-        }
-
-        
 
         // steering the character
 

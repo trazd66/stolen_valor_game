@@ -109,7 +109,6 @@ GameObject:
   - component: {fileID: 3666225349445414424}
   - component: {fileID: 3666225349445414431}
   - component: {fileID: 3666225349445414430}
-  - component: {fileID: -3118240842918372554}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -226,22 +225,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 4
   JumpHeight: 2
---- !u!95 &-3118240842918372554
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3666225349445414429}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d4bc4d348ba073b43b72c78e761f5ade, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
