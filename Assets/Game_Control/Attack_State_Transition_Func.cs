@@ -22,9 +22,10 @@ namespace Game_Control
         }
 
 
-        private float basic_attack_interval = 0.8f;
-        private float jump_attack_interval = 0.5f;
-        private float dash_attack_interval = 0.5f;
+        private float basic_attack_interval = 0.5f;
+        private float jump_attack_interval = 0.2f;
+        private float dash_attack_interval = 0.2f;
+        private float special_attack_interval_0 = 0.3f;
 
         private Queue<int> attack_queue;
 
@@ -57,8 +58,14 @@ namespace Game_Control
                         if(curr_state < 5){
                             update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         } 
-                    }else 
+                    }else
+                    //special attack 0
+                    if(atk == (int) (Player_Input.PlayerInput.Attack | Player_Input.PlayerInput.Special_attack_0))
+                    {
+                        update_state((int)attack_state.attack_special_0, special_attack_interval_0, ref curr_state, ref prev_states, ref duration);
+                    }
                     //dash attack
+                    else
                     if(atk == (int) (Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack)){
                         if(curr_state < 5){
                             update_state((int)attack_state.attack_dash_0, dash_attack_interval, ref curr_state, ref prev_states, ref duration);

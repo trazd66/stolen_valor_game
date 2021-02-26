@@ -145,11 +145,10 @@ namespace Game_Control{
             //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
 
-            int final_damage = 0;
+            int damage = 0;
 
-            foreach (Collider c in cols)
+            if (cols.Length > 0)
             {
-                int damage = 0;
 
                 //add damage based on what's attacking
                 switch (col.name)
@@ -173,29 +172,12 @@ namespace Game_Control{
                         Debug.Log("Unable to identify attack, make sure switch case matches.");
                         break;
                 }
-
-                //add damage based on what's being hit
-                switch (c.name)
-                {
-                    case "Body":
-                        damage += 10;
-                        break;
-                    case "Eyes":
-                        damage += 10;
-                        break;
-                    default:
-                        Debug.Log("Unable to identify target, make sure switch case matches.");
-                        break;
-                }
-
-                //TODO some kind of priority system for when an attack hits multiple hitboxes at the same time, but you only want to apply damage once
-                final_damage = damage;
             }
             
             //return true if attack landed, false otherwise
-            if (final_damage > 0)
+            if (damage > 0)
             {
-                player_health_info.doDamage(final_damage);
+                player_health_info.doDamage(damage);
                 player_health_info.setInvincible(0.5f);
             }
         }

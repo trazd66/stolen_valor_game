@@ -24,8 +24,10 @@ namespace Game_Control{
         public void fire_laser(Vector3 position, bool is_enemy, bool direction_right)
 
         {
-            RaycastHit hit;
+            RaycastHit hit = new RaycastHit();
             Vector3 direction;
+            bool successful_hit = false;
+            //determine direction of laser fire
             if (direction_right)
             {
                 direction = transform.right;
@@ -34,35 +36,51 @@ namespace Game_Control{
             {
                 direction = transform.right * -1;
             }
+
+            //check collision with enemies
             if (!is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
             {
                 boss_health_info.doDamage(100);
                 boss_health_info.setInvincible(0.3f);
-                GameObject laser_visual = new GameObject();
-                laser_visual.transform.position = position;
-                LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
-                line_renderer.material = new Material(Shader.Find("Sprites/Default"));
-                line_renderer.startColor = Color.red;
-                line_renderer.endColor = Color.red;
-                line_renderer.SetPosition(0, position);
-                if (direction_right)
-                {
-                    line_renderer.SetPosition(1, new Vector3(position.x + hit.distance, position.y, position.z));
-                }
-                else
-                {
-                    line_renderer.SetPosition(1, new Vector3(position.x - hit.distance, position.y, position.z));
-                }
+                successful_hit = true;
                 
-                line_renderer.widthMultiplier = 0.2f;
-                Destroy(laser_visual, 0.15f);
 
             }
+            //check collision with player
             else if (is_enemy && Physics.SphereCast(position, 1f, direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
             {
                 player_health_info.doDamage(100);
                 boss_health_info.setInvincible(0.5f);
+                successful_hit = true;
             }
+            //create laser visual
+            GameObject laser_visual = new GameObject();
+            laser_visual.transform.position = position;
+            LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
+            line_renderer.material = new Material(Shader.Find("Sprites/Default"));
+            line_renderer.startColor = Color.red;
+            line_renderer.endColor = Color.red;
+            line_renderer.SetPosition(0, position);
+            float distance;
+            if (successful_hit)
+            {
+                distance = hit.distance;
+            }
+            else
+            {
+                distance = 10f;
+            }
+            if (direction_right)
+            {
+                line_renderer.SetPosition(1, new Vector3(position.x + distance, position.y, position.z));
+            }
+            else
+            {
+                line_renderer.SetPosition(1, new Vector3(position.x - distance, position.y, position.z));
+            }
+
+            line_renderer.widthMultiplier = 0.2f;
+            Destroy(laser_visual, 0.15f);
         }
 
 

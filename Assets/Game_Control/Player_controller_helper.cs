@@ -14,12 +14,12 @@ namespace Game_Control
             Player_Input.PlayerInput input = Player_Input.PlayerInput.None;
 
             //check if player has inputed dash
-            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetMouseButtonDown(1))
+            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetKeyDown(KeyCode.LeftShift))
             {
                 input |= Player_Input.PlayerInput.Dodge;
             }
             //otherwise check if left or right are inputed
-            else if (Input.GetAxis("Horizontal") != 0)
+            else if (Math.Abs(Input.GetAxis("Horizontal")) >= 0.9)
             {
                 input |= Player_Input.PlayerInput.Dash;
             }
@@ -31,9 +31,15 @@ namespace Game_Control
             }
 
             //check if attack is inputted
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.U))
             {
                 input |= Player_Input.PlayerInput.Attack;
+            }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                input |= Player_Input.PlayerInput.Attack;
+                input |= Player_Input.PlayerInput.Special_attack_0;
             }
 
             return input;
@@ -79,14 +85,46 @@ namespace Game_Control
         public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Renderer[] visuals, Collider[] hitboxes, HealthInfo boss_health_info){
             Debug.Log("ATTACK");
 
-            Collider col  = hitboxes[0];
-            visuals[0].enabled = true;
+            //default is basic attack
+            Collider col = hitboxes[0];
+            Renderer vis = visuals[0];
+
+            //eventually this will be used to select hurtbox
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_basic_0 ||
+                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_1 ||
+                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_2 ||
+                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_3 ||
+                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_4)
+            {
+                col = hitboxes[0];
+                vis = visuals[0];
+            }
+            vis.enabled = true;
+
+            int damage = 0;
                  //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
             if(cols.Length > 0){
                 Debug.Log("hit");
-                //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
-                boss_health_info.doDamage(50);
+                switch (col.name)
+                {
+                    case "BasicAttack":
+                        damage += 50;
+                        break;
+                    case "DashAttack":
+                        damage += 80;
+                        break;
+                    case "JumpAttack":
+                        damage += 40;
+                        break;
+                    default:
+                        Debug.Log("Unable to identify attack, make sure switch case matches.");
+                        break;
+                }
+            }
+            if (damage > 0)
+            {
+                boss_health_info.doDamage(damage);
                 boss_health_info.setInvincible(0.3f);
             }
 
