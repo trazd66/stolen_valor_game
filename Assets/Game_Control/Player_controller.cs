@@ -87,13 +87,13 @@ namespace Game_Control
 
             }
 
-            if (Input.GetKeyDown("p") && !paused)
+            if (Input.GetButtonDown("Pause") && !paused)
             {
                 Debug.Log("pause");
                 paused = true;
                 Time.timeScale = 0f;
             }
-            else if (Input.GetKeyDown("p") && paused)
+            else if (Input.GetButtonDown("Pause") && paused)
             {
                 Debug.Log("unpause");
                 paused = false;

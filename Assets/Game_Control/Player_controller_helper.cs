@@ -14,7 +14,7 @@ namespace Game_Control
             Player_Input.PlayerInput input = Player_Input.PlayerInput.None;
 
             //check if player has inputed dash
-            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetKeyDown(KeyCode.LeftShift))
+            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetButtonDown("Dodge"))
             {
                 input |= Player_Input.PlayerInput.Dodge;
             }
@@ -31,12 +31,13 @@ namespace Game_Control
             }
 
             //check if attack is inputted
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Input.GetButtonDown("Attack"))
             {
                 input |= Player_Input.PlayerInput.Attack;
             }
 
-            if (Input.GetKeyDown(KeyCode.I))
+            if (Input.GetButtonDown("SpecialAttack1"))
+            //if (Input.GetKeyDown("i"))
             {
                 input |= Player_Input.PlayerInput.Attack;
                 input |= Player_Input.PlayerInput.Special_attack_0;
