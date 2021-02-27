@@ -20,8 +20,10 @@ namespace Game_Control
         private float dodge_vertical;
         private float dodge_speed = 12.0f;
 
-        private bool paused = false;
+        private float lerpSpeed;
 
+        private bool paused = false;
+        private Quaternion rot;
 
         private CharacterController _character_controller;
         // private Rigidbody rb;
@@ -60,7 +62,7 @@ namespace Game_Control
             {
                 PlayerVisuals[i].material.SetColor("_Color", Color.green);
             }
-
+            rot = Quaternion.Euler(0, 0, 0);
 
         }
         void OnDrawGizmos()
@@ -328,10 +330,33 @@ namespace Game_Control
                 move += new Vector3(Input.GetAxis("Horizontal"), 0, 0) * Time.deltaTime * Speed;
 
                 // steering the character
-                if (move != Vector3.zero)
-                    transform.right = move;
+                lerpSpeed = 20 * Time.deltaTime;
+                if (move.x > 0)
+                {
+                    rot = Quaternion.Euler(0, 0, 0);
+                }
+
+                if (move.x < 0)
+                {
+                    rot = Quaternion.Euler(0, -180, 0);
+
+                }
+                transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
             }
 
+            //lerprot = move.x;
+            //Quaternion right_rot = Quaternion.Euler(0, 0, 0);
+            //Quaternion left_rot = Quaternion.Euler(0, -180, 0);
+            //if (move.x > 0)
+            //{
+            //transform.rotation = Quaternion.Slerp(transform.rotation, right_rot, lerpSpeed);
+            //}
+
+            //if (move.x < 0)
+            //{
+            //transform.rotation = Quaternion.Slerp(transform.rotation, left_rot, lerpSpeed);
+            //}
+            //Debug.Log(transform.right.x);
 
 
             //apply gravity
