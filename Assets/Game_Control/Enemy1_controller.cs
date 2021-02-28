@@ -11,6 +11,7 @@ namespace Game_Control{
         float run_attack_speed = 5f;
         float front_attack_speed = 1.5f;
 
+
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
         private HealthBarApi ui;
@@ -187,8 +188,16 @@ namespace Game_Control{
             //return true if attack landed, false otherwise
             if (damage > 0)
             {
-                player_health_info.doDamage(damage);
-                player_health_info.setInvincible(0.5f);
+                if (player_health_info.parry_ready)
+                {
+                    player_health_info.setParrySuccess(true);
+                }
+                else
+                {
+                    player_health_info.doDamage(damage);
+                    player_health_info.setInvincible(0.5f);
+                }
+                
             }
         }
     }

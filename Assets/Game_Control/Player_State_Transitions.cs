@@ -88,7 +88,11 @@ namespace Game_Control
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
             if(duration <= 0){
-                if (player_characterController.isGrounded &&  curr_state != (int)player_state.idle)
+                if (curr_state == (int)player_state.parry_active)
+                {
+                    update_state((int)player_state.parry_cooldown, 0.5f, ref curr_state, ref prev_states, ref duration);
+                }
+                else if (player_characterController.isGrounded &&  curr_state != (int)player_state.idle)
                 {
                     update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
                 }
@@ -149,6 +153,18 @@ namespace Game_Control
                 }
                 // else do nothing
                 return false;
+            }
+            else
+            // process parry input
+            if (input.HasFlag(Player_Input.PlayerInput.Parry))
+            {
+                if (curr_state == (int)player_state.idle ||
+                    curr_state == (int)player_state.walk ||
+                    curr_state == (int)player_state.dash)
+                {
+                    update_state((int)player_state.parry_active, 0.1f, ref curr_state, ref prev_states, ref duration);
+                    return true;
+                }
             }
             else
             if (input.HasFlag(Player_Input.PlayerInput.Jump))

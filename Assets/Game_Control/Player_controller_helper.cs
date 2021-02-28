@@ -18,6 +18,10 @@ namespace Game_Control
             {
                 input |= Player_Input.PlayerInput.Dodge;
             }
+            else if (Input.GetButtonDown("Dodge"))
+            {
+                input |= Player_Input.PlayerInput.Parry;
+            }
             //otherwise check if left or right are inputed
             else if (Math.Abs(Input.GetAxis("Horizontal")) > 0.9)
             {
@@ -83,7 +87,8 @@ namespace Game_Control
             return new Vector3(horizontal/normalize,vertical/normalize,0);
         }
 
-        public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Renderer[] visuals, Collider[] hitboxes, HealthInfo boss_health_info){
+        public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Renderer[] visuals, Collider[] hitboxes, ref float combo_counter, ref float combo_timer, 
+            HealthInfo player_health_info, HealthInfo boss_health_info){
             Debug.Log("ATTACK");
 
             //default is basic attack
@@ -121,6 +126,7 @@ namespace Game_Control
             vis.enabled = true;
 
             int damage = 0;
+            int combo_points;
                  
             //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
@@ -152,6 +158,21 @@ namespace Game_Control
             {
                 boss_health_info.doDamage(damage);
                 boss_health_info.setInvincible(0.4f);
+                combo_counter++;
+                combo_timer = 1.5f;
+                combo_points = damage;
+                float combo_multiplier = 1.0f + (combo_counter * 0.1f);
+                if (combo_multiplier > 2.0f)
+                {
+                    combo_multiplier = 2.0f;
+                }
+                combo_points = (int)(combo_points * combo_multiplier);
+                if (player_health_info.parry_bonus)
+                {
+                    combo_points = (int)(combo_points * 1.5f);
+                }
+                Debug.Log(combo_counter);
+                Debug.Log(combo_points);
             }
 
         }

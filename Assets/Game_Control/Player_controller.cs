@@ -20,6 +20,12 @@ namespace Game_Control
         private float dodge_vertical;
         private float dodge_speed = 12.0f;
 
+        private float combo_counter = 0f;
+        private float combo_timer = 0f;
+
+        private bool parry_stop = false;
+        private float parry_stop_initial;
+
         private float lerpSpeed;
 
         private bool paused = false;
@@ -110,6 +116,28 @@ namespace Game_Control
                 return;
             }
 
+            //if parry_stop is active, check if it should be removed
+            if (parry_stop)
+            {
+                Time.timeScale = 0f;
+                if(Time.realtimeSinceStartup - parry_stop_initial > 0.3f)
+                {
+                    parry_stop = false;
+                    Time.timeScale = 1f;
+                }
+            }
+
+            //decrement combo timer
+            if (combo_timer > 0f)
+            {
+                combo_timer -= Time.deltaTime;
+                if (combo_timer <= 0f)
+                {
+                    combo_counter = 0f;
+                }
+            }
+
+            //reset scene if player dies
             if (player_health_info.is_dead || transform.position.y <= -2)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -117,11 +145,10 @@ namespace Game_Control
 
             attack_controller.process_time();
             state_controller.process_time();
-            //call process_state
-            // state_controller.process_state();
+
             bool state_changed = state_controller.process_state(input);
 
-
+            //call attack state transition function if attack is initiated
             if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
                 if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_basic)
@@ -201,7 +228,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_1)
@@ -209,7 +237,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_2)
@@ -217,7 +246,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3)
@@ -225,7 +255,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
@@ -233,7 +264,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 //launch dash attack
@@ -242,7 +274,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
@@ -250,7 +283,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
@@ -258,7 +292,8 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
+                        ref combo_timer, player_health_info, boss_health_info);
                 }
                 //launch laser attack
                 else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
@@ -288,20 +323,65 @@ namespace Game_Control
             //     }
             // }
 
+            //activate parry state
+            if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_active)
+            {
+                Debug.Log("parry activated");
+                player_health_info.setInvincible(0.1f);
+                player_health_info.setParryReady(0.1f);
+            }
+
+            //process successful parry
+            if (player_health_info.getParrySuccess())
+            {
+                Debug.Log("parry_success");
+                player_health_info.setParrySuccess(false);
+                player_health_info.setParryReady(0.0f);
+                player_health_info.setInvincible(0.5f);
+                player_health_info.setParryBonus(2.0f);
+                state_controller.curr_state = (int)Player_State_Transition_Func.player_state.idle;
+                state_controller.state_duration = 0f;
+                parry_stop = true;
+                parry_stop_initial = Time.realtimeSinceStartup;
+            }
 
             //apply colour
+            if (player_health_info.parry_bonus)
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.green);
+                }
+            }
+            else
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_active)
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.cyan);
+                }
+            }
+            else
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_cooldown)
+            {
+                for (int i = 0; i < PlayerVisuals.Length; i++)
+                {
+                    PlayerVisuals[i].material.SetColor("_Color", Color.black);
+                }
+            }
+            else
             if (player_health_info.is_invincible)
             {
                 for (int i = 0; i < PlayerVisuals.Length; i++)
                 {
                     PlayerVisuals[i].material.SetColor("_Color", Color.white);
                 }
-            }
+            } 
             else
             {
                 for (int i = 0; i < PlayerVisuals.Length; i++)
                 {
-                    PlayerVisuals[i].material.SetColor("_Color", Color.green);
+                    PlayerVisuals[i].material.SetColor("_Color", Color.blue);
                 }
             }
 
@@ -323,8 +403,10 @@ namespace Game_Control
 
             }
             //otherwise apply regular movement
-            else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking || 
-                attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
+            else if ((attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking || 
+                attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0) &&
+                state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active &&
+                state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown)
             {
                 //apply horizontal movement
                 move += new Vector3(Input.GetAxis("Horizontal"), 0, 0) * Time.deltaTime * Speed;
