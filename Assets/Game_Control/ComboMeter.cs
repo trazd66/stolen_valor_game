@@ -10,8 +10,7 @@ public class ComboMeter : MonoBehaviour
 
     public float Player_combo_count;
     public float MaxComboNum;
-    private float newComboNum;
-
+    private float displayNum;
 
     private float lerpSpeed;
     private float textLerpSpeed;
@@ -20,6 +19,7 @@ public class ComboMeter : MonoBehaviour
     {
         Player_combo_count = 0;
         MaxComboNum = 2000;
+        displayNum = Player_combo_count;
         ComboCount.text = "0";
     }
 
@@ -45,12 +45,28 @@ public class ComboMeter : MonoBehaviour
 
     void TextDisplay()
     {
-        if(textLerpSpeed<1.0f)
+        
+        if(Player_combo_count!= displayNum)
         {
-            textLerpSpeed += Time.deltaTime*0.25f;
-            float count_temp = float.Parse(ComboCount.text);
-            ComboCount.text = (Mathf.Lerp(count_temp, Player_combo_count, textLerpSpeed)).ToString("0.");
+            if(displayNum<Player_combo_count)
+            {
+                displayNum += (4f * Time.deltaTime) * (Player_combo_count - displayNum);
+                if(displayNum>= Player_combo_count)
+                {
+                    displayNum = Player_combo_count;
+                }
+            }
+            else
+            {
+                displayNum -= (4f * Time.deltaTime) * (displayNum-Player_combo_count);
+                if (displayNum <= Player_combo_count)
+                {
+                    displayNum = Player_combo_count;
+                }
+            }
+            ComboCount.text = displayNum.ToString("0.");
         }
+        
         
     }
 
@@ -86,6 +102,7 @@ public class ComboMeter : MonoBehaviour
         {
             Player_combo_count -= Player_combo_count;
         }
+        textLerpSpeed = 0f;
     }
-    textLerpSpeed = 0f;
+    
 }
