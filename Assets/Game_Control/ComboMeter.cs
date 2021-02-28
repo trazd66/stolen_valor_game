@@ -32,7 +32,6 @@ public class ComboMeter : MonoBehaviour
 
         TextDisplay();
         ColorChanger();
-        Debug.Log(ComboCount.text);
         
     }
 
@@ -86,6 +85,7 @@ public class ComboMeter : MonoBehaviour
         {
             Player_combo_count -= Player_combo_count;
         }
+        textLerpSpeed = 0f;
     }
-    textLerpSpeed = 0f;
+    
 }
