@@ -804,7 +804,9 @@ MonoBehaviour:
   JumpHeight: 2
   player_health_info: {fileID: 1635380873}
   boss_health_info: {fileID: 0}
+  combo_info: {fileID: 0}
   laser_manager: {fileID: 0}
+  pause_manager: {fileID: 0}
   AttackVisuals:
   - {fileID: 1133948831}
   - {fileID: 1133948831}

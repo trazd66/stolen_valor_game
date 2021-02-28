@@ -8,9 +8,9 @@ public class ComboMeter : MonoBehaviour
     public Image ComboRing;
     public Text ComboCount;
 
-    public float Player_combo_count;
+    public ComboInfo combo_info;
+
     public float MaxComboNum;
-    private float newComboNum;
 
 
     private float lerpSpeed;
@@ -18,7 +18,6 @@ public class ComboMeter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Player_combo_count = 0;
         MaxComboNum = 2000;
         ComboCount.text = "0";
     }
@@ -38,7 +37,7 @@ public class ComboMeter : MonoBehaviour
     void ComboRingFiller()
     {
 
-        ComboRing.fillAmount = Mathf.Lerp(ComboRing.fillAmount, Player_combo_count / MaxComboNum, lerpSpeed);
+        ComboRing.fillAmount = Mathf.Lerp(ComboRing.fillAmount, combo_info.combo_points / MaxComboNum, lerpSpeed);
         
     }
 
@@ -48,14 +47,14 @@ public class ComboMeter : MonoBehaviour
         {
             textLerpSpeed += Time.deltaTime*0.25f;
             float count_temp = float.Parse(ComboCount.text);
-            ComboCount.text = (Mathf.Lerp(count_temp, Player_combo_count, textLerpSpeed)).ToString("0.");
+            ComboCount.text = (Mathf.Lerp(count_temp, combo_info.combo_points, textLerpSpeed)).ToString("0.");
         }
         
     }
 
     void ColorChanger()
     {
-        Color bosshealthColor = Color.Lerp(Color.red, Color.green, Player_combo_count / MaxComboNum);
+        Color bosshealthColor = Color.Lerp(Color.red, Color.green, combo_info.combo_points / MaxComboNum);
 
         ComboRing.color = bosshealthColor;
         
@@ -64,26 +63,26 @@ public class ComboMeter : MonoBehaviour
     void Combo_increase( int inc_num)
     {
         
-        if (Player_combo_count + inc_num> MaxComboNum)
+        if (combo_info.combo_points + inc_num> MaxComboNum)
         {
-            Player_combo_count = MaxComboNum;
+            combo_info.combo_points = MaxComboNum;
         }
         else
         {
-            Player_combo_count += Player_combo_count;
+            combo_info.combo_points += inc_num;
         }
         textLerpSpeed = 0f;
     }
 
     void Combo_decrease(int dec_num)
     {
-        if (Player_combo_count - dec_num <0)
+        if (combo_info.combo_points - dec_num < 0)
         {
-            Player_combo_count = 0f;
+            combo_info.combo_points = 0f;
         }
         else
         {
-            Player_combo_count -= Player_combo_count;
+            combo_info.combo_points -= dec_num;
         }
         textLerpSpeed = 0f;
     }

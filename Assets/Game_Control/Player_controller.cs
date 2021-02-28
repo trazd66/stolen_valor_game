@@ -20,9 +20,6 @@ namespace Game_Control
         private float dodge_vertical;
         private float dodge_speed = 12.0f;
 
-        private float combo_counter = 0f;
-        private float combo_timer = 0f;
-
         private bool parry_stop = false;
         private float parry_stop_initial;
 
@@ -37,6 +34,8 @@ namespace Game_Control
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
+
+        public ComboInfo combo_info;
 
         public Laser_Manager laser_manager;
         public Pause_Manager pause_manager;
@@ -124,16 +123,6 @@ namespace Game_Control
                 {
                     parry_stop = false;
                     Time.timeScale = 1f;
-                }
-            }
-
-            //decrement combo timer
-            if (combo_timer > 0f)
-            {
-                combo_timer -= Time.deltaTime;
-                if (combo_timer <= 0f)
-                {
-                    combo_counter = 0f;
                 }
             }
 
@@ -228,8 +217,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_1)
@@ -237,8 +225,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_2)
@@ -246,8 +233,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3)
@@ -255,8 +241,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
@@ -264,8 +249,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 //launch dash attack
@@ -274,8 +258,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
@@ -283,8 +266,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
@@ -292,8 +274,7 @@ namespace Game_Control
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, ref combo_counter, 
-                        ref combo_timer, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 //launch laser attack
                 else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
