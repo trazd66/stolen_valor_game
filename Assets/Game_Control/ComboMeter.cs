@@ -32,7 +32,6 @@ public class ComboMeter : MonoBehaviour
 
         TextDisplay();
         ColorChanger();
-        Debug.Log(ComboCount.text);
         
     }
 
