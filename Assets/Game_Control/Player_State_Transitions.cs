@@ -30,6 +30,8 @@ namespace Game_Control
             attack_jump,
             attack_special_0,
             dodge,
+            parry_active,
+            parry_cooldown,
             attacked
         }
 
