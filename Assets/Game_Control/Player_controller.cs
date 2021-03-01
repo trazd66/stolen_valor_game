@@ -138,6 +138,14 @@ namespace Game_Control
             bool state_changed = state_controller.process_state(input);
 
             //call attack state transition function if attack is initiated
+
+            //every frame the player controller is in the jump attack state, a jump attack input is sent. This is because, when we make the player leave jump attack state on 
+            //landing, we want to cancel the jump attack. Thus, when we don't send the jump attack input, the attack state machine knows to cancel the attack
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump)
+            {
+                attack_controller.process_state(Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack);
+            }
+            else
             if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
                 if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_basic)
@@ -146,11 +154,7 @@ namespace Game_Control
                 }
                 else if (state_changed)
                 {
-                    if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump)
-                    {
-                        attack_controller.process_state(Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack);
-                    }
-                    else if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_dash)
+                    if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_dash)
                     {
                         attack_controller.process_state(Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack);
                     }
@@ -209,6 +213,21 @@ namespace Game_Control
                 {
                     AttackVisuals[7].enabled = false;
                 }
+                else
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
+                {
+                    AttackVisuals[8].enabled = false;
+                }
+                else
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_jump_1)
+                {
+                    AttackVisuals[9].enabled = false;
+                }
+                else
+                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_jump_2)
+                {
+                    AttackVisuals[10].enabled = false;
+                }
 
 
                 //launch attack if new state is basic attack
@@ -255,24 +274,37 @@ namespace Game_Control
                 //launch dash attack
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
                 {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
                 {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
                 else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
                 {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
+                }
+                else
+                //launch jump attack
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
+                {
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
+                }
+                else
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_1)
+                {
+                    //do attack
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
+                }
+                else
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_2)
+                {
                     //do attack
                     Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
                 }
@@ -385,7 +417,7 @@ namespace Game_Control
             }
             //otherwise apply regular movement
             else if ((attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking || 
-                attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0) &&
+                state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump) &&
                 state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active &&
                 state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown)
             {

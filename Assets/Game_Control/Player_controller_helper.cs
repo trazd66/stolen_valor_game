@@ -52,36 +52,7 @@ namespace Game_Control
 
         public static Vector3 getDodgeVector(float horizontal, float vertical)
         {
-
-            //             if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodging)
-            // {
-            //     dodge_horizontal = Math.Abs(Input.GetAxis("Horizontal"));
-            //     dodge_vertical = Math.Abs(Input.GetAxis("Vertical"));
-
-            //     ui.set_player_invincible(0.2f);
-
-            //     if(dodge_vertical > dodge_horizontal)
-            //     {
-            //         dodge_horizontal = dodge_horizontal * 1 / dodge_vertical;
-            //         dodge_vertical = 1;
-            //     }
-            //     else
-            //     {
-            //         dodge_vertical = dodge_vertical * 1 / dodge_horizontal;
-            //         dodge_horizontal = 1;
-            //     }
-
-            //     if (Input.GetAxis("Horizontal") < 0)
-            //     {
-            //         dodge_horizontal = dodge_horizontal * -1;
-            //     }
-            //     if (Input.GetAxis("Vertical") < 0)
-            //     {
-            //         dodge_vertical = dodge_vertical * -1;
-            //     }
-
-            // }
-            //Does the same thing as above
+            //normalize the direction vector to preserve input direction
             float normalize = Math.Max(Math.Abs(horizontal),Math.Abs(vertical));
             return new Vector3(horizontal/normalize,vertical/normalize,0);
         }
@@ -121,6 +92,24 @@ namespace Game_Control
                 col = hitboxes[7];
                 vis = visuals[7];
             }
+            else
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_jump_0)
+            {
+                col = hitboxes[8];
+                vis = visuals[8];
+            }
+            else
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_jump_1)
+            {
+                col = hitboxes[9];
+                vis = visuals[9];
+            }
+            else
+            if (attack_state == Attack_State_Transition_Func.attack_state.attack_jump_2)
+            {
+                col = hitboxes[10];
+                vis = visuals[10];
+            }
 
             vis.enabled = true;
 
@@ -137,16 +126,22 @@ namespace Game_Control
                         damage += 50;
                         break;
                     case "DashAttack1":
-                        damage += 30;
+                        damage += 20;
                         break;
                     case "DashAttack2":
-                        damage += 70;
+                        damage += 60;
                         break;
                     case "DashAttack3":
-                        damage += 70;
+                        damage += 60;
                         break;
-                    case "JumpAttack":
-                        damage += 40;
+                    case "JumpAttack1":
+                        damage += 30;
+                        break;
+                    case "JumpAttack2":
+                        damage += 30;
+                        break;
+                    case "JumpAttack3":
+                        damage += 30;
                         break;
                     default:
                         Debug.Log("Unable to identify attack, make sure switch case matches.");

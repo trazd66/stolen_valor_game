@@ -41,7 +41,7 @@ namespace Game_Control{
 
             if (!is_enemy && combo_info.canFireLaser())
             {
-                combo_info.decreaseComboPoints(200f);
+                combo_info.decreaseComboPoints(500f);
             }
             //not enough points to fire laser
             else if (!is_enemy)

@@ -9,7 +9,7 @@ public class ComboInfo : MonoBehaviour
     public float combo_counter = 0;
     private float combo_points = 0;
 
-    private static float laser_cost = 200;
+    private static float laser_cost = 500;
 
     public bool combo_timer_active { get { return combo_timer.Value > 0; } }
 

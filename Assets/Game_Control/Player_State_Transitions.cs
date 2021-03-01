@@ -39,9 +39,12 @@ namespace Game_Control
         int maximum_jump_count = 2;
         int jump_count = 0;
 
+        float parry_active_duration = 0.1f;
+        float parry_cooldown_duration = 0.5f;
 
+        float dash_attack_duration = 0.9f;
+        float jump_attack_duration = 0.3f;
 
-        //TODO: make a timer for cooldown
         float dodge_duration = 0.1f;
         float dodge_cooldown = 1.0f;
         Float_ref dodge_cd_timer;
@@ -87,11 +90,16 @@ namespace Game_Control
 
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
+            if(player_characterController.isGrounded && curr_state == (int)player_state.attack_jump)
+            {
+                update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
+            }
             if(duration <= 0){
                 if (curr_state == (int)player_state.parry_active)
                 {
-                    update_state((int)player_state.parry_cooldown, 0.5f, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)player_state.parry_cooldown, parry_cooldown_duration, ref curr_state, ref prev_states, ref duration);
                 }
+
                 else if (player_characterController.isGrounded &&  curr_state != (int)player_state.idle)
                 {
                     update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
@@ -136,12 +144,12 @@ namespace Game_Control
                     else
                     if (curr_state == (int)player_state.airborne || input.HasFlag(Player_Input.PlayerInput.Jump))
                     {
-                        update_state((int)player_state.attack_jump, 0, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)player_state.attack_jump, jump_attack_duration, ref curr_state, ref prev_states, ref duration);
                     }
                     else
                     if (curr_state == (int)player_state.dash || input.HasFlag(Player_Input.PlayerInput.Dash))
                     {
-                        update_state((int)player_state.attack_dash, 0, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)player_state.attack_dash, dash_attack_duration, ref curr_state, ref prev_states, ref duration);
                     }
                     else
                     if (curr_state == (int)player_state.idle)
@@ -162,7 +170,7 @@ namespace Game_Control
                     curr_state == (int)player_state.walk ||
                     curr_state == (int)player_state.dash)
                 {
-                    update_state((int)player_state.parry_active, 0.1f, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)player_state.parry_active, parry_active_duration, ref curr_state, ref prev_states, ref duration);
                     return true;
                 }
             }
