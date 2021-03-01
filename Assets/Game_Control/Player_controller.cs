@@ -182,22 +182,22 @@ namespace Game_Control
                 //do attack
                 Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
             }
-            else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
-            {
-                state_controller.state_duration = attack_controller.state_duration;
-                //do attack in correct direction
-                if (transform.right.x >= 0)
-                {
-                    laser_manager.fire_laser(transform.position, false, true);
-                }
-                if (transform.right.x < 0)
-                {
-                    laser_manager.fire_laser(transform.position, false, false);
-                }
-             }
 
             if (attack_sequence_changed)
             {
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
+                {
+                    state_controller.state_duration = attack_controller.state_duration;
+                    //do attack in correct direction
+                    if (transform.right.x >= 0)
+                    {
+                        laser_manager.fire_laser(transform.position, false, true);
+                    }
+                    if (transform.right.x < 0)
+                    {
+                        laser_manager.fire_laser(transform.position, false, false);
+                    }
+                }
                 if (attack_controller.curr_state != 0)
                 {
                     //attacking
