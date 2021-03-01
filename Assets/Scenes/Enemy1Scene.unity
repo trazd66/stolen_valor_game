@@ -758,7 +758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1806049453, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: curr_health
-      value: 100
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: laser_manager
@@ -837,10 +837,22 @@ PrefabInstance:
       propertyPath: character_health
       value: 
       objectReference: {fileID: 1635380873}
+    - target: {fileID: 2488399165836970849, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 775
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488399165836970849, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -409
+      objectReference: {fileID: 0}
     - target: {fileID: 4006409519019691640, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: combo_info
       value: 
       objectReference: {fileID: 4246387}
+    - target: {fileID: 7670035487977134225, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -443
+      objectReference: {fileID: 0}
     - target: {fileID: 7670035488944169877, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: m_Name
       value: GameUI
