@@ -39,6 +39,7 @@ namespace Game_Control
 
         public Laser_Manager laser_manager;
         public Pause_Manager pause_manager;
+        public Cooldown_Manager cooldown_manager;
 
         public Renderer[] AttackVisuals;
         public Collider[] AttackHitboxes;
@@ -468,6 +469,28 @@ namespace Game_Control
 
             //apply all movement
             _character_controller.Move(move + (_velocity * Time.deltaTime));
+
+            //update UI
+
+            //check dodge cooldown
+            if(state_controller.cooldown_timers[0].Value <= 0 && !cooldown_manager.dodge_ready){
+                cooldown_manager.dodge_ready = true;
+            }
+            else
+            if (state_controller.cooldown_timers[0].Value > 0 && cooldown_manager.dodge_ready)
+            {
+                cooldown_manager.dodge_ready = false;
+            }
+            //check laser cooldown
+            if (state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser() && !cooldown_manager.laser_ready)
+            {
+                cooldown_manager.laser_ready = true;
+            }
+            else
+            if (state_controller.cooldown_timers[1].Value > 0 && cooldown_manager.laser_ready)
+            {
+                cooldown_manager.laser_ready = false;
+            }
 
 
 

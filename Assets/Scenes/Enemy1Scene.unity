@@ -134,6 +134,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f3ac3f786a8fb4595737b1ae4623fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &407661586 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 407661586, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
+  m_PrefabInstance: {fileID: 7670035488583023897}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb3d24a984b5ba1478426d3656614219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &464519325 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 464519325, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
@@ -617,6 +628,10 @@ PrefabInstance:
       propertyPath: boss_health_info
       value: 
       objectReference: {fileID: 1806049453}
+    - target: {fileID: 437468939929972493, guid: af4aaf708cd7dc14a9ad4e98f30c8182, type: 3}
+      propertyPath: cooldown_manager
+      value: 
+      objectReference: {fileID: 407661586}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af4aaf708cd7dc14a9ad4e98f30c8182, type: 3}
 --- !u!1001 &477298935653843632
@@ -837,22 +852,10 @@ PrefabInstance:
       propertyPath: character_health
       value: 
       objectReference: {fileID: 1635380873}
-    - target: {fileID: 2488399165836970849, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 775
-      objectReference: {fileID: 0}
-    - target: {fileID: 2488399165836970849, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -409
-      objectReference: {fileID: 0}
     - target: {fileID: 4006409519019691640, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: combo_info
       value: 
       objectReference: {fileID: 4246387}
-    - target: {fileID: 7670035487977134225, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -443
-      objectReference: {fileID: 0}
     - target: {fileID: 7670035488944169877, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: m_Name
       value: GameUI

@@ -1109,6 +1109,7 @@ MonoBehaviour:
   combo_info: {fileID: 4246387}
   laser_manager: {fileID: 0}
   pause_manager: {fileID: 0}
+  cooldown_manager: {fileID: 0}
   AttackVisuals:
   - {fileID: 1133948831}
   - {fileID: 1133948831}

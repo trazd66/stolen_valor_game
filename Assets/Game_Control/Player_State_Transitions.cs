@@ -47,10 +47,10 @@ namespace Game_Control
 
         float dodge_duration = 0.1f;
         float dodge_cooldown = 1.0f;
-        Float_ref dodge_cd_timer;
+        public Float_ref dodge_cd_timer;
 
         float laser_cooldown = 2.0f;
-        Float_ref laser_cd_timer;
+        public Float_ref laser_cd_timer;
 
         CharacterController player_characterController;
         // CharacterController enemy_characterController;

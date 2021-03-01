@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ComboMeter : MonoBehaviour
 {
     public Image ComboRing;
+    public Text ComboPointCount;
     public Text ComboCount;
 
     public ComboInfo combo_info;
@@ -20,6 +21,7 @@ public class ComboMeter : MonoBehaviour
     void Start()
     {
         MaxComboNum = 2000;
+        ComboPointCount.text = "0";
         ComboCount.text = "0";
         displayNum = combo_info.getComboPoints();
     }
@@ -64,8 +66,10 @@ public class ComboMeter : MonoBehaviour
                     displayNum = combo_info.getComboPoints();
                 }
             }
-            ComboCount.text = displayNum.ToString("0.");
+            ComboPointCount.text = displayNum.ToString("0.");
         }
+
+        ComboCount.text = combo_info.combo_counter.ToString();
 
 
     }
