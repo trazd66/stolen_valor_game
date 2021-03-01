@@ -23,6 +23,7 @@ namespace Game_Control{
         public Collider[] AttackHitboxes;
 
         public Laser_Manager laser_manager;
+        public Reward_Manager reward_manager;
 
 
         // Start is called before the first frame update
@@ -39,6 +40,7 @@ namespace Game_Control{
 
             if (boss_health_info.is_dead)
             {
+                reward_manager.placeReward(transform.position);
                 Destroy(gameObject);
             }
 
