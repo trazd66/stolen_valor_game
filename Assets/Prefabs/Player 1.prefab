@@ -565,6 +565,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1911106874}
+  - component: {fileID: 4246387}
   m_Layer: 0
   m_Name: Hurtboxes
   m_TagString: Untagged
@@ -590,6 +591,19 @@ Transform:
   m_Father: {fileID: 437468939929972486}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4246387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911106873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5f3ac3f786a8fb4595737b1ae4623fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combo_counter: 0
 --- !u!1 &2062583216
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,7 +818,7 @@ MonoBehaviour:
   JumpHeight: 2
   player_health_info: {fileID: 1635380873}
   boss_health_info: {fileID: 0}
-  combo_info: {fileID: 0}
+  combo_info: {fileID: 4246387}
   laser_manager: {fileID: 0}
   pause_manager: {fileID: 0}
   AttackVisuals:

@@ -9,6 +9,8 @@ namespace Game_Control{
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
+
+        public ComboInfo combo_info;
         // Start is called before the first frame update
         void Start()
         {
@@ -35,6 +37,16 @@ namespace Game_Control{
             else
             {
                 direction = transform.right * -1;
+            }
+
+            if (!is_enemy && combo_info.canFireLaser())
+            {
+                combo_info.decreaseComboPoints(200f);
+            }
+            //not enough points to fire laser
+            else if (!is_enemy)
+            {
+                return;
             }
 
             //check collision with enemies

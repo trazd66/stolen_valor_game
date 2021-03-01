@@ -42,7 +42,7 @@ namespace Game_Control
 
 
         //TODO: make a timer for cooldown
-        float dodge_duration = 0.2f;
+        float dodge_duration = 0.1f;
         float dodge_cooldown = 1.0f;
         Float_ref dodge_cd_timer;
 

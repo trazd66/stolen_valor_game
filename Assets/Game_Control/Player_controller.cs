@@ -87,7 +87,7 @@ namespace Game_Control
         void Update()
         {
 
-            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput();
+            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info);
             if (Input.GetKeyDown("f"))
             {
                 Debug.Log(state_controller.curr_state);
@@ -379,7 +379,7 @@ namespace Game_Control
             //apply dodge movement and colourto the player
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)
             {
-                player_health_info.setInvincible(0.2f);
+                player_health_info.setInvincible(0.15f);
                 move += Player_controller_helper.getDodgeVector(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Time.deltaTime * dodge_speed;
 
             }

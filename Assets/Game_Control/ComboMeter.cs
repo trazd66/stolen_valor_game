@@ -11,6 +11,7 @@ public class ComboMeter : MonoBehaviour
     public ComboInfo combo_info;
 
     public float MaxComboNum;
+    private float displayNum;
 
 
     private float lerpSpeed;
@@ -20,6 +21,7 @@ public class ComboMeter : MonoBehaviour
     {
         MaxComboNum = 2000;
         ComboCount.text = "0";
+        displayNum = combo_info.getComboPoints();
     }
 
     // Update is called once per frame
@@ -37,54 +39,43 @@ public class ComboMeter : MonoBehaviour
     void ComboRingFiller()
     {
 
-        ComboRing.fillAmount = Mathf.Lerp(ComboRing.fillAmount, combo_info.combo_points / MaxComboNum, lerpSpeed);
+        ComboRing.fillAmount = Mathf.Lerp(ComboRing.fillAmount, combo_info.getComboPoints() / MaxComboNum, lerpSpeed);
         
     }
 
     void TextDisplay()
     {
-        if(textLerpSpeed<1.0f)
+
+        if (combo_info.getComboPoints() != displayNum)
         {
-            textLerpSpeed += Time.deltaTime*0.25f;
-            float count_temp = float.Parse(ComboCount.text);
-            ComboCount.text = (Mathf.Lerp(count_temp, combo_info.combo_points, textLerpSpeed)).ToString("0.");
+            if (displayNum < combo_info.getComboPoints())
+            {
+                displayNum += (4f * Time.deltaTime) * (combo_info.getComboPoints() - displayNum);
+                if (displayNum >= combo_info.getComboPoints())
+                {
+                    displayNum = combo_info.getComboPoints();
+                }
+            }
+            else
+            {
+                displayNum -= (4f * Time.deltaTime) * (displayNum - combo_info.getComboPoints());
+                if (displayNum <= combo_info.getComboPoints())
+                {
+                    displayNum = combo_info.getComboPoints();
+                }
+            }
+            ComboCount.text = displayNum.ToString("0.");
         }
-        
+
+
     }
 
     void ColorChanger()
     {
-        Color bosshealthColor = Color.Lerp(Color.red, Color.green, combo_info.combo_points / MaxComboNum);
+        Color bosshealthColor = Color.Lerp(Color.red, Color.green, combo_info.getComboPoints() / MaxComboNum);
 
         ComboRing.color = bosshealthColor;
         
-    }
-
-    void Combo_increase( int inc_num)
-    {
-        
-        if (combo_info.combo_points + inc_num> MaxComboNum)
-        {
-            combo_info.combo_points = MaxComboNum;
-        }
-        else
-        {
-            combo_info.combo_points += inc_num;
-        }
-        textLerpSpeed = 0f;
-    }
-
-    void Combo_decrease(int dec_num)
-    {
-        if (combo_info.combo_points - dec_num < 0)
-        {
-            combo_info.combo_points = 0f;
-        }
-        else
-        {
-            combo_info.combo_points -= dec_num;
-        }
-        textLerpSpeed = 0f;
     }
     
 }

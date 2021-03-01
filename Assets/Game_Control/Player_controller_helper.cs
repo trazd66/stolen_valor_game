@@ -8,7 +8,7 @@ namespace Game_Control
     public static class Player_controller_helper
     {
 
-        public static Player_Input.PlayerInput getPlayerInput()
+        public static Player_Input.PlayerInput getPlayerInput(ref ComboInfo combo_info)
         {
 
             Player_Input.PlayerInput input = Player_Input.PlayerInput.None;
@@ -39,9 +39,8 @@ namespace Game_Control
             {
                 input |= Player_Input.PlayerInput.Attack;
             }
-
-            if (Input.GetButtonDown("SpecialAttack1"))
-            //if (Input.GetKeyDown("i"))
+            //check if laser is inputted
+            if (Input.GetButtonDown("SpecialAttack1") && combo_info.canFireLaser())
             {
                 input |= Player_Input.PlayerInput.Attack;
                 input |= Player_Input.PlayerInput.Special_attack_0;
@@ -157,21 +156,25 @@ namespace Game_Control
             if (damage > 0)
             {
                 boss_health_info.doDamage(damage);
-                boss_health_info.setInvincible(0.4f);
-                combo_info.combo_counter++;
-                combo_info.setComboTimer(1.5f);
-                cur_combo_points = damage;
-                float combo_multiplier = 1.0f + (combo_info.combo_counter * 0.1f);
-                if (combo_multiplier > 2.0f)
+                if (!boss_health_info.is_invincible)
                 {
-                    combo_multiplier = 2.0f;
+                    boss_health_info.setInvincible(0.4f);
+                    combo_info.setComboTimer(1.5f);
+                    cur_combo_points = damage;
+                    float combo_multiplier = 1.0f + (combo_info.combo_counter * 0.1f);
+                    if (combo_multiplier > 2.0f)
+                    {
+                        combo_multiplier = 2.0f;
+                    }
+                    cur_combo_points = (int)(cur_combo_points * combo_multiplier);
+                    if (player_health_info.parry_bonus)
+                    {
+                        cur_combo_points = (int)(combo_info.getComboPoints() * 1.5f);
+                    }
+                    combo_info.addComboPoints(cur_combo_points);
+                    combo_info.combo_counter++;
                 }
-                cur_combo_points = (int)(cur_combo_points * combo_multiplier);
-                if (player_health_info.parry_bonus)
-                {
-                    cur_combo_points = (int)(combo_info.combo_points * 1.5f);
-                }
-                combo_info.combo_points += cur_combo_points;
+                
             }
 
         }
