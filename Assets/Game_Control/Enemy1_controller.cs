@@ -154,12 +154,11 @@ namespace Game_Control{
 
             //check what Colliders on the PlayerHitbox layer overlap col
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
-
+            
             int damage = 0;
 
             if (cols.Length > 0)
             {
-
                 //add damage based on what's attacking
                 switch (col.name)
                 {

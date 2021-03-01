@@ -57,7 +57,6 @@ namespace Game_Control
 
         public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Collider[] hitboxes, HealthInfo boss_health_info)
         {
-
             int damage = 0;
 
             foreach (Collider col in hitboxes)
@@ -65,10 +64,9 @@ namespace Game_Control
                 Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
                 if (cols.Length > 0)
                 {
-                    Debug.Log("hit");
                     switch (col.name)
                     {
-                        case "BasicAttack":
+                        case "ikHandle2":
                             damage += 50;
                             break;
                         case "DashAttack1":
@@ -87,9 +85,9 @@ namespace Game_Control
                             Debug.Log("Unable to identify attack, make sure switch case matches.");
                             break;
                     }
+                    //hit detected
+                    break;
                 }
-                //hit detected
-                break;
             }
             //check what Colliders on the PlayerHitbox layer overlap col
 

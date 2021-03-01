@@ -155,55 +155,58 @@ namespace Game_Control
             }
 
             bool attack_sequence_changed = attack_controller.process_state();
+
+
+            if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_0 ||
+                attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_1 ||
+                attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_2 ||
+                attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3 )
+            {
+                state_controller.state_duration = attack_controller.state_duration;
+                state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
+                //do attack
+                Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
+            }
+            //launch laser attack
+            if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
+            {
+                state_controller.state_duration = attack_controller.state_duration;
+                state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_jump;
+                //do attack
+                Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
+            }
+            if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
+            {
+                state_controller.state_duration = attack_controller.state_duration;
+                state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
+                //do attack
+                Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
+            }
+            else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
+            {
+                state_controller.state_duration = attack_controller.state_duration;
+                //do attack in correct direction
+                if (transform.right.x >= 0)
+                {
+                    laser_manager.fire_laser(transform.position, false, true);
+                }
+                if (transform.right.x < 0)
+                {
+                    laser_manager.fire_laser(transform.position, false, false);
+                }
+             }
+
             if (attack_sequence_changed)
             {
-
-
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_0 ||
-                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_1 ||
-                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_2 ||
-                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3 )
+                if (attack_controller.curr_state != 0)
                 {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
-                }
-                //launch laser attack
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_jump;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
-                }
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes, boss_health_info);
-                }
-                else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    //do attack in correct direction
-                    if (transform.right.x >= 0)
-                    {
-                        laser_manager.fire_laser(transform.position, false, true);
-                    }
-                    if (transform.right.x < 0)
-                    {
-                        laser_manager.fire_laser(transform.position, false, false);
-                    }
-                }
-
-                if(attack_controller.curr_state != 0){
                     //attacking
-                    char_animator.SetTrigger(Utility_methods.GetDescription<Attack_State_Transition_Func.attack_state>((Attack_State_Transition_Func.attack_state)attack_controller.curr_state));                    
-                }else{
+                    char_animator.SetTrigger(Utility_methods.GetDescription<Attack_State_Transition_Func.attack_state>((Attack_State_Transition_Func.attack_state)attack_controller.curr_state));
+                }
+                else
+                {
                     //set animation to idle
-                        char_animator.SetTrigger(Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state));                    
+                    char_animator.SetTrigger(Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state));
                 }
             }
             //apply colour
