@@ -741,7 +741,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5850905806817006707}
   - component: {fileID: 2244367821108988097}
-  - component: {fileID: 1428980084}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -766,22 +765,6 @@ Transform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2244367821108988097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7909218412090805595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eca36805b4a75e1478e0aec9b593ffef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BossHealthBar: {fileID: 7670035489672522933}
-  CharacterHealthBar: {fileID: 7670035487977134239}
-  boss_health: {fileID: 0}
-  character_health: {fileID: 0}
---- !u!114 &1428980084
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

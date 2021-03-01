@@ -16,8 +16,7 @@ public class HealthBarApi : MonoBehaviour
     void Update()
     {
         lerpSpeed = 3f * Time.deltaTime;
-        //Boss_health = Boss.GetComponent<HealthInfo>().curr_health;
-        //Character_health = Player.GetComponent<HealthInfo>().curr_health;
+
         HealthBarFiller();
         ColorChanger();
     }

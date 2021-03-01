@@ -758,7 +758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1806049453, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: curr_health
-      value: 3000
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: laser_manager
@@ -829,22 +829,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1428980084, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
+    - target: {fileID: 2244367821108988097, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: boss_health
       value: 
       objectReference: {fileID: 1806049453}
-    - target: {fileID: 1428980084, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
+    - target: {fileID: 2244367821108988097, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: character_health
       value: 
       objectReference: {fileID: 1635380873}
-    - target: {fileID: 2244367821108988097, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
-      propertyPath: boss_health
-      value: 
-      objectReference: {fileID: 1806049453}
-    - target: {fileID: 2244367821108988097, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
-      propertyPath: character_health
-      value: 
-      objectReference: {fileID: 1806049453}
     - target: {fileID: 4006409519019691640, guid: 0630228a8112f074b867ab667b95ff67, type: 3}
       propertyPath: combo_info
       value: 
