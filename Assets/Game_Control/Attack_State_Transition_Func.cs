@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game_Util;
+using System.ComponentModel;
 namespace Game_Control
 {
 
@@ -10,16 +11,25 @@ namespace Game_Control
     {
         public enum attack_state
         {
+            [Description("not_attacking")]
             not_attacking,
+            [Description("attack_basic_0")]
             attack_basic_0,
+            [Description("attack_basic_1")]
             attack_basic_1,            
+            [Description("attack_basic_2")]
             attack_basic_2, 
+            [Description("attack_basic_3")]
             attack_basic_3,
-            attack_basic_4,
+            [Description("attack_dash_0")]
             attack_dash_0,
+            [Description("attack_dash_1")]
             attack_dash_1,
+            [Description("attack_dash_2")]
             attack_dash_2,
+            [Description("attack_jump_0")]
             attack_jump_0,
+            [Description("attack_special_0")]
             attack_special_0,
         }
 
@@ -58,11 +68,11 @@ namespace Game_Control
 
                     //basic attack
                     if(atk == (int)Player_Input.PlayerInput.Attack){
-                        if(curr_state < (int)attack_state.attack_basic_4)
+                        if(curr_state < (int)attack_state.attack_basic_3)
                         {
                             update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         } 
-                        else if (curr_state == (int)attack_state.attack_basic_4)
+                        else if (curr_state == (int)attack_state.attack_basic_3)
                         {
                            update_state((int)attack_state.attack_basic_0, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
@@ -87,7 +97,7 @@ namespace Game_Control
                     }else
                     //jump attack
                     if(atk == (int) (Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack)){
-                        if(curr_state < (int)attack_state.attack_basic_4)
+                        if(curr_state < (int)attack_state.attack_basic_3)
                         {
                             update_state((int)attack_state.attack_jump_0, jump_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
@@ -117,7 +127,7 @@ namespace Game_Control
                 return true;
             }
 
-            if (curr_state <= (int)attack_state.attack_basic_4)
+            if (curr_state <= (int)attack_state.attack_basic_3)
             {
                 //enqueue attack if attack queue is not full
                 if (input.HasFlag(Player_Input.PlayerInput.Attack) && attack_queue.Count <= 4)
