@@ -23,6 +23,44 @@ namespace Game_Control{
 
         }
 
+        public void aim_laser(Vector3 position, bool direction_right)
+        {
+            //create laser visual
+            GameObject laser_visual = new GameObject();
+            laser_visual.transform.position = position;
+            LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();
+            line_renderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
+            //line_renderer.startColor = Color.gray;
+            //line_renderer.endColor = Color.grey;
+            line_renderer.material.SetColor("_Color", new Color(1f, 0f, 0f, 0.3f));
+
+            //buncha code that allows transparency
+            line_renderer.material.SetFloat("_Mode", 2);
+            line_renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            line_renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            line_renderer.material.SetInt("_ZWrite", 0);
+            line_renderer.material.DisableKeyword("_ALPHATEST_ON");
+            line_renderer.material.EnableKeyword("_ALPHABLEND_ON");
+            line_renderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            line_renderer.material.renderQueue = 3000;
+
+
+
+
+            line_renderer.SetPosition(0, position);
+            if (direction_right)
+            {
+                line_renderer.SetPosition(1, new Vector3(position.x + 10f, position.y, position.z));
+            }
+            else
+            {
+                line_renderer.SetPosition(1, new Vector3(position.x - 10f, position.y, position.z));
+            }
+
+            line_renderer.widthMultiplier = 0.2f;
+            Destroy(laser_visual, 1.0f);
+        }
+
         public void fire_laser(Vector3 position, bool is_enemy, bool direction_right)
 
         {

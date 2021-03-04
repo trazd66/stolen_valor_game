@@ -148,7 +148,7 @@ namespace Game_Control
                         break;
                 }
             }
-            if (damage > 0)
+            if (damage > 0 && !boss_health_info.is_invincible)
             {
                 boss_health_info.doDamage(damage);
                 if (!boss_health_info.is_invincible)

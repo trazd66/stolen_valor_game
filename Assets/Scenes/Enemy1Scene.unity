@@ -451,6 +451,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211218638}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1534816314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 437468939929972492, guid: af4aaf708cd7dc14a9ad4e98f30c8182, type: 3}
+  m_PrefabInstance: {fileID: 437468938764946702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1635380873 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1635380873, guid: af4aaf708cd7dc14a9ad4e98f30c8182, type: 3}
@@ -775,6 +780,10 @@ PrefabInstance:
       propertyPath: curr_health
       value: 3000
       objectReference: {fileID: 0}
+    - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1534816314}
     - target: {fileID: 7243306801115690500, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: laser_manager
       value: 

@@ -7,6 +7,7 @@ namespace Game_Control{
     public class Enemy1_controller : MonoBehaviour
     {
         State_controller state_controller;
+        Enemy1_State_Transition_Func enemy1_state_transition_func;
 
         float run_attack_speed = 5f;
         float front_attack_speed = 1.5f;
@@ -15,6 +16,8 @@ namespace Game_Control{
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
         private HealthBarApi ui;
+
+        public GameObject player;
 
         public GameObject[] AttackVisuals;
         public Renderer[] BossVisuals;
@@ -25,12 +28,15 @@ namespace Game_Control{
         public Laser_Manager laser_manager;
         public Reward_Manager reward_manager;
 
+        private float front_attack_range = 2.0f;
+
 
         // Start is called before the first frame update
         void Start()
         {
             state_controller = new State_controller();
-            state_controller.initialize(new Enemy1_State_Transition_Func());
+            enemy1_state_transition_func = new Enemy1_State_Transition_Func(player, gameObject, boss_health_info);
+            state_controller.initialize(enemy1_state_transition_func);
 
         }
 
@@ -43,6 +49,8 @@ namespace Game_Control{
                 reward_manager.placeReward(transform.position);
                 Destroy(gameObject);
             }
+
+            state_controller.process_time();
 
             bool state_changed = false;
             state_changed = state_controller.process_state();
@@ -61,16 +69,39 @@ namespace Game_Control{
                 {
                     transform.RotateAround(transform.position, Vector3.up, 180);
                 }
+                //turn around if run attack collides with player
+                if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_left &&
+                    state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_right)
+                {
+                    transform.RotateAround(transform.position, Vector3.up, 180);
+                }
+                else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_right &&
+                    state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_left)
+                {
+                    transform.RotateAround(transform.position, Vector3.up, 180);
+                }
                 //activate front attack hitboxes if front attack state has been entered
                 else if(state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
                 {
-                    AttackVisuals[2].SetActive(true);
+                    state_controller.state_duration = 0f;
+                    state_controller.curr_state = (int)Enemy1_State_Transition_Func.enemy1_state.idle;
                 }
                 //remove front attack hitboxes whehn attack ends, and reset them to initial position
                 else if(state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
                 {
                     AttackVisuals[2].transform.localPosition = new Vector3(1.5f, 0.9f, 0f);
                     AttackVisuals[2].SetActive(false);
+                }
+                else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
+                {
+                    if (transform.right.x >= 0)
+                    {
+                        laser_manager.aim_laser(transform.position, true);
+                    }
+                    if (transform.right.x < 0)
+                    {
+                        laser_manager.aim_laser(transform.position, false);
+                    }
                 }
                 //call laser function if laser attack state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
@@ -135,6 +166,7 @@ namespace Game_Control{
                 LaunchAttack(AttackHitboxes[2]);
                 AttackVisuals[2].transform.Translate(0, -Time.deltaTime * front_attack_speed, 0);
             }
+            
 
             //hitbox detecting for player touching enemy body
             LaunchAttack(AttackHitboxes[0]);
@@ -148,10 +180,8 @@ namespace Game_Control{
 
 
 
-
-
         //called when an attack is launched
-        private void LaunchAttack(Collider col)
+        private bool LaunchAttack(Collider col)
         {
 
 
@@ -188,7 +218,7 @@ namespace Game_Control{
             }
             
             //return true if attack landed, false otherwise
-            if (damage > 0)
+            if (damage > 0 && !player_health_info.is_invincible)
             {
                 if (player_health_info.parry_ready)
                 {
@@ -199,8 +229,11 @@ namespace Game_Control{
                     player_health_info.doDamage(damage);
                     player_health_info.setInvincible(0.5f);
                 }
-                
+                enemy1_state_transition_func.setJustHit();
+
+
             }
+            return false;
         }
     }
 }
