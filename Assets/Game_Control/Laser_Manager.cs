@@ -9,6 +9,8 @@ namespace Game_Control{
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
+
+        public ComboInfo combo_info;
         // Start is called before the first frame update
         void Start()
         {
@@ -37,20 +39,37 @@ namespace Game_Control{
                 direction = transform.right * -1;
             }
 
+            if (!is_enemy && combo_info.canFireLaser())
+            {
+                combo_info.decreaseComboPoints(500f);
+            }
+            //not enough points to fire laser
+            else if (!is_enemy)
+            {
+                return;
+            }
+
             //check collision with enemies
             if (!is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
             {
+                
                 boss_health_info.doDamage(100);
                 boss_health_info.setInvincible(0.3f);
                 successful_hit = true;
-                
 
             }
             //check collision with player
             else if (is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
             {
-                player_health_info.doDamage(50);
-                boss_health_info.setInvincible(0.5f);
+                if (player_health_info.parry_ready)
+                {
+                    player_health_info.setParrySuccess(true);
+                }
+                else
+                {
+                    player_health_info.doDamage(50);
+                    boss_health_info.setInvincible(0.5f);
+                }
                 successful_hit = true;
             }
             //create laser visual

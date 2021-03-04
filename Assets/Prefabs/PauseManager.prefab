@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &477298934347590667
+--- !u!1 &9174120246256766080
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 477298934347590668}
-  - component: {fileID: 477298934347590669}
+  - component: {fileID: 9174120246256766094}
+  - component: {fileID: 9174120246256766081}
   m_Layer: 0
-  m_Name: LaserManager
+  m_Name: PauseManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &477298934347590668
+--- !u!4 &9174120246256766094
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 477298934347590667}
+  m_GameObject: {fileID: 9174120246256766080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.2175336, y: -6.7201767, z: 0.0084270695}
+  m_LocalPosition: {x: 822.66675, y: 408.0761, z: -6.8724365}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &477298934347590669
+--- !u!114 &9174120246256766081
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 477298934347590667}
+  m_GameObject: {fileID: 9174120246256766080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e090043a9d309b243b78fad4d78a8dc4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f61054565ca0b84ebd2e35b9028963a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_health_info: {fileID: 0}
-  boss_health_info: {fileID: 0}
-  combo_info: {fileID: 0}
+  pause_image: {fileID: 0}
+  pause_text: {fileID: 0}
