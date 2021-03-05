@@ -67,29 +67,33 @@ namespace Game_Control
                 Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
                 if (cols.Length > 0)
                 {
-                    switch (col.name)
+                    switch (attack_state)
                     {
-                        case "ikHandle2":
-                            damage += 50;
+                        case Attack_State_Transition_Func.attack_state.attack_basic_0:
+                            damage = 30;
                             break;
-                        case "DashAttack1":
-                            damage += 30;
+                        case Attack_State_Transition_Func.attack_state.attack_basic_1:
+                            damage = 30;
                             break;
-                        case "DashAttack2":
-                            damage += 70;
+                        case Attack_State_Transition_Func.attack_state.attack_basic_2:
+                            damage = 50;
                             break;
-                        case "DashAttack3":
-                            damage += 70;
+                        case Attack_State_Transition_Func.attack_state.attack_basic_3:
+                            damage = 50;
                             break;
-                        case "JumpAttack":
-                            damage += 40;
+                        case Attack_State_Transition_Func.attack_state.attack_basic_4:
+                            damage = 100;
+                            break;
+                        case Attack_State_Transition_Func.attack_state.attack_dash_0:
+                            damage = 40;
+                            break;
+                        case Attack_State_Transition_Func.attack_state.attack_jump_0:
+                            damage = 40;
                             break;
                         default:
                             Debug.Log("Unable to identify attack, make sure switch case matches.");
                             break;
                     }
-                    //hit detected
-                    break;
                 }
             }
 
