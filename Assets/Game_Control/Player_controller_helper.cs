@@ -52,102 +52,48 @@ namespace Game_Control
 
         public static Vector3 getDodgeVector(float horizontal, float vertical)
         {
-            //normalize the direction vector to preserve input direction
-            float normalize = Math.Max(Math.Abs(horizontal),Math.Abs(vertical));
-            return new Vector3(horizontal/normalize,vertical/normalize,0);
+
+            //Does the same thing as above
+            float normalize = Math.Max(Math.Abs(horizontal), Math.Abs(vertical));
+            return new Vector3(horizontal / normalize, vertical / normalize, 0);
         }
 
-        public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Renderer[] visuals, Collider[] hitboxes, ComboInfo combo_info, 
+       public static void do_attack(Attack_State_Transition_Func.attack_state attack_state, Collider[] hitboxes, ComboInfo combo_info, 
             HealthInfo player_health_info, HealthInfo boss_health_info){
-            Debug.Log("ATTACK");
-
-            //default is basic attack
-            Collider col = hitboxes[0];
-            Renderer vis = visuals[0];
-
-            //select hurtbox based on state
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_basic_0 ||
-                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_1 ||
-                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_2 ||
-                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_3 ||
-                attack_state == Attack_State_Transition_Func.attack_state.attack_basic_4)
-            {
-                col = hitboxes[0];
-                vis = visuals[0];
-            }
-            else
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_dash_0){
-                col = hitboxes[5];
-                vis = visuals[5];
-            }
-            else
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_dash_1)
-            {
-                col = hitboxes[6];
-                vis = visuals[6];
-            }
-            else
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_dash_2)
-            {
-                col = hitboxes[7];
-                vis = visuals[7];
-            }
-            else
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_jump_0)
-            {
-                col = hitboxes[8];
-                vis = visuals[8];
-            }
-            else
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_jump_1)
-            {
-                col = hitboxes[9];
-                vis = visuals[9];
-            }
-            else
-            if (attack_state == Attack_State_Transition_Func.attack_state.attack_jump_2)
-            {
-                col = hitboxes[10];
-                vis = visuals[10];
-            }
-
-            vis.enabled = true;
-
             int damage = 0;
-            int cur_combo_points;
-                 
-            //check what Colliders on the PlayerHitbox layer overlap col
-            Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
-            if(cols.Length > 0){
-                Debug.Log("hit");
-                switch (col.name)
+
+            foreach (Collider col in hitboxes)
+            {
+                Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
+                if (cols.Length > 0)
                 {
-                    case "BasicAttack":
-                        damage += 50;
-                        break;
-                    case "DashAttack1":
-                        damage += 20;
-                        break;
-                    case "DashAttack2":
-                        damage += 60;
-                        break;
-                    case "DashAttack3":
-                        damage += 60;
-                        break;
-                    case "JumpAttack1":
-                        damage += 30;
-                        break;
-                    case "JumpAttack2":
-                        damage += 30;
-                        break;
-                    case "JumpAttack3":
-                        damage += 30;
-                        break;
-                    default:
-                        Debug.Log("Unable to identify attack, make sure switch case matches.");
-                        break;
+                    switch (col.name)
+                    {
+                        case "ikHandle2":
+                            damage += 50;
+                            break;
+                        case "DashAttack1":
+                            damage += 30;
+                            break;
+                        case "DashAttack2":
+                            damage += 70;
+                            break;
+                        case "DashAttack3":
+                            damage += 70;
+                            break;
+                        case "JumpAttack":
+                            damage += 40;
+                            break;
+                        default:
+                            Debug.Log("Unable to identify attack, make sure switch case matches.");
+                            break;
+                    }
+                    //hit detected
+                    break;
                 }
             }
+
+            int cur_combo_points;                 
             if (damage > 0 && !boss_health_info.is_invincible)
             {
                 boss_health_info.doDamage(damage);

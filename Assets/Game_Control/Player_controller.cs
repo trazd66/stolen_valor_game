@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using Game_Util;
 
 namespace Game_Control
 {
@@ -41,9 +41,12 @@ namespace Game_Control
         public Pause_Manager pause_manager;
         public Cooldown_Manager cooldown_manager;
 
-        public Renderer[] AttackVisuals;
+        // public Renderer[] AttackVisuals;
+        // public Renderer[] PlayerVisuals;
+
+
         public Collider[] AttackHitboxes;
-        public Renderer[] PlayerVisuals;
+
 
         State_controller state_controller;
         State_controller attack_controller;
@@ -52,6 +55,8 @@ namespace Game_Control
         public Vector3 player_state_debug_display;
         public Vector3 attack_state_debug_display;
         // Start is called before the first frame update
+
+        public Animator char_animator;
         void Start()
         {
             _character_controller = GetComponent<CharacterController>();
@@ -64,10 +69,11 @@ namespace Game_Control
             attack_controller.initialize(new Attack_State_Transition_Func());
 
             //remove this when someone figures out how to change the default colour in unity lol
-            for (int i = 0; i < PlayerVisuals.Length; i++)
-            {
-                PlayerVisuals[i].material.SetColor("_Color", Color.green);
-            }
+
+            // for (int i = 0; i < PlayerVisuals.Length; i++)
+            // {
+            //     PlayerVisuals[i].material.SetColor("_Color", Color.green);
+            // }
             rot = Quaternion.Euler(0, 0, 0);
 
         }
@@ -75,8 +81,8 @@ namespace Game_Control
         {
             if (state_controller != null && attack_controller != null)
             {
-                //Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
-                //Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
+                Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
+                Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
             }
         }
 
@@ -87,30 +93,14 @@ namespace Game_Control
         // Update is called once per frame
         void Update()
         {
+            float horizontal_input = Input.GetAxis("Horizontal");
+            float vertical_input = Input.GetAxis("Vertical");
+            bool pause_input = Input.GetButtonDown("Pause");
 
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info);
-            if (Input.GetKeyDown("f"))
-            {
-                Debug.Log(state_controller.curr_state);
-                Debug.Log(attack_controller.curr_state);
 
-            }
 
-            if (Input.GetButtonDown("Pause") && !paused)
-            {
-                Debug.Log("pause");
-                paused = true;
-                pause_manager.ShowPause();
-                Time.timeScale = 0f;
-            }
-            else if (Input.GetButtonDown("Pause") && paused)
-            {
-                Debug.Log("unpause");
-                paused = false;
-                pause_manager.RemovePause();
-                Time.timeScale = 1f;
-            }
-
+            pause_game(pause_input);
             if (paused)
             {
                 return;
@@ -133,25 +123,36 @@ namespace Game_Control
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
 
+            reload_scene_if_death();
+            
             attack_controller.process_time();
             state_controller.process_time();
 
             bool state_changed = state_controller.process_state(input);
 
-            //call attack state transition function if attack is initiated
-
-            //every frame the player controller is in the jump attack state, a jump attack input is sent. This is because, when we make the player leave jump attack state on 
-            //landing, we want to cancel the jump attack. Thus, when we don't send the jump attack input, the attack state machine knows to cancel the attack
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump)
+            process_attack_input(state_changed, input);
+            if (attack_controller.curr_state != 0)
             {
-                attack_controller.process_state(Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack);
+                //attacking
+                char_animator.Play(Utility_methods.GetDescription<Attack_State_Transition_Func.attack_state>((Attack_State_Transition_Func.attack_state)attack_controller.curr_state));
             }
             else
+            {
+                //set animation to idle
+                char_animator.Play(Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state));
+            }
+
+            apply_movement(horizontal_input, vertical_input);
+
+        }
+
+
+        private void process_attack_input(bool state_changed, Player_Input.PlayerInput input){
             if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
                 if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_basic)
                 {
-                   attack_controller.process_state(Player_Input.PlayerInput.Attack);
+                    attack_controller.process_state(Player_Input.PlayerInput.Attack);
                 }
                 else if (state_changed)
                 {
@@ -164,153 +165,38 @@ namespace Game_Control
                         attack_controller.process_state(Player_Input.PlayerInput.Special_attack_0 | Player_Input.PlayerInput.Attack);
                     }
                 }
-            }else
+            }
+            else
             {
                 attack_controller.process_state(input);
             }
 
             bool attack_sequence_changed = attack_controller.process_state();
+
+
             if (attack_sequence_changed)
             {
-                //perhaps this should be a helper function in the future
-
-                //if the previous attack state is from basic attack, then remove whatever visuals are left over from the previous attack
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_basic_0)
-                {
-                    AttackVisuals[0].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_basic_1)
-                {
-                    AttackVisuals[0].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_basic_2)
-                {
-                    AttackVisuals[0].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_basic_3)
-                {
-                    AttackVisuals[0].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
-                {
-                    AttackVisuals[0].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
-                {
-                    AttackVisuals[5].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
-                {
-                    AttackVisuals[6].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
-                {
-                    AttackVisuals[7].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
-                {
-                    AttackVisuals[8].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_jump_1)
-                {
-                    AttackVisuals[9].enabled = false;
-                }
-                else
-                if (attack_controller.prev_states.Count > 0 && attack_controller.prev_states[attack_controller.prev_states.Count - 1] == (int)Attack_State_Transition_Func.attack_state.attack_jump_2)
-                {
-                    AttackVisuals[10].enabled = false;
-                }
-
-
-                //launch attack if new state is basic attack
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_0)
+                if (attack_controller.curr_state <= (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes,combo_info,player_health_info,  boss_health_info);
                 }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_1)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_2)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
-                {
-                    state_controller.state_duration = attack_controller.state_duration;
-                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                //launch dash attack
+                //launch laser attack
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
                 {
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes,combo_info,player_health_info,  boss_health_info);
                 }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_1)
-                {
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_2)
-                {
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                //launch jump attack
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
                 {
+                    state_controller.state_duration = attack_controller.state_duration;
+                    state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_jump;
                     //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
+                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes,combo_info,player_health_info,  boss_health_info);
                 }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_1)
-                {
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                else
-                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_2)
-                {
-                    //do attack
-                    Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackVisuals, AttackHitboxes, combo_info, player_health_info, boss_health_info);
-                }
-                //launch laser attack
-                else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
                     //do attack in correct direction
@@ -323,106 +209,61 @@ namespace Game_Control
                         laser_manager.fire_laser(transform.position, false, false);
                     }
                 }
+                
             }
 
+        }
 
-            // if(attack_controller.curr_state != (int) Attack_State_Transition_Func.attack_state.not_attacking && !(ui.get_enemy_invincible())){
-            //     Collider col  = AttackHitboxes[0];
-            //      //check what Colliders on the PlayerHitbox layer overlap col
-            //     Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
-            //     if(cols.Length > 0){
-            //         Debug.Log("hit");
-            //         //cols[0].gameObject.GetComponentInParent<HealthInfo>().curr_health -= 10;
-            //         ui.BossDamage(10f);
-            //     }
-            // }
+        private void reload_scene_if_death(){
+            if (player_health_info.is_dead || transform.position.y <= -2)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
 
-            //activate parry state
-            if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_active)
+        private void pause_game(bool pause_input){
+            if (pause_input && !paused)
             {
-                Debug.Log("parry activated");
-                player_health_info.setParryReady(0.2f);
+                Debug.Log("pause");
+                paused = true;
+                pause_manager.ShowPause();
+                Time.timeScale = 0f;
             }
+            else if (pause_input && paused)
+            {
+                Debug.Log("unpause");
+                paused = false;
+                pause_manager.RemovePause();
+                Time.timeScale = 1f;
+            }
+        }
 
-            //process successful parry
-            if (player_health_info.getParrySuccess())
-            {
-                Debug.Log("parry_success");
-                player_health_info.setParrySuccess(false);
-                player_health_info.setParryReady(0.0f);
-                player_health_info.setInvincible(0.5f);
-                player_health_info.setParryBonus(2.0f);
-                state_controller.curr_state = (int)Player_State_Transition_Func.player_state.idle;
-                state_controller.state_duration = 0f;
-                parry_stop = true;
-                parry_stop_initial = Time.realtimeSinceStartup;
-            }
-
-            //apply colour
-            if (player_health_info.parry_bonus)
-            {
-                for (int i = 0; i < PlayerVisuals.Length; i++)
-                {
-                    PlayerVisuals[i].material.SetColor("_Color", Color.green);
-                }
-            }
-            else
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_active)
-            {
-                for (int i = 0; i < PlayerVisuals.Length; i++)
-                {
-                    PlayerVisuals[i].material.SetColor("_Color", Color.cyan);
-                }
-            }
-            else
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_cooldown)
-            {
-                for (int i = 0; i < PlayerVisuals.Length; i++)
-                {
-                    PlayerVisuals[i].material.SetColor("_Color", Color.black);
-                }
-            }
-            else
-            if (player_health_info.is_invincible)
-            {
-                for (int i = 0; i < PlayerVisuals.Length; i++)
-                {
-                    PlayerVisuals[i].material.SetColor("_Color", Color.white);
-                }
-            } 
-            else
-            {
-                for (int i = 0; i < PlayerVisuals.Length; i++)
-                {
-                    PlayerVisuals[i].material.SetColor("_Color", Color.blue);
-                }
-            }
-
+        private void apply_movement(float horizontal_input, float vertical_input){
             Vector3 move = new Vector3(0, 0, 0);
 
 
 
             //apply upwards momentum when jump
-            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.jump && state_changed)
+            if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.jump)
             {
                 _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
-            }else
+            }
+            else
 
             //apply dodge movement and colourto the player
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)
             {
-                player_health_info.setInvincible(0.15f);
-                move += Player_controller_helper.getDodgeVector(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Time.deltaTime * dodge_speed;
+                player_health_info.setInvincible(0.2f);
+                move += Player_controller_helper.getDodgeVector(horizontal_input, vertical_input) * Time.deltaTime * dodge_speed;
 
             }
             //otherwise apply regular movement
-            else if ((attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking || 
-                state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump) &&
-                state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active &&
-                state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown)
+            else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking ||
+                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0 ||
+                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
             {
                 //apply horizontal movement
-                move += new Vector3(Input.GetAxis("Horizontal"), 0, 0) * Time.deltaTime * Speed;
+                move += new Vector3(horizontal_input, 0, 0) * Time.deltaTime * Speed;
 
                 // steering the character
                 lerpSpeed = 20 * Time.deltaTime;
@@ -439,22 +280,16 @@ namespace Game_Control
                 transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
             }
 
-            //lerprot = move.x;
-            //Quaternion right_rot = Quaternion.Euler(0, 0, 0);
-            //Quaternion left_rot = Quaternion.Euler(0, -180, 0);
-            //if (move.x > 0)
-            //{
-            //transform.rotation = Quaternion.Slerp(transform.rotation, right_rot, lerpSpeed);
-            //}
 
-            //if (move.x < 0)
-            //{
-            //transform.rotation = Quaternion.Slerp(transform.rotation, left_rot, lerpSpeed);
-            //}
-            //Debug.Log(transform.right.x);
+            apply_gravity();
+            //apply all movement
+            _character_controller.Move(move + (_velocity * Time.deltaTime));
 
 
-            //apply gravity
+        }
+
+        private void apply_gravity(){
+                        //always apply gravity
             if (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.dodge)
             {
                 _velocity.y += Physics.gravity.y * Time.deltaTime * 2;
@@ -466,36 +301,7 @@ namespace Game_Control
                 _velocity.y = -0.001f;
             }
 
-            //apply all movement
-            _character_controller.Move(move + (_velocity * Time.deltaTime));
-
-            //update UI
-
-            //check dodge cooldown
-            if(state_controller.cooldown_timers[0].Value <= 0 && !cooldown_manager.dodge_ready){
-                cooldown_manager.dodge_ready = true;
-            }
-            else
-            if (state_controller.cooldown_timers[0].Value > 0 && cooldown_manager.dodge_ready)
-            {
-                cooldown_manager.dodge_ready = false;
-            }
-            //check laser cooldown
-            if (state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser() && !cooldown_manager.laser_ready)
-            {
-                cooldown_manager.laser_ready = true;
-            }
-            else
-            if (state_controller.cooldown_timers[1].Value > 0 && cooldown_manager.laser_ready)
-            {
-                cooldown_manager.laser_ready = false;
-            }
-
-
 
         }
-
     }
-
-
 }
