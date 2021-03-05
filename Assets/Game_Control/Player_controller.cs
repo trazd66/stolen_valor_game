@@ -341,8 +341,7 @@ namespace Game_Control
             if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_active)
             {
                 Debug.Log("parry activated");
-                player_health_info.setInvincible(0.1f);
-                player_health_info.setParryReady(0.1f);
+                player_health_info.setParryReady(0.2f);
             }
 
             //process successful parry

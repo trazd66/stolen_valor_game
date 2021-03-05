@@ -10,24 +10,27 @@ namespace Game_Control
         public enum enemy1_state
         {
             idle,
+            run_windup,
             run_attack_right,
             run_attack_left,
             front_attack,
             laser_charge,
-            laser_attack
+            laser_attack,
+            stomp_windup,
+            stomp_charge,
+            stomp_attack
         }
-
-        int direction_facing = 1; //0 for facing left, 1 for facing right
 
         private HealthInfo boss_health_info;
         private GameObject player;
         private GameObject enemy1;
         private bool just_hit = false;
+        private bool just_stomped = false;
 
         private float base_idle_duration = 3.0f;
         private float hurt_idle_duration = 1.5f;
 
-        private float front_attack_range = 2.0f;
+        private float stomp_attack_range = 2.5f;
 
 
         public Enemy1_State_Transition_Func(GameObject player_ref, GameObject enemy1_ref, HealthInfo boss_health_info_ref)
@@ -56,6 +59,7 @@ namespace Game_Control
         {
             bool state_changed = false;
             bool just_hit_temp = false;
+            bool just_stomped_temp = false;
 
             float idle_duration = base_idle_duration;
 
@@ -66,7 +70,13 @@ namespace Game_Control
                 just_hit = false;
             }
 
-            if(boss_health_info.curr_health / boss_health_info.max_health <= 0.5f)
+            if (just_stomped)
+            {
+                just_stomped_temp = true;
+                just_stomped = false;
+            }
+
+            if (boss_health_info.curr_health / boss_health_info.max_health <= 0.5f)
             {
                 idle_duration = hurt_idle_duration;
             }
@@ -75,14 +85,26 @@ namespace Game_Control
             if (curr_state == (int)enemy1_state.run_attack_right && just_hit_temp)
             {
                 update_state((int)enemy1_state.run_attack_left, 0, ref curr_state, ref prev_states, ref duration);
-                direction_facing = 1;
                 return true;
             }
 
             if (curr_state == (int)enemy1_state.run_attack_left && just_hit_temp)
             {
                 update_state((int)enemy1_state.run_attack_right, 0, ref curr_state, ref prev_states, ref duration);
-                direction_facing = 0;
+                return true;
+            }
+
+            //activate recharge stomp if it connected
+            if (curr_state == (int)enemy1_state.stomp_attack && just_stomped_temp)
+            {
+                update_state((int)enemy1_state.stomp_charge, 0, ref curr_state, ref prev_states, ref duration);
+                return true;
+            }
+
+            //go back to idle after stomp attack
+            if (curr_state == (int)enemy1_state.stomp_attack && enemy1.transform.position.y == 0.66f)
+            {
+                update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 return true;
             }
 
@@ -90,34 +112,40 @@ namespace Game_Control
             if (curr_state == (int)enemy1_state.idle && duration <= 0)
             {
                 float rand = -1;
-                if (PlayerIsWithinRange(front_attack_range))
+
+                List<int> invalid_rolls = new List<int>();
+
+                if (!PlayerIsWithinRange(stomp_attack_range))
                 {
-                    rand = Random.value * 3;
+                    invalid_rolls.Add(1);
                 }
-                else
+                if (CheckPlayerBehind())
                 {
-                    while (rand == -1 || (rand >= 1 && rand < 2))
+                    invalid_rolls.Add(0);
+                }
+                bool valid = false;
+                while (!valid)
+                {
+                    valid = true;
+                    rand = Random.value * 3;
+                    foreach(int roll in invalid_rolls)
                     {
-                        rand = Random.value * 3;
+                        if((int)rand == roll){
+                            valid = false;
+                            break;
+                        }
                     }
                 }
 
                 //perform run attack in appropriate direction
                 if (rand < 1)
                 {
-                    if (direction_facing == 0)
-                    {
-                        update_state((int)enemy1_state.run_attack_left, 0f, ref curr_state, ref prev_states, ref duration);
-                    }
-                    else
-                    {
-                        update_state((int)enemy1_state.run_attack_right, 0f, ref curr_state, ref prev_states, ref duration);
-                    }
+                    update_state((int)enemy1_state.run_windup, 0.5f, ref curr_state, ref prev_states, ref duration);
                 }
-                //perform front attack
+                //perform stomp attack
                 else if (rand < 2)
                 {
-                    update_state((int)enemy1_state.front_attack, 1.07f, ref curr_state, ref prev_states, ref duration);
+                    update_state((int)enemy1_state.stomp_windup, 0.2f, ref curr_state, ref prev_states, ref duration);
                     //Debug.Log("state changed 3");
                 }
                 //perform laser attack
@@ -130,20 +158,31 @@ namespace Game_Control
 
 
             }
+            //boss has completed run windup
+            else if (curr_state == (int)enemy1_state.run_windup && duration <= 0)
+            {
+                if (enemy1.transform.right.x < 0)
+                {
+                    update_state((int)enemy1_state.run_attack_left, 0f, ref curr_state, ref prev_states, ref duration);
+                }
+                else
+                {
+                    update_state((int)enemy1_state.run_attack_right, 0f, ref curr_state, ref prev_states, ref duration);
+                }
+            }
+            
             //boss has completed run attack to the right
-            else if (curr_state == (int)enemy1_state.run_attack_right && enemy1.transform.position == new Vector3(4f, enemy1.transform.position.y, enemy1.transform.position.z))
+            else if (curr_state == (int)enemy1_state.run_attack_right && enemy1.transform.position.x == 4f)
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
-                direction_facing = 0;
                 state_changed = true;
             }
             //boss has completed run attack to the left
-            else if (curr_state == (int)enemy1_state.run_attack_left && enemy1.transform.position == new Vector3(-4f, enemy1.transform.position.y, enemy1.transform.position.z))
+            else if (curr_state == (int)enemy1_state.run_attack_left && enemy1.transform.position.x == -4f)
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
-                direction_facing = 1;
                 state_changed = true;
             }
             //boss has completed front attack
@@ -167,6 +206,23 @@ namespace Game_Control
                 //Debug.Log("state changed 0");
                 state_changed = true;
             }
+            else if (curr_state == (int)enemy1_state.stomp_windup && duration <= 0)
+            {
+                update_state((int)enemy1_state.stomp_charge, 0f, ref curr_state, ref prev_states, ref duration);
+                state_changed = true;
+            }
+            //activate stomp if peak stomp charge height has been reached
+            else if (curr_state == (int)enemy1_state.stomp_charge && enemy1.transform.position.y == 3f)
+            {
+                update_state((int)enemy1_state.stomp_attack, 0, ref curr_state, ref prev_states, ref duration);
+                state_changed = true;
+            }
+            //go back to idle after stomp attack
+            else if (curr_state == (int)enemy1_state.stomp_attack && enemy1.transform.position.y == 0.66f)
+            {
+                update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
+                state_changed = true;
+            }
 
             return state_changed;
         }
@@ -188,9 +244,25 @@ namespace Game_Control
             return false;
         }
 
+        private bool CheckPlayerBehind()
+        {
+            if ((enemy1.transform.position.x < -3.75 && player.transform.position.x < enemy1.transform.position.x) ||
+                 (enemy1.transform.position.x > 3.75 && enemy1.transform.position.x < player.transform.position.x))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         public void setJustHit()
         {
             just_hit = true;
+        }
+
+        public void setJustStomped()
+        {
+            just_stomped = true; 
         }
     }
 }

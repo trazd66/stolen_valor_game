@@ -39,7 +39,7 @@ namespace Game_Control
         int maximum_jump_count = 2;
         int jump_count = 0;
 
-        float parry_active_duration = 0.1f;
+        float parry_active_duration = 0.2f;
         float parry_cooldown_duration = 0.5f;
 
         float dash_attack_duration = 0.9f;

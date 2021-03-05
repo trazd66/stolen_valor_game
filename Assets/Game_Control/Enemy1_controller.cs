@@ -9,8 +9,7 @@ namespace Game_Control{
         State_controller state_controller;
         Enemy1_State_Transition_Func enemy1_state_transition_func;
 
-        float run_attack_speed = 5f;
-        float front_attack_speed = 1.5f;
+        
 
 
         public HealthInfo player_health_info;
@@ -28,7 +27,14 @@ namespace Game_Control{
         public Laser_Manager laser_manager;
         public Reward_Manager reward_manager;
 
-        private float front_attack_range = 2.0f;
+        private float run_windup_speed = 1f;
+        private float run_attack_speed = 5f;
+
+        private float stomp_windup_speed = 2f;
+
+        private float stomp_charge_horizontal_speed = 2.5f;
+        private float stomp_charge_vertical_speed = 2.5f;
+        private float stomp_attack_speed = 9.0f;
 
 
         // Start is called before the first frame update
@@ -80,17 +86,10 @@ namespace Game_Control{
                 {
                     transform.RotateAround(transform.position, Vector3.up, 180);
                 }
-                //activate front attack hitboxes if front attack state has been entered
-                else if(state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
+                //determine stomp horizontal speed
+                else if(state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.stomp_charge)
                 {
-                    state_controller.state_duration = 0f;
-                    state_controller.curr_state = (int)Enemy1_State_Transition_Func.enemy1_state.idle;
-                }
-                //remove front attack hitboxes whehn attack ends, and reset them to initial position
-                else if(state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
-                {
-                    AttackVisuals[2].transform.localPosition = new Vector3(1.5f, 0.9f, 0f);
-                    AttackVisuals[2].SetActive(false);
+                    stomp_charge_horizontal_speed = 1.5f + Random.value;
                 }
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
                 {
@@ -141,9 +140,20 @@ namespace Game_Control{
                 }
             }
 
-
+           
+            if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.idle)
+            {
+                if (CheckPlayerBehind())
+                {
+                    transform.RotateAround(transform.position, Vector3.up, 180);
+                }
+            }
+            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_windup)
+            {
+                transform.Translate(Time.deltaTime * -run_windup_speed, 0, 0);
+            }
             //enemy is running to the right
-            if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_right)
+            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_right)
             {
                 transform.Translate(Time.deltaTime * run_attack_speed, 0, 0);
                 if (transform.position.x >= 4)
@@ -160,13 +170,39 @@ namespace Game_Control{
                     transform.position = new Vector3(-4f, transform.position.y, transform.position.z);                  
                 }
             }
-            //enemy is front attacking
-            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.front_attack)
+            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.stomp_windup)
             {
-                LaunchAttack(AttackHitboxes[2]);
-                AttackVisuals[2].transform.Translate(0, -Time.deltaTime * front_attack_speed, 0);
+                transform.Translate(Time.deltaTime * -stomp_windup_speed, 0, 0);
             }
-            
+            //enemy is charging stomp
+            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.stomp_charge)
+            {
+                transform.Translate(Time.deltaTime * stomp_charge_horizontal_speed, Time.deltaTime * stomp_charge_vertical_speed, 0);
+                if (transform.position.y >= 3f)
+                {
+                    transform.position = new Vector3(transform.position.x, 3f, transform.position.z);
+                }
+                if (transform.position.x >= 4.5f && transform.right.x > 0)
+                {
+                    transform.position = new Vector3(4.5f, transform.position.y, transform.position.z);
+                }
+                if (transform.position.x <= -4.5f && transform.right.x < 0)
+                {
+                    transform.position = new Vector3(-4.5f, transform.position.y, transform.position.z);
+                }
+
+            }
+            //enemy is stomping
+            else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.stomp_attack)
+            {
+                transform.Translate(0, Time.deltaTime * -stomp_attack_speed, 0);
+                if (transform.position.y <= 0.66f)
+                {
+                    transform.position = new Vector3(transform.position.x, 0.66f, transform.position.z);
+                }
+                LaunchAttack(AttackHitboxes[5]);
+            }
+
 
             //hitbox detecting for player touching enemy body
             LaunchAttack(AttackHitboxes[0]);
@@ -178,7 +214,15 @@ namespace Game_Control{
 
         }
 
-
+        private bool CheckPlayerBehind()
+        {
+            if ((transform.right.x >= 0 && player.transform.position.x < transform.position.x) ||
+                 (transform.right.x < 0 && transform.position.x < player.transform.position.x))
+            {
+                return true;
+            }
+            return false;
+        }
 
         //called when an attack is launched
         private bool LaunchAttack(Collider col)
@@ -208,6 +252,10 @@ namespace Game_Control{
                     case "Laser":
                         damage += 50;
                         break;
+                    case "Stomp":
+                        damage += 80;
+                        enemy1_state_transition_func.setJustStomped();
+                        break;
                     case "TestDamage":
                         damage += 10;
                         break;
@@ -218,18 +266,20 @@ namespace Game_Control{
             }
             
             //return true if attack landed, false otherwise
-            if (damage > 0 && !player_health_info.is_invincible)
+            if (damage > 0)
             {
                 if (player_health_info.parry_ready)
                 {
                     player_health_info.setParrySuccess(true);
+                    enemy1_state_transition_func.setJustHit();
                 }
-                else
+                else if (!player_health_info.is_invincible)
                 {
                     player_health_info.doDamage(damage);
                     player_health_info.setInvincible(0.5f);
+                    enemy1_state_transition_func.setJustHit();
                 }
-                enemy1_state_transition_func.setJustHit();
+                
 
 
             }
