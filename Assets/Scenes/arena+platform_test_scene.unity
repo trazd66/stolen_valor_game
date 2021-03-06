@@ -444,11 +444,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f3ac3f786a8fb4595737b1ae4623fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &1374529016 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 4499602264149891667, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-  m_PrefabInstance: {fileID: 3517537113262570126}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1486152882
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -679,14 +674,6 @@ PrefabInstance:
       propertyPath: player_health_info
       value: 
       objectReference: {fileID: 249195719}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: hitboxes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: hitboxes.Array.data[0]
-      value: 
-      objectReference: {fileID: 1374529016}
     - target: {fileID: 6076948499756499637, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -729,10 +716,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6076948499756499637, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499639, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6076948499756499641, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
