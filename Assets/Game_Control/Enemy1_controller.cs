@@ -206,7 +206,7 @@ namespace Game_Control{
 
             foreach (Collider col in hitboxes)
             {
-                Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("EnemyHitbox"));
+                Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
                 if (cols.Length > 0)
                 {
                     switch (state)
