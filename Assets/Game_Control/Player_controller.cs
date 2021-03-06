@@ -145,8 +145,11 @@ namespace Game_Control
             }
             else
             {
+                string desc = Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state);
+                if(desc != ""){
+                    char_animator.Play(desc);
+                }
                 //set animation to whatever else
-                char_animator.Play(Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state));
             }
 
             apply_movement(horizontal_input, vertical_input);
@@ -165,7 +168,11 @@ namespace Game_Control
                 }
                 else if (state_changed)
                 {
-                    if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_dash)
+                    if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_jump)
+                    {
+                        attack_controller.process_state(Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack);
+                    }
+                    else if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_dash)
                     {
                         attack_controller.process_state(Player_Input.PlayerInput.Dash | Player_Input.PlayerInput.Attack);
                     }

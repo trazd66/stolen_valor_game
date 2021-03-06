@@ -30,13 +30,9 @@ namespace Game_Control
             jump,
             [Description("airborne")]
             airborne,
-            [Description("attack_basic")]
             attack_basic,
-            [Description("attack_dash")]
             attack_dash,
-            [Description("attack_jump")]
             attack_jump,
-            [Description("attack_special_0")]
             attack_special_0,
             [Description("dodge")]
             dodge,
