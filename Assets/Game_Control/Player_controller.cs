@@ -47,6 +47,11 @@ namespace Game_Control
 
         public Collider[] AttackHitboxes;
 
+        public Renderer PlayerVisuals;
+        private Material skin_material;
+        private Color skin_natural;
+
+
 
         State_controller state_controller;
         State_controller attack_controller;
@@ -68,6 +73,14 @@ namespace Game_Control
 
 
             rot = Quaternion.Euler(0, 0, 0);
+
+            Material[] materials = PlayerVisuals.materials;
+
+            skin_material = materials[1];
+
+            skin_natural = new Color(1f, 1f, 1f);
+
+            skin_material.SetColor("_Color", skin_natural);
 
         }
         void OnDrawGizmos()
@@ -138,6 +151,8 @@ namespace Game_Control
 
             apply_movement(horizontal_input, vertical_input);
 
+            update_indicators();
+
         }
 
 
@@ -190,11 +205,11 @@ namespace Game_Control
                     //do attack in correct direction
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(transform.position, false, true);
+                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, true);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(transform.position, false, false);
+                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, false);
                     }
                 }
                 
@@ -238,17 +253,19 @@ namespace Game_Control
             }
             else
 
-            //apply dodge movement and colourto the player
+            //apply dodge movement to the player
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)
             {
                 player_health_info.setInvincible(0.2f);
                 move += Player_controller_helper.getDodgeVector(horizontal_input, vertical_input) * Time.deltaTime * dodge_speed;
 
             }
-            //otherwise apply regular movement
-            else if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking ||
+            //otherwise apply regular movement if not in an attack that locks movement
+            else if ((attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking ||
                     attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0 ||
-                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
+                    attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0) &&
+                    (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active&&
+                    state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown))
             {
                 //apply horizontal movement
                 move += new Vector3(horizontal_input, 0, 0) * Time.deltaTime * Speed;
@@ -290,6 +307,27 @@ namespace Game_Control
             }
 
 
+        }
+
+        private void update_indicators()
+        {
+            if (cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value > 0)
+            {
+                cooldown_manager.dodge_ready = false;
+            }
+            else if (!cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value <= 0)
+            {
+                cooldown_manager.dodge_ready = true;
+            }
+
+            if (cooldown_manager.laser_ready && (state_controller.cooldown_timers[1].Value > 0 || !combo_info.canFireLaser()))
+            {
+                cooldown_manager.laser_ready = false;
+            }
+            else if (!cooldown_manager.dodge_ready && state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser())
+            {
+                cooldown_manager.laser_ready = true;
+            }
         }
     }
 }
