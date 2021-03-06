@@ -50,8 +50,8 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        SetLoop(Theme,true);
-        Play(Theme);
+        // SetLoop(Theme,true);
+        // Play(Theme);
     }
 
     /// <summary>

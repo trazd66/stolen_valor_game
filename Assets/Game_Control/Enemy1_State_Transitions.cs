@@ -145,17 +145,20 @@ namespace Game_Control
                 //perform run attack in appropriate direction
                 if (rand < 1)
                 {
+                    AudioManager.instance.Play("boss_hoveridle");
                     update_state((int)enemy1_state.run_windup, 0.5f, ref curr_state, ref prev_states, ref duration);
                 }
                 //perform stomp attack
                 else if (rand < 2)
                 {
+                    AudioManager.instance.Play("boss_slam");
                     update_state((int)enemy1_state.stomp_windup, 0.2f, ref curr_state, ref prev_states, ref duration);
                     //Debug.Log("state changed 3");
                 }
                 //perform laser attack
                 else
                 {
+                    AudioManager.instance.Play("boss_chargeattk");
                     update_state((int)enemy1_state.laser_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
                     //Debug.Log("state changed 4");
                 }
