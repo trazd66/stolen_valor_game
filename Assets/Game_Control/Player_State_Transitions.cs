@@ -63,12 +63,14 @@ namespace Game_Control
         public Float_ref laser_cd_timer;
 
         CharacterController player_characterController;
+        HealthInfo player_health_info;
         // CharacterController enemy_characterController;
 
 
-        public Player_State_Transition_Func(CharacterController player)
+        public Player_State_Transition_Func(CharacterController player, HealthInfo player_health_info_ref)
         {
             player_characterController = player;
+            player_health_info = player_health_info_ref;
         }
 
 
@@ -100,11 +102,19 @@ namespace Game_Control
 
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
+            //exit jump attack state when landing
             if(player_characterController.isGrounded && curr_state == (int)player_state.attack_jump)
             {
                 update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
             }
-            if(duration <= 0){
+
+            //exit parry state on successful parry
+            if (player_health_info.getParrySuccess() && curr_state == (int)player_state.parry_active)
+            {
+                update_state((int)player_state.idle, 0, ref curr_state, ref prev_states, ref duration);
+            }
+
+            if (duration <= 0){
                 if (curr_state == (int)player_state.parry_active)
                 {
                     update_state((int)player_state.parry_cooldown, parry_cooldown_duration, ref curr_state, ref prev_states, ref duration);
