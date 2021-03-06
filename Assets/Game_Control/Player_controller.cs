@@ -184,6 +184,7 @@ namespace Game_Control
             {
                 AudioManager.instance.Play("parry_success");
                 player_health_info.setParryReady(0f);
+                player_health_info.setInvincible(0.5f);
                 player_health_info.setParryBonus(parry_bonus_duration);
                 player_health_info.setParrySuccess(false);
             }
