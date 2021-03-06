@@ -386,7 +386,7 @@ namespace Game_Control
             {
                 cooldown_manager.laser_ready = false;
             }
-            else if (!cooldown_manager.dodge_ready && state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser())
+            else if (!cooldown_manager.laser_ready && state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser())
             {
                 cooldown_manager.laser_ready = true;
             }
