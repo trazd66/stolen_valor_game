@@ -31,8 +31,8 @@ namespace Game_Util
                     return ((DescriptionAttribute)attrs[0]).Description;
                 }
             }
-            //If we have no description attribute, just return the ToString of the enum
-            return enumerationValue.ToString();
+            // return empty string if no description
+            return "";
         }
     }
 

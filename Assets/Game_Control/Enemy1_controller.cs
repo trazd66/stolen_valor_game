@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game_Util;
 
 namespace Game_Control{
 
@@ -9,21 +10,15 @@ namespace Game_Control{
         State_controller state_controller;
         Enemy1_State_Transition_Func enemy1_state_transition_func;
 
-        
-
-
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
         private HealthBarApi ui;
 
         public GameObject player;
 
-        public GameObject[] AttackVisuals;
-        public Renderer[] BossVisuals;
+        public Collider[] hitboxes;
 
-
-        public Collider[] AttackHitboxes;
-
+        public Animator enemy_animator;
         public Laser_Manager laser_manager;
         public Reward_Manager reward_manager;
 
@@ -91,6 +86,7 @@ namespace Game_Control{
                 {
                     stomp_charge_horizontal_speed = 1.5f + Random.value;
                 }
+
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
                 {
                     if (transform.right.x >= 0)
@@ -116,27 +112,12 @@ namespace Game_Control{
                 }
             }
 
-            //apply colour
-            if (boss_health_info.is_invincible)
-            {
-                for (int i = 0; i < BossVisuals.Length; i++)
-                {
-                    BossVisuals[i].material.SetColor("_Color", Color.red);
-                }
-            }
-            else
-            if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
-            {
-                for (int i = 0; i < BossVisuals.Length; i++)
-                {
-                    BossVisuals[i].material.SetColor("_Color", Color.black);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < BossVisuals.Length; i++)
-                {
-                    BossVisuals[i].material.SetColor("_Color", Color.gray);
+            if((Enemy1_State_Transition_Func.enemy1_state) state_controller.curr_state == Enemy1_State_Transition_Func.enemy1_state.laser_charge){
+                enemy_animator.Play(Utility_methods.GetDescription<Enemy1_State_Transition_Func.enemy1_state>((Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state));
+            }else{
+                string desc = Utility_methods.GetDescription<Enemy1_State_Transition_Func.enemy1_state>((Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
+                if(desc != ""){
+                    enemy_animator.Play(desc);
                 }
             }
 
@@ -200,16 +181,9 @@ namespace Game_Control{
                 {
                     transform.position = new Vector3(transform.position.x, 0.66f, transform.position.z);
                 }
-                LaunchAttack(AttackHitboxes[5]);
             }
 
-
-            //hitbox detecting for player touching enemy body
-            LaunchAttack(AttackHitboxes[0]);
-            LaunchAttack(AttackHitboxes[1]);
-
-            //uncomment when you want to use the test attack
-            //LaunchAttack(AttackHitboxes[4]);
+            LaunchAttack(hitboxes,(Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
 
 
         }
@@ -225,42 +199,30 @@ namespace Game_Control{
         }
 
         //called when an attack is launched
-        private bool LaunchAttack(Collider col)
+        private bool LaunchAttack(Collider[] hitboxes, Enemy1_State_Transition_Func.enemy1_state state)
         {
 
-
-            //check what Colliders on the PlayerHitbox layer overlap col
-            Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
-            
             int damage = 0;
 
-            if (cols.Length > 0)
+            foreach (Collider col in hitboxes)
             {
-                //add damage based on what's attacking
-                switch (col.name)
+                Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
+                if (cols.Length > 0)
                 {
-                    case "Body":
-                        damage += 20;
-                        break;
-                    case "Head":
-                        damage += 20;
-                        break;
-                    case "Front":
-                        damage += 80;
-                        break;
-                    case "Laser":
-                        damage += 50;
-                        break;
-                    case "Stomp":
-                        damage += 80;
-                        enemy1_state_transition_func.setJustStomped();
-                        break;
-                    case "TestDamage":
-                        damage += 10;
-                        break;
-                    default:
-                        Debug.Log("Unable to identify attack, make sure switch case matches.");
-                        break;
+                    switch (state)
+                    {
+                        case  Enemy1_State_Transition_Func.enemy1_state.run_attack_left:
+                            damage = 30;
+                            break;
+                        case Enemy1_State_Transition_Func.enemy1_state.run_attack_right:
+                            damage = 30;
+                            break;
+                        case Enemy1_State_Transition_Func.enemy1_state.stomp_attack:
+                            damage = 50;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             

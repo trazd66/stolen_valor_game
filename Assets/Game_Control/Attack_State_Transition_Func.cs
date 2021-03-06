@@ -11,7 +11,6 @@ namespace Game_Control
     {
         public enum attack_state
         {
-            [Description("not_attacking")]
             not_attacking,
             [Description("attack_basic_0")]
             attack_basic_0,
@@ -130,7 +129,6 @@ namespace Game_Control
         //add input to queue, that's it
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
         {
-
 
             //enqueue attack if attack queue is not full
             if (input.HasFlag(Player_Input.PlayerInput.Attack) && attack_queue.Count <= 8)

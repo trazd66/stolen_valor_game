@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game_Util;
+using System.ComponentModel;
+
+
 namespace Game_Control
 {
 
@@ -9,11 +12,13 @@ namespace Game_Control
     {
         public enum enemy1_state
         {
+            [Description("idle")]
             idle,
             run_windup,
             run_attack_right,
             run_attack_left,
             front_attack,
+            [Description("laser_charge")]
             laser_charge,
             laser_attack,
             stomp_windup,
