@@ -20,6 +20,9 @@ namespace Game_Control
         private float dodge_vertical;
         private float dodge_speed = 12.0f;
 
+        private float parry_active_duration = 0.2f;
+        private float parry_bonus_duration = 1.5f;
+
         private bool parry_stop = false;
         private float parry_stop_initial;
 
@@ -49,7 +52,11 @@ namespace Game_Control
 
         public Renderer PlayerVisuals;
         private Material skin_material;
-        private Color skin_natural;
+        private Color skin_natural = new Color(1f, 1f, 0f);
+        private Color parry_active_colour = new Color(0f, 1f, 1f);
+        private Color parry_cooldown_colour = new Color(0f, 0f, 0f);
+        private Color parry_success_colour = new Color(0f, 1f, 0f);
+        private Color invincible_colour = new Color(1f, 0f, 0f);
 
 
 
@@ -66,7 +73,7 @@ namespace Game_Control
             _character_controller.minMoveDistance = 0;
 
             state_controller = new State_controller();
-            state_controller.initialize(new Player_State_Transition_Func(_character_controller));
+            state_controller.initialize(new Player_State_Transition_Func(_character_controller, player_health_info));
 
             attack_controller = new State_controller();
             attack_controller.initialize(new Attack_State_Transition_Func());
@@ -77,8 +84,6 @@ namespace Game_Control
             Material[] materials = PlayerVisuals.materials;
 
             skin_material = materials[1];
-
-            skin_natural = new Color(1f, 1f, 1f);
 
             skin_material.SetColor("_Color", skin_natural);
 
@@ -149,12 +154,30 @@ namespace Game_Control
                 char_animator.Play(Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state));
             }
 
+            process_parry(state_changed);
+
+            setColour();
+
             apply_movement(horizontal_input, vertical_input);
 
             update_indicators();
 
         }
 
+        private void process_parry(bool state_changed)
+        {
+            if (state_changed && state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_active)
+            {
+                player_health_info.setParryReady(parry_active_duration);
+                player_health_info.setInvincible(parry_active_duration);
+            }
+            if (player_health_info.getParrySuccess())
+            {
+                player_health_info.setParryReady(0f);
+                player_health_info.setParryBonus(parry_bonus_duration);
+                player_health_info.setParrySuccess(false);
+            }
+        }
 
         private void process_attack_input(bool state_changed, Player_Input.PlayerInput input){
             if (input.HasFlag(Player_Input.PlayerInput.Attack))
@@ -215,6 +238,30 @@ namespace Game_Control
                 
             }
 
+        }
+
+        private void setColour()
+        {
+            if (player_health_info.parry_ready)
+            {
+                skin_material.SetColor("_Color", parry_active_colour);
+            }
+            else if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.parry_cooldown)
+            {
+                skin_material.SetColor("_Color", parry_cooldown_colour);
+            }
+            else if (player_health_info.parry_bonus)
+            {
+                skin_material.SetColor("_Color", parry_success_colour);
+            }
+            else if (player_health_info.is_invincible)
+            {
+                skin_material.SetColor("_Color", invincible_colour);
+            }
+            else
+            {
+                skin_material.SetColor("_Color", skin_natural);
+            }
         }
 
         private void reload_scene_if_death(){
