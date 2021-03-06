@@ -86,16 +86,22 @@ namespace Game_Control
             skin_material = materials[1];
 
             skin_material.SetColor("_Color", skin_natural);
+            AudioManager.instance.SetLoop("leveltheme1_v2",true);
+            AudioManager.instance.ChangeVolume("leveltheme1_v2", 0.3f);
+            AudioManager.instance.Play("leveltheme1_v2");
 
+            AudioManager.instance.SetLoop("char_hoveridle",true);
+            AudioManager.instance.ChangeVolume("char_hoveridle", 0.2f);
+            AudioManager.instance.Play("char_hoveridle");
         }
-        void OnDrawGizmos()
-        {
-            if (state_controller != null && attack_controller != null)
-            {
-                Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
-                Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
-            }
-        }
+        // void OnDrawGizmos()
+        // {
+        //     if (state_controller != null && attack_controller != null)
+        //     {
+        //         Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
+        //         Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
+        //     }
+        // }
 
         void FixedUpdate()
         {
@@ -176,6 +182,7 @@ namespace Game_Control
             }
             if (player_health_info.getParrySuccess())
             {
+                AudioManager.instance.Play("parry_success");
                 player_health_info.setParryReady(0f);
                 player_health_info.setParryBonus(parry_bonus_duration);
                 player_health_info.setParrySuccess(false);

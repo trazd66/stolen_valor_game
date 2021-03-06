@@ -26,7 +26,6 @@ namespace Game_Control
             attack_dash_0,
             [Description("attack_jump_0")]
             attack_jump_0,
-            [Description("attack_special_0")]
             attack_special_0,
 
         }
@@ -72,15 +71,17 @@ namespace Game_Control
                     {
                         if (curr_state < (int)attack_state.attack_basic_3)
                         {
+                            AudioManager.instance.Play("game jam 3 impact");
                             update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
                         else if (curr_state == (int)attack_state.attack_basic_3)
                         {
+                            AudioManager.instance.Play("char_spinattk");
                             update_state((int)curr_state + 1, strong_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
                         else if (curr_state == (int)attack_state.attack_basic_4)
                         {
-                            update_state((int)attack_state.attack_basic_0, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
+                            AudioManager.instance.Play("game jam 3 impact");
                         }
                     }
                     else
@@ -95,6 +96,7 @@ namespace Game_Control
                     {
                         if (curr_state == (int)attack_state.not_attacking)
                         {
+                            AudioManager.instance.Play("char_spinattk");
                             update_state((int)attack_state.attack_dash_0, dash_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
 
@@ -103,6 +105,7 @@ namespace Game_Control
                     //jump attack
                     if (atk == (int)(Player_Input.PlayerInput.Jump | Player_Input.PlayerInput.Attack))
                     {
+                        AudioManager.instance.Play("game jam 3 impact");
                         if (curr_state < (int)attack_state.attack_basic_3)
                         {
                             update_state((int)attack_state.attack_jump_0, jump_attack_interval, ref curr_state, ref prev_states, ref duration);
