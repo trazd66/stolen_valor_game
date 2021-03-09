@@ -20,6 +20,8 @@ namespace Game_Control
         private float dodge_vertical;
         private float dodge_speed = 12.0f;
 
+        private float dodge_invuln_timer = 0f;
+
         private float parry_active_duration = 0.2f;
         private float parry_bonus_duration = 1.5f;
 
@@ -56,7 +58,8 @@ namespace Game_Control
         private Color parry_active_colour = new Color(0f, 1f, 1f);
         private Color parry_cooldown_colour = new Color(0f, 0f, 0f);
         private Color parry_success_colour = new Color(0f, 1f, 0f);
-        private Color invincible_colour = new Color(1f, 0f, 0f);
+        private Color invincible_colour = new Color(1f, 1f, 1f);
+        private Color hurt_colour = new Color(1f, 0f, 0f);
 
 
 
@@ -171,6 +174,8 @@ namespace Game_Control
 
             update_indicators();
 
+            dodge_invuln_timer -= Time.deltaTime;
+
         }
 
         private void process_parry(bool state_changed)
@@ -269,9 +274,13 @@ namespace Game_Control
             {
                 skin_material.SetColor("_Color", parry_success_colour);
             }
-            else if (player_health_info.is_invincible)
+            else if (dodge_invuln_timer > 0)
             {
                 skin_material.SetColor("_Color", invincible_colour);
+            }
+            else if (player_health_info.is_invincible)
+            {
+                skin_material.SetColor("_Color", hurt_colour);
             }
             else
             {
@@ -319,6 +328,7 @@ namespace Game_Control
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)
             {
                 player_health_info.setInvincible(0.2f);
+                dodge_invuln_timer = 0.2f;
                 move += Player_controller_helper.getDodgeVector(horizontal_input, vertical_input) * Time.deltaTime * dodge_speed;
 
             }
