@@ -13,8 +13,8 @@ namespace Game_Control
 
         int player_id;
 
-        public float Speed = 5.0f;
-        public float JumpHeight = 1.5f;
+        private float Speed = 5.0f;
+        private float JumpHeight = 2.5f;
 
         private float dodge_horizontal;
         private float dodge_vertical;
