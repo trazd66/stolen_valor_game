@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4495991, g: 0.49967182, b: 0.5756598, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -723,6 +723,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 32357475302341076, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507670414685177363, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: m_Center.x
+      value: -0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 6507670414685177364, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: laser_manager
       value: 
@@ -786,6 +794,14 @@ PrefabInstance:
     - target: {fileID: 6507670414685177375, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655704993709682716, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.3936409
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655704993709682716, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.129
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}

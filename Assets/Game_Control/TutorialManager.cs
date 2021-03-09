@@ -16,7 +16,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Attack"))
         {
-            SceneManager.LoadScene("Enemy1Scene");
+            SceneManager.LoadScene("arena+platform_test_scene");
         }
     }
 }

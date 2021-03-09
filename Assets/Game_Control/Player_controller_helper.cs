@@ -101,24 +101,27 @@ namespace Game_Control
             if (damage > 0 && !boss_health_info.is_invincible)
             {
                 boss_health_info.doDamage(damage);
-                if (!boss_health_info.is_invincible)
-                {
-                    boss_health_info.setInvincible(0.4f);
-                    combo_info.setComboTimer(1.5f);
-                    cur_combo_points = damage;
-                    float combo_multiplier = 1.0f + (combo_info.combo_counter * 0.1f);
-                    if (combo_multiplier > 2.0f)
-                    {
-                        combo_multiplier = 2.0f;
-                    }
-                    cur_combo_points = (int)(cur_combo_points * combo_multiplier);
-                    if (player_health_info.parry_bonus)
-                    {
-                        cur_combo_points = (int)(combo_info.getComboPoints() * 1.5f);
-                    }
-                    combo_info.addComboPoints(cur_combo_points);
-                    combo_info.combo_counter++;
-                }
+                AudioManager.instance.Play("game jam 3 impact");
+
+                boss_health_info.setInvincible(0.4f);
+                combo_info.setComboTimer(1.5f);
+                    
+                cur_combo_points = damage;                   
+                float combo_multiplier = 1.0f + (combo_info.combo_counter * 0.1f);    
+                
+                if (combo_multiplier > 2.0f)                    
+                {                        
+                    combo_multiplier = 2.0f;                    
+                }                    
+                cur_combo_points = (int)(cur_combo_points * combo_multiplier);   
+                
+                if (player_health_info.parry_bonus)                  
+                {                        
+                    cur_combo_points = (int)(combo_info.getComboPoints() * 1.5f);                  
+                }            
+                
+                combo_info.addComboPoints(cur_combo_points);
+                combo_info.combo_counter++;
                 
             }
 

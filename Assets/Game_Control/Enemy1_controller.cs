@@ -219,8 +219,10 @@ namespace Game_Control{
                             break;
                         case Enemy1_State_Transition_Func.enemy1_state.stomp_attack:
                             damage = 50;
+                            enemy1_state_transition_func.setJustStomped();
                             break;
                         default:
+                            damage = 20;
                             break;
                     }
                 }
