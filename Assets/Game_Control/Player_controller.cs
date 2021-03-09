@@ -54,12 +54,12 @@ namespace Game_Control
 
         public Renderer PlayerVisuals;
         private Material skin_material;
-        private Color skin_natural = new Color(1f, 1f, 0f);
+        private Color skin_natural;
         private Color parry_active_colour = new Color(0f, 1f, 1f);
         private Color parry_cooldown_colour = new Color(0f, 0f, 0f);
         private Color parry_success_colour = new Color(0f, 1f, 0f);
-        private Color invincible_colour = new Color(1f, 1f, 1f);
-        private Color hurt_colour = new Color(1f, 0f, 0f);
+        private Color invincible_colour = new Color(1f, 1f, 1f,0.0f);
+        private Color hurt_colour = new Color(1f, 0f, 0f, 0.5f);
 
 
 
@@ -87,8 +87,9 @@ namespace Game_Control
             Material[] materials = PlayerVisuals.materials;
 
             skin_material = materials[1];
+            
+            skin_natural = skin_material.color;
 
-            skin_material.SetColor("_Color", skin_natural);
             AudioManager.instance.SetLoop("leveltheme1_v2",true);
             AudioManager.instance.ChangeVolume("leveltheme1_v2", 0.3f);
             AudioManager.instance.Play("leveltheme1_v2");
@@ -106,6 +107,16 @@ namespace Game_Control
         //     }
         // }
 
+        public IEnumerator Flash (Color c)
+    
+        {
+            skin_material.color = c;
+            yield return new WaitForSeconds(0.05f);
+            skin_material.color = skin_natural;
+            StopCoroutine("Flash");
+        }
+    
+    
         void FixedUpdate()
         {
         }
@@ -276,11 +287,11 @@ namespace Game_Control
             }
             else if (dodge_invuln_timer > 0)
             {
-                skin_material.SetColor("_Color", invincible_colour);
+                StartCoroutine("Flash",invincible_colour);
             }
             else if (player_health_info.is_invincible)
             {
-                skin_material.SetColor("_Color", hurt_colour);
+                StartCoroutine("Flash",hurt_colour);
             }
             else
             {
