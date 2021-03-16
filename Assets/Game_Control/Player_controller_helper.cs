@@ -82,7 +82,7 @@ namespace Game_Control
                             damage = 50;
                             break;
                         case Attack_State_Transition_Func.attack_state.attack_basic_4:
-                            damage = 100;
+                            damage = 50;
                             break;
                         case Attack_State_Transition_Func.attack_state.attack_dash_0:
                             damage = 40;
@@ -100,7 +100,14 @@ namespace Game_Control
             int cur_combo_points;                 
             if (damage > 0 && !boss_health_info.is_invincible)
             {
+
+                if (player_health_info.parry_bonus)
+                {
+                    damage = (int)(damage * 1.5);
+                }
+
                 boss_health_info.doDamage(damage);
+                Debug.Log(damage);
                 AudioManager.instance.Play("game jam 3 impact");
 
                 boss_health_info.setInvincible(0.4f);
@@ -113,12 +120,7 @@ namespace Game_Control
                 {                        
                     combo_multiplier = 2.0f;                    
                 }                    
-                cur_combo_points = (int)(cur_combo_points * combo_multiplier);   
-                
-                if (player_health_info.parry_bonus)                  
-                {                        
-                    cur_combo_points = (int)(combo_info.getComboPoints() * 1.5f);                  
-                }            
+                cur_combo_points = (int)(cur_combo_points * combo_multiplier);             
                 
                 combo_info.addComboPoints(cur_combo_points);
                 combo_info.combo_counter++;

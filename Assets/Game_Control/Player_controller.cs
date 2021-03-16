@@ -354,18 +354,21 @@ namespace Game_Control
                 move += new Vector3(horizontal_input, 0, 0) * Time.deltaTime * Speed;
 
                 // steering the character
-                lerpSpeed = 20 * Time.deltaTime;
-                if (move.x > 0)
-                {
-                    rot = Quaternion.Euler(0, 0, 0);
-                }
+                if(attack_controller.curr_state != (int)Attack_State_Transition_Func.attack_state.attack_jump_0){
+                    lerpSpeed = 20 * Time.deltaTime;
+                    if (move.x > 0)
+                    {
+                        rot = Quaternion.Euler(0, 0, 0);
+                    }
 
-                if (move.x < 0)
-                {
-                    rot = Quaternion.Euler(0, -180, 0);
+                    if (move.x < 0)
+                    {
+                        rot = Quaternion.Euler(0, -180, 0);
 
+                    }
+                    transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
                 }
-                transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
+                
             }
 
 
