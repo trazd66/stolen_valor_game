@@ -11,6 +11,8 @@ public class ComboInfo : MonoBehaviour
 
     private static float laser_cost = 500;
 
+    private bool laser_unlock = false;
+
     public bool combo_timer_active { get { return combo_timer.Value > 0; } }
 
     private Float_ref combo_timer;
@@ -64,6 +66,11 @@ public class ComboInfo : MonoBehaviour
 
     public bool canFireLaser()
     {
-        return combo_points >= laser_cost;
+        return combo_points >= laser_cost && laser_unlock;
+    }
+
+    public void unlockLaser()
+    {
+        laser_unlock = true;
     }
 }

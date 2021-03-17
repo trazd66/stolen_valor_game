@@ -20,7 +20,10 @@ namespace Game_Control{
 
         public Animator enemy_animator;
         public Laser_Manager laser_manager;
+        public Laser_Reward_Manager laser_reward_manager;
         public Reward_Manager reward_manager;
+
+        private int phase = 1;
 
         private float run_windup_speed = 1f;
         private float run_attack_speed = 5f;
@@ -55,6 +58,12 @@ namespace Game_Control{
             {
                 reward_manager.placeReward(transform.position);
                 Destroy(gameObject);
+            }
+
+            if(boss_health_info.curr_health / boss_health_info.max_health <= 0.5f && phase == 1)
+            {
+                phase = 2;
+                laser_reward_manager.placeReward();
             }
 
             state_controller.process_time();

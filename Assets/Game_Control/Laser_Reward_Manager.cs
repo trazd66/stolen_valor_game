@@ -1,35 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Reward_Manager : MonoBehaviour
+public class Laser_Reward_Manager : MonoBehaviour
 {
+    // Start is called before the first frame update
+
+    public ComboInfo combo_info;
 
     private Collider col;
-    private bool active = false;
-    // Start is called before the first frame update
+    private bool active = true;
+
+    private Vector3 position = new Vector3(0f, 2f, -0.558f);
+
     void Start()
     {
-        gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
+        gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.gray);
         col = gameObject.GetComponent<Collider>();
     }
 
+    // Update is called once per frame
     void Update()
     {
         if (active)
         {
             Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
 
-            if(cols.Length > 0)
+            if (cols.Length > 0)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                combo_info.unlockLaser();
+                Destroy(gameObject);
             }
         }
     }
 
-
-    public void placeReward(Vector3 position)
+    public void placeReward()
     {
         gameObject.transform.position = position;
         active = true;
