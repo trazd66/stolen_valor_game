@@ -23,7 +23,7 @@ namespace Game_Control{
 
         }
 
-        public void aim_laser(Vector3 position, Vector3 direction)
+        public void aim_laser(Vector3 position, Vector3 direction, float radius, float max_distance)
         {
             //create laser visual
             GameObject laser_visual = new GameObject();
@@ -44,18 +44,18 @@ namespace Game_Control{
             line_renderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
             line_renderer.material.renderQueue = 3000;
 
-
+            Vector3 norm_direction = (new Vector3(direction.x - position.x, direction.y - position.y, direction.z - position.z)).normalized;
 
 
             line_renderer.SetPosition(0, position);
 
-            line_renderer.SetPosition(1, direction);
+            line_renderer.SetPosition(1, position + norm_direction * max_distance);
 
-            line_renderer.widthMultiplier = 0.2f;
+            line_renderer.widthMultiplier = radius;
             Destroy(laser_visual, 1.0f);
         }
 
-        public void fire_laser(Vector3 position, bool is_enemy, Vector3 direction)
+        public void fire_laser(Vector3 position, bool is_enemy, Vector3 direction, float radius, float max_distance)
 
         {
             RaycastHit hit = new RaycastHit();
@@ -74,7 +74,7 @@ namespace Game_Control{
             }
 
             //check collision with enemies
-            if (!is_enemy && Physics.SphereCast(position, 0.2f, norm_direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
+            if (!is_enemy && Physics.SphereCast(position, radius, norm_direction, out hit, max_distance, LayerMask.GetMask("EnemyHitbox")))
             {
                 
                 boss_health_info.doDamage(100);
@@ -83,7 +83,7 @@ namespace Game_Control{
 
             }
             //check collision with player
-            else if (is_enemy && Physics.SphereCast(position, 0.2f, norm_direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
+            else if (is_enemy && Physics.SphereCast(position, radius, norm_direction, out hit, max_distance, LayerMask.GetMask("PlayerHitbox")))
             {
                 if (player_health_info.parry_ready)
                 {
@@ -111,12 +111,12 @@ namespace Game_Control{
             }
             else
             {
-                distance = 10f;
+                distance = max_distance;
             }
 
             line_renderer.SetPosition(1, position + norm_direction * distance);
 
-            line_renderer.widthMultiplier = 0.2f;
+            line_renderer.widthMultiplier = radius;
             Destroy(laser_visual, 0.15f);
         }
 

@@ -23,6 +23,8 @@ namespace Game_Control
             laser_attack,
             laser_rain_charge,
             laser_rain_attack,
+            laser_rapid_charge,
+            laser_rapid_attack,
             stomp_windup,
             stomp_charge,
             stomp_attack
@@ -38,6 +40,9 @@ namespace Game_Control
         private float hurt_idle_duration = 1.5f;
 
         private float stomp_attack_range = 2.5f;
+
+        private float laser_rapid_max = 3;
+        private float laser_rapid_fires = 0;
 
 
         public Enemy1_State_Transition_Func(GameObject player_ref, GameObject enemy1_ref, HealthInfo boss_health_info_ref)
@@ -148,18 +153,17 @@ namespace Game_Control
                         }
                     }
 
-                    rand = 2;
                     //perform run attack in appropriate direction
                     if (rand < 1)
                     {
                         AudioManager.instance.Play("boss_hoveridle");
-                        update_state((int)enemy1_state.run_windup, 0.5f, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)enemy1_state.run_windup, 0.75f, ref curr_state, ref prev_states, ref duration);
                     }
                     //perform stomp attack
                     else if (rand < 2)
                     {
                         AudioManager.instance.Play("boss_slam");
-                        update_state((int)enemy1_state.stomp_windup, 0.2f, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)enemy1_state.stomp_windup, 0.3f, ref curr_state, ref prev_states, ref duration);
                         //Debug.Log("state changed 3");
                     }
                     //perform laser attack
@@ -178,7 +182,7 @@ namespace Game_Control
                     while (!valid)
                     {
                         valid = true;
-                        rand = Random.value * 3;
+                        rand = Random.value * 4;
                         foreach (int roll in invalid_rolls)
                         {
                             if ((int)rand == roll)
@@ -188,27 +192,31 @@ namespace Game_Control
                             }
                         }
                     }
-
-                    rand = 2;
+                    rand = 3;
                     //perform run attack in appropriate direction
                     if (rand < 1)
                     {
                         AudioManager.instance.Play("boss_hoveridle");
-                        update_state((int)enemy1_state.run_windup, 0.5f, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)enemy1_state.run_windup, 0.75f, ref curr_state, ref prev_states, ref duration);
                     }
                     //perform stomp attack
                     else if (rand < 2)
                     {
                         AudioManager.instance.Play("boss_slam");
-                        update_state((int)enemy1_state.stomp_windup, 0.2f, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)enemy1_state.stomp_windup, 0.3f, ref curr_state, ref prev_states, ref duration);
                         //Debug.Log("state changed 3");
                     }
                     //perform laser attack
-                    else
+                    else if (rand < 3)
                     {
                         AudioManager.instance.Play("boss_chargeattk");
                         update_state((int)enemy1_state.laser_rain_charge, 1.75f, ref curr_state, ref prev_states, ref duration);
                         //Debug.Log("state changed 4");
+                    }
+                    else
+                    {
+                        AudioManager.instance.Play("boss_chargeattk");
+                        update_state((int)enemy1_state.laser_rapid_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
                     }
                     state_changed = true;
                 }
@@ -275,6 +283,30 @@ namespace Game_Control
             else if (curr_state == (int)enemy1_state.laser_rain_attack && duration <= 0)
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
+                //Debug.Log("state changed 0");
+                state_changed = true;
+            }
+            //boss has completed laser rapid charge
+            else if (curr_state == (int)enemy1_state.laser_rapid_charge && duration <= 0)
+            {
+                update_state((int)enemy1_state.laser_rapid_attack, 0.5f, ref curr_state, ref prev_states, ref duration);
+                //Debug.Log("state changed 0");
+                state_changed = true;
+            }
+            //boss has completed laser rapid attack
+            else if (curr_state == (int)enemy1_state.laser_rapid_attack && duration <= 0)
+            {
+                laser_rapid_fires++;
+                if (laser_rapid_fires >= laser_rapid_max)
+                {
+                    laser_rapid_fires = 0;
+                    update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
+                }
+                else
+                {
+                    AudioManager.instance.Play("boss_chargeattk");
+                    update_state((int)enemy1_state.laser_rapid_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
+                }
                 //Debug.Log("state changed 0");
                 state_changed = true;
             }

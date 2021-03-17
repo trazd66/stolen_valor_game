@@ -34,6 +34,9 @@ namespace Game_Control{
         private Vector3[] laser_rain_positions = new Vector3[6];
         private Vector3[] laser_rain_directions = new Vector3[6];
 
+        private Vector3 laser_rapid_position;
+        private Vector3 laser_rapid_direction;
+
 
         // Start is called before the first frame update
         void Start()
@@ -89,17 +92,17 @@ namespace Game_Control{
                 {
                     stomp_charge_horizontal_speed = 1.5f + Random.value;
                 }
-
+                //call laser aim function if laser attack state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
                 {
 
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z));
+                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z), 0.2f, 10f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z));
+                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), 0.2f, 10f);
                     }
                 }
                 //call laser function if laser attack state is entered
@@ -108,13 +111,14 @@ namespace Game_Control{
 
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z));
+                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z), 0.2f, 10f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z));
+                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), 0.2f, 10f);
                     }
                 }
+                //call laser rain aim function of laser rain aim state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rain_charge)
                 {
                     float x = -5f;
@@ -129,9 +133,25 @@ namespace Game_Control{
 
                     laser_manager.laser_rain_aim(laser_rain_positions, laser_rain_directions);
                 }
+                //call laser rain attack function if laser rain aim state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rain_attack)
                 {
                     laser_manager.laser_rain_fire(laser_rain_positions, laser_rain_directions);
+                }
+                //call laser rapid aim function if laser rapid aim state is entered
+                else if((state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rapid_charge))
+                {
+                    float rand_x = (Random.value * 20) - 10;
+
+                    laser_rapid_position = new Vector3(rand_x, 10f, -0.558f);
+                    laser_rapid_direction = player.transform.position;
+
+                    laser_manager.aim_laser(laser_rapid_position, laser_rapid_direction, 0.5f, 30f);
+                }
+                //call laser rapid fire function if laser rapid fire state is entered
+                else if ((state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rapid_attack))
+                {
+                    laser_manager.fire_laser(laser_rapid_position, true, laser_rapid_direction, 0.5f, 30f);
                 }
             }
 
