@@ -53,7 +53,6 @@ namespace Game_Control
         public static Vector3 getDodgeVector(float horizontal, float vertical)
         {
 
-            //Does the same thing as above
             float normalize = Math.Max(Math.Abs(horizontal), Math.Abs(vertical));
             return new Vector3(horizontal / normalize, vertical / normalize, 0);
         }

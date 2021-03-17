@@ -259,11 +259,11 @@ namespace Game_Control
                     //do attack in correct direction
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, true);
+                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, new Vector3(transform.position.x + 10, transform.position.y + 1, transform.position.z));
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, false);
+                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, new Vector3(transform.position.x - 10, transform.position.y + 1, transform.position.z));
                     }
                 }
                 

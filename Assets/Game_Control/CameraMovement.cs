@@ -17,12 +17,16 @@ public class CameraMovement : MonoBehaviour
     
     void LateUpdate()
     {
-        offset.z = -(Vector3.Distance(boss.position, target.position)+2);
-        if (offset.z > -minDistance)
-            offset.z = -minDistance;
-        Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity,smoothSpeed);
-        transform.position = smoothedPosition;
+        if(boss != null)
+        {
+            offset.z = -(Vector3.Distance(boss.position, target.position) + 2);
+            if (offset.z > -minDistance)
+                offset.z = -minDistance;
+            Vector3 desiredPosition = target.position + offset;
+            Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
+        
 
 
 

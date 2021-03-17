@@ -31,6 +31,9 @@ namespace Game_Control{
         private float stomp_charge_vertical_speed = 2.5f;
         private float stomp_attack_speed = 9.0f;
 
+        private Vector3[] laser_rain_positions = new Vector3[6];
+        private Vector3[] laser_rain_directions = new Vector3[6];
+
 
         // Start is called before the first frame update
         void Start()
@@ -89,26 +92,46 @@ namespace Game_Control{
 
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
                 {
+
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.aim_laser(transform.position, true);
+                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z));
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.aim_laser(transform.position, false);
+                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z));
                     }
                 }
                 //call laser function if laser attack state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_attack)
                 {
+
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, true);
+                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z));
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, false);
+                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z));
                     }
+                }
+                else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rain_charge)
+                {
+                    float x = -5f;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        float rand_x = (x - 0.5f) + (Random.value);
+                        laser_rain_positions[i] = new Vector3(rand_x, 10, -0.558f);
+                        laser_rain_directions[i] = new Vector3(rand_x, -2, -0.558f);
+                        x += 2f;
+
+                    }
+
+                    laser_manager.laser_rain_aim(laser_rain_positions, laser_rain_directions);
+                }
+                else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rain_attack)
+                {
+                    laser_manager.laser_rain_fire(laser_rain_positions, laser_rain_directions);
                 }
             }
 

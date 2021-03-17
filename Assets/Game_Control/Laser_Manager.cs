@@ -23,7 +23,7 @@ namespace Game_Control{
 
         }
 
-        public void aim_laser(Vector3 position, bool direction_right)
+        public void aim_laser(Vector3 position, Vector3 direction)
         {
             //create laser visual
             GameObject laser_visual = new GameObject();
@@ -48,34 +48,20 @@ namespace Game_Control{
 
 
             line_renderer.SetPosition(0, position);
-            if (direction_right)
-            {
-                line_renderer.SetPosition(1, new Vector3(position.x + 10f, position.y, position.z));
-            }
-            else
-            {
-                line_renderer.SetPosition(1, new Vector3(position.x - 10f, position.y, position.z));
-            }
+
+            line_renderer.SetPosition(1, direction);
 
             line_renderer.widthMultiplier = 0.2f;
             Destroy(laser_visual, 1.0f);
         }
 
-        public void fire_laser(Vector3 position, bool is_enemy, bool direction_right)
+        public void fire_laser(Vector3 position, bool is_enemy, Vector3 direction)
 
         {
             RaycastHit hit = new RaycastHit();
-            Vector3 direction;
+            Vector3 norm_direction = (new Vector3(direction.x - position.x, direction.y - position.y, direction.z - position.z)).normalized;
             bool successful_hit = false;
             //determine direction of laser fire
-            if (direction_right)
-            {
-                direction = transform.right;
-            }
-            else
-            {
-                direction = transform.right * -1;
-            }
 
             if (!is_enemy && combo_info.canFireLaser())
             {
@@ -88,7 +74,7 @@ namespace Game_Control{
             }
 
             //check collision with enemies
-            if (!is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
+            if (!is_enemy && Physics.SphereCast(position, 0.2f, norm_direction, out hit, 10, LayerMask.GetMask("EnemyHitbox")))
             {
                 
                 boss_health_info.doDamage(100);
@@ -97,7 +83,7 @@ namespace Game_Control{
 
             }
             //check collision with player
-            else if (is_enemy && Physics.SphereCast(position, 0.2f, direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
+            else if (is_enemy && Physics.SphereCast(position, 0.2f, norm_direction, out hit, 10, LayerMask.GetMask("PlayerHitbox")))
             {
                 if (player_health_info.parry_ready)
                 {
@@ -106,7 +92,7 @@ namespace Game_Control{
                 else
                 {
                     player_health_info.doDamage(50);
-                    boss_health_info.setInvincible(0.5f);
+                    player_health_info.setInvincible(0.5f);
                 }
                 successful_hit = true;
             }
@@ -127,17 +113,90 @@ namespace Game_Control{
             {
                 distance = 10f;
             }
-            if (direction_right)
-            {
-                line_renderer.SetPosition(1, new Vector3(position.x + distance, position.y, position.z));
-            }
-            else
-            {
-                line_renderer.SetPosition(1, new Vector3(position.x - distance, position.y, position.z));
-            }
+
+            line_renderer.SetPosition(1, position + norm_direction * distance);
 
             line_renderer.widthMultiplier = 0.2f;
             Destroy(laser_visual, 0.15f);
+        }
+
+
+        public void laser_rain_aim(Vector3[] positions, Vector3[] directions)
+        {
+            for(int i = 0; i < positions.Length; i++)
+            {
+                //create laser visual
+                GameObject laser_visual = new GameObject();
+                laser_visual.transform.position = positions[i];
+                LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();
+                line_renderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
+                //line_renderer.startColor = Color.gray;
+                //line_renderer.endColor = Color.grey;
+                line_renderer.material.SetColor("_Color", new Color(1f, 0f, 0f, 0.3f));
+
+                //buncha code that allows transparency
+                line_renderer.material.SetFloat("_Mode", 2);
+                line_renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                line_renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                line_renderer.material.SetInt("_ZWrite", 0);
+                line_renderer.material.DisableKeyword("_ALPHATEST_ON");
+                line_renderer.material.EnableKeyword("_ALPHABLEND_ON");
+                line_renderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                line_renderer.material.renderQueue = 3000;
+
+
+
+
+                line_renderer.SetPosition(0, positions[i]);
+                line_renderer.SetPosition(1, directions[i]);
+
+                line_renderer.widthMultiplier = 0.5f;
+                Destroy(laser_visual, 1.50f);
+            }
+        }
+
+        public void laser_rain_fire(Vector3[] positions, Vector3[] directions)
+        {
+            RaycastHit hit = new RaycastHit();
+            bool successful_hit;
+            for (int i = 0; i < positions.Length; i++)
+            {
+                successful_hit = false;
+                Vector3 direction = (new Vector3(directions[i].x - positions[i].x, directions[i].y - positions[i].y, directions[i].z - positions[i].z)).normalized;
+                if (Physics.SphereCast(positions[i], 0.4f, direction, out hit, 100, LayerMask.GetMask("PlayerHitbox")))
+                {
+                    if (player_health_info.parry_ready)
+                    {
+                        player_health_info.setParrySuccess(true);
+                    }
+                    else
+                    {
+                        player_health_info.doDamage(50);
+                        player_health_info.setInvincible(0.5f);
+                    }
+                    successful_hit = true;
+                }
+                //create laser visual
+                GameObject laser_visual = new GameObject();
+                laser_visual.transform.position = positions[i];
+                LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
+                line_renderer.material = new Material(Shader.Find("Sprites/Default"));
+                line_renderer.startColor = Color.red;
+                line_renderer.endColor = Color.red;
+                line_renderer.SetPosition(0, positions[i]);
+
+                if (successful_hit)
+                {
+                    line_renderer.SetPosition(1, positions[i] + (direction * hit.distance));
+                }
+                else
+                {
+                    line_renderer.SetPosition(1, directions[i]);
+                }
+
+                line_renderer.widthMultiplier = 0.5f;
+                Destroy(laser_visual, 0.15f);
+            }
         }
 
 
