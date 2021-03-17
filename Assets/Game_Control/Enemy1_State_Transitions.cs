@@ -192,7 +192,6 @@ namespace Game_Control
                             }
                         }
                     }
-                    rand = 3;
                     //perform run attack in appropriate direction
                     if (rand < 1)
                     {
