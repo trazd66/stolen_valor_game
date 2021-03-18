@@ -16,7 +16,7 @@ public class Cooldown_Manager : MonoBehaviour
     void Start()
     {
         dodge_indicator.color = Color.red;
-        laser_indicator.color = Color.red;
+        laser_indicator.color = Color.gray;
     }
 
     // Update is called once per frame
@@ -31,13 +31,13 @@ public class Cooldown_Manager : MonoBehaviour
             dodge_indicator.color = Color.red;
         }
 
-        if (laser_ready && laser_indicator.color == Color.red)
-        {
-            laser_indicator.color = Color.green;
-        }
-        else if (!laser_ready && laser_indicator.color == Color.green)
+        if (laser_ready && laser_indicator.color == Color.gray)
         {
             laser_indicator.color = Color.red;
+        }
+        else if (!laser_ready && laser_indicator.color == Color.red)
+        {
+            laser_indicator.color = Color.gray;
         }
     }
 }

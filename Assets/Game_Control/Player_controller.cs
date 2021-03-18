@@ -30,12 +30,13 @@ namespace Game_Control
 
         private float lerpSpeed;
 
-        private bool paused = false;
         private Quaternion rot;
 
         private CharacterController _character_controller;
         // private Rigidbody rb;
         private Vector3 _velocity;
+
+        private bool pause_visual = true;
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
@@ -130,10 +131,29 @@ namespace Game_Control
 
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info);
 
+            if (pause_manager.GetLaserPaused())
+            {
+                if (Input.GetButtonDown("Jump")){
+                    pause_manager.UnpauseLaser();
+                    pause_manager.RemoveLaserTutorial();
+                    Time.timeScale = 1f;
+                }
+            }
 
             pause_game(pause_input);
-            if (paused)
+            
+            if (pause_manager.GetPaused())
             {
+                if (Input.GetButtonDown("Jump") && pause_visual)
+                {
+                    pause_manager.RemovePause();
+                    pause_visual = false;
+                }
+                else if(Input.GetButtonDown("Jump") && !pause_visual)
+                {
+                    pause_manager.ShowPause();
+                    pause_visual = true;
+                }
                 return;
             }
 
@@ -309,21 +329,24 @@ namespace Game_Control
         }
 
         private void pause_game(bool pause_input){
-            if (pause_input && !paused)
+            if (pause_input && !pause_manager.GetPaused())
             {
                 Debug.Log("pause");
-                paused = true;
+                pause_manager.PauseGame();
                 pause_manager.ShowPause();
                 Time.timeScale = 0f;
             }
-            else if (pause_input && paused)
+            else if (pause_input && pause_manager.GetPaused())
             {
                 Debug.Log("unpause");
-                paused = false;
+                pause_manager.UnpauseGame();
                 pause_manager.RemovePause();
+                pause_visual = true;
                 Time.timeScale = 1f;
             }
         }
+
+
 
         private void apply_movement(float horizontal_input, float vertical_input){
             Vector3 move = new Vector3(0, 0, 0);
