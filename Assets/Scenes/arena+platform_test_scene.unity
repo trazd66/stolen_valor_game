@@ -1124,22 +1124,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2100685678707967912, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 1cfeafc08174a08429dd383798e45896, type: 3}
-    - target: {fileID: 3266889431980912533, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
-      propertyPath: m_Color.b
-      value: 0.7686275
-      objectReference: {fileID: 0}
-    - target: {fileID: 3266889431980912533, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
-      propertyPath: m_Color.g
-      value: 0.7686275
-      objectReference: {fileID: 0}
-    - target: {fileID: 3266889431980912533, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
-      propertyPath: m_Color.r
-      value: 0.7686275
-      objectReference: {fileID: 0}
     - target: {fileID: 3838444659519568581, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1200,13 +1184,5 @@ PrefabInstance:
       propertyPath: combo_info
       value: 
       objectReference: {fileID: 1136582173}
-    - target: {fileID: 7927772186475628430, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8237749205398892090, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4feaa31547cae3f4bbbabe26a86da4de, type: 3}
