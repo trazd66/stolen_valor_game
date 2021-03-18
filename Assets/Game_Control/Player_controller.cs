@@ -11,8 +11,6 @@ namespace Game_Control
     public class Player_controller : MonoBehaviour
     {
 
-        int player_id;
-
         private float Speed = 5.0f;
         private float JumpHeight = 2.5f;
 
@@ -58,7 +56,7 @@ namespace Game_Control
         private Color parry_active_colour = new Color(0f, 1f, 1f);
         private Color parry_cooldown_colour = new Color(0f, 0f, 0f);
         private Color parry_success_colour = new Color(0f, 1f, 0f);
-        private Color invincible_colour = new Color(1f, 1f, 1f,0.0f);
+        private Color invincible_colour = new Color(1f, 1f, 1f, 0.0f);
         private Color hurt_colour = new Color(1f, 0f, 0f, 0.5f);
 
 
@@ -70,6 +68,16 @@ namespace Game_Control
         // Start is called before the first frame update
 
         public Animator char_animator;
+
+        public Attack_State_Transition_Func.attack_state curr_atk_state
+        {
+            get
+            {
+                return (Attack_State_Transition_Func.attack_state)attack_controller.curr_state;
+            }
+        }
+
+
         void Start()
         {
             _character_controller = GetComponent<CharacterController>();
@@ -87,14 +95,14 @@ namespace Game_Control
             Material[] materials = PlayerVisuals.materials;
 
             skin_material = materials[1];
-            
+
             skin_natural = skin_material.color;
 
-            AudioManager.instance.SetLoop("leveltheme1_v2",true);
+            AudioManager.instance.SetLoop("leveltheme1_v2", true);
             AudioManager.instance.ChangeVolume("leveltheme1_v2", 0.3f);
             AudioManager.instance.Play("leveltheme1_v2");
 
-            AudioManager.instance.SetLoop("char_hoveridle",true);
+            AudioManager.instance.SetLoop("char_hoveridle", true);
             AudioManager.instance.ChangeVolume("char_hoveridle", 0.2f);
             AudioManager.instance.Play("char_hoveridle");
         }
@@ -107,16 +115,16 @@ namespace Game_Control
         //     }
         // }
 
-        public IEnumerator Flash (Color c)
-    
+        public IEnumerator Flash(Color c)
+
         {
             skin_material.color = c;
             yield return new WaitForSeconds(0.05f);
             skin_material.color = skin_natural;
             StopCoroutine("Flash");
         }
-    
-    
+
+
         void FixedUpdate()
         {
         }
@@ -141,7 +149,7 @@ namespace Game_Control
             if (parry_stop)
             {
                 Time.timeScale = 0f;
-                if(Time.realtimeSinceStartup - parry_stop_initial > 0.3f)
+                if (Time.realtimeSinceStartup - parry_stop_initial > 0.3f)
                 {
                     parry_stop = false;
                     Time.timeScale = 1f;
@@ -155,7 +163,7 @@ namespace Game_Control
             }
 
             reload_scene_if_death();
-            
+
             attack_controller.process_time();
             state_controller.process_time();
 
@@ -165,13 +173,13 @@ namespace Game_Control
             if (attack_controller.curr_state != 0)
             {
                 //attacking
-                Player_controller_helper.do_attack((Attack_State_Transition_Func.attack_state)attack_controller.curr_state, AttackHitboxes,combo_info,player_health_info,  boss_health_info);
                 char_animator.Play(Utility_methods.GetDescription<Attack_State_Transition_Func.attack_state>((Attack_State_Transition_Func.attack_state)attack_controller.curr_state));
             }
             else
             {
                 string desc = Utility_methods.GetDescription<Player_State_Transition_Func.player_state>((Player_State_Transition_Func.player_state)state_controller.curr_state);
-                if(desc != ""){
+                if (desc != "")
+                {
                     char_animator.Play(desc);
                 }
                 //set animation to whatever else
@@ -206,7 +214,8 @@ namespace Game_Control
             }
         }
 
-        private void process_attack_input(bool state_changed, Player_Input.PlayerInput input){
+        private void process_attack_input(bool state_changed, Player_Input.PlayerInput input)
+        {
             if (input.HasFlag(Player_Input.PlayerInput.Attack))
             {
                 if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.attack_basic)
@@ -239,7 +248,7 @@ namespace Game_Control
             if (attack_sequence_changed)
             {
                 state_controller.state_duration = attack_controller.state_duration;
-                if (attack_controller.curr_state != 0 && 
+                if (attack_controller.curr_state != 0 &&
                     attack_controller.curr_state <= (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
                 {
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
@@ -259,16 +268,16 @@ namespace Game_Control
                     //do attack in correct direction
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, 
+                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false,
                             new Vector3(transform.position.x + 10, transform.position.y + 1, transform.position.z), 0.2f, 10f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false, 
+                        laser_manager.fire_laser(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), false,
                             new Vector3(transform.position.x - 10, transform.position.y + 1, transform.position.z), 0.2f, 10f);
                     }
                 }
-                
+
             }
 
         }
@@ -289,11 +298,11 @@ namespace Game_Control
             }
             else if (dodge_invuln_timer > 0)
             {
-                StartCoroutine("Flash",invincible_colour);
+                StartCoroutine("Flash", invincible_colour);
             }
             else if (player_health_info.is_invincible)
             {
-                StartCoroutine("Flash",hurt_colour);
+                StartCoroutine("Flash", hurt_colour);
             }
             else
             {
@@ -301,14 +310,16 @@ namespace Game_Control
             }
         }
 
-        private void reload_scene_if_death(){
+        private void reload_scene_if_death()
+        {
             if (player_health_info.is_dead || transform.position.y <= -2)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
 
-        private void pause_game(bool pause_input){
+        private void pause_game(bool pause_input)
+        {
             if (pause_input && !paused)
             {
                 Debug.Log("pause");
@@ -325,7 +336,8 @@ namespace Game_Control
             }
         }
 
-        private void apply_movement(float horizontal_input, float vertical_input){
+        private void apply_movement(float horizontal_input, float vertical_input)
+        {
             Vector3 move = new Vector3(0, 0, 0);
 
 
@@ -334,6 +346,7 @@ namespace Game_Control
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.jump)
             {
                 _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
+                AudioManager.instance.Play("JUMP");
             }
             else
 
@@ -343,20 +356,22 @@ namespace Game_Control
                 player_health_info.setInvincible(0.2f);
                 dodge_invuln_timer = 0.2f;
                 move += Player_controller_helper.getDodgeVector(horizontal_input, vertical_input) * Time.deltaTime * dodge_speed;
+                AudioManager.instance.Play("DODGE");
 
             }
             //otherwise apply regular movement if not in an attack that locks movement
             else if ((attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.not_attacking ||
                     attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0 ||
                     attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0) &&
-                    (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active&&
+                    (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active &&
                     state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown))
             {
                 //apply horizontal movement
                 move += new Vector3(horizontal_input, 0, 0) * Time.deltaTime * Speed;
 
                 // steering the character
-                if(attack_controller.curr_state != (int)Attack_State_Transition_Func.attack_state.attack_jump_0){
+                if (attack_controller.curr_state != (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
+                {
                     lerpSpeed = 20 * Time.deltaTime;
                     if (move.x > 0)
                     {
@@ -370,7 +385,7 @@ namespace Game_Control
                     }
                     transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
                 }
-                
+
             }
 
 
@@ -381,8 +396,9 @@ namespace Game_Control
 
         }
 
-        private void apply_gravity(){
-                        //always apply gravity
+        private void apply_gravity()
+        {
+            //always apply gravity
             if (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.dodge)
             {
                 _velocity.y += Physics.gravity.y * Time.deltaTime * 2;

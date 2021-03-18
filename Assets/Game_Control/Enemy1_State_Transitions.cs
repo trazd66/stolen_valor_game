@@ -14,16 +14,24 @@ namespace Game_Control
         {
             [Description("idle")]
             idle,
+            [Description("charge")]
             run_windup,
+            [Description("charge")]
             run_attack_right,
+            [Description("charge")]
             run_attack_left,
             front_attack,
             [Description("laser_charge")]
             laser_charge,
+            [Description("laser_attack")]
             laser_attack,
+            [Description("laser_charge")]
             laser_rain_charge,
+            [Description("laser_attack")]
             laser_rain_attack,
+            [Description("laser_charge")]
             laser_rapid_charge,
+            [Description("laser_attack")]
             laser_rapid_attack,
             stomp_windup,
             stomp_charge,
@@ -318,6 +326,9 @@ namespace Game_Control
             else if (curr_state == (int)enemy1_state.stomp_charge && enemy1.transform.position.y == 3f)
             {
                 update_state((int)enemy1_state.stomp_attack, 0, ref curr_state, ref prev_states, ref duration);
+                var pos = enemy1.transform.position;
+                pos.y -= 2f;
+                Particle_system_controller.Instance.set_particle(CONTROL_CONFIG.VFX_SHOCK_WAVE,pos,0.2f);
                 state_changed = true;
             }
             //go back to idle after stomp attack

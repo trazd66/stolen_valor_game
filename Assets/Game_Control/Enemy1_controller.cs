@@ -164,14 +164,12 @@ namespace Game_Control{
                 }
             }
 
-            if((Enemy1_State_Transition_Func.enemy1_state) state_controller.curr_state == Enemy1_State_Transition_Func.enemy1_state.laser_charge){
-                enemy_animator.Play(Utility_methods.GetDescription<Enemy1_State_Transition_Func.enemy1_state>((Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state));
-            }else{
                 string desc = Utility_methods.GetDescription<Enemy1_State_Transition_Func.enemy1_state>((Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
                 if(desc != ""){
                     enemy_animator.Play(desc);
+                }else{
+                    enemy_animator.Play("idle");
                 }
-            }
 
            
             if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.idle)
@@ -283,6 +281,7 @@ namespace Game_Control{
             //return true if attack landed, false otherwise
             if (damage > 0)
             {
+                AudioManager.instance.Play("boss_bonk");
                 if (player_health_info.parry_ready)
                 {
                     player_health_info.setParrySuccess(true);

@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Player_Attack_Hitbox
+  - Enemy_Attack_Hitbox
+  - Player_Damage_Hitbox
+  - Enemy_Damage_Hitbox
   layers:
   - Default
   - TransparentFX

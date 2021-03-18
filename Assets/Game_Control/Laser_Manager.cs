@@ -72,6 +72,7 @@ namespace Game_Control{
             {
                 return;
             }
+            AudioManager.instance.Play("LASER FIRE 1");
 
             //check collision with enemies
             if (!is_enemy && Physics.SphereCast(position, radius, norm_direction, out hit, max_distance, LayerMask.GetMask("EnemyHitbox")))
@@ -184,6 +185,7 @@ namespace Game_Control{
                 line_renderer.startColor = Color.red;
                 line_renderer.endColor = Color.red;
                 line_renderer.SetPosition(0, positions[i]);
+                AudioManager.instance.Play("LASER FIRE 1");
 
                 if (successful_hit)
                 {
