@@ -123,28 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &127226132 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1175996600183055742, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
-  m_PrefabInstance: {fileID: 1175996600489706375}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &127226133 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1175996600559129097, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
-  m_PrefabInstance: {fileID: 1175996600489706375}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &180576964
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,11 +381,11 @@ PrefabInstance:
     - target: {fileID: 9174120246256766081, guid: 82c2590d55dd39b4984e21a54fda1650, type: 3}
       propertyPath: pause_text
       value: 
-      objectReference: {fileID: 127226132}
+      objectReference: {fileID: 0}
     - target: {fileID: 9174120246256766081, guid: 82c2590d55dd39b4984e21a54fda1650, type: 3}
       propertyPath: pause_image
       value: 
-      objectReference: {fileID: 127226133}
+      objectReference: {fileID: 0}
     - target: {fileID: 9174120246256766094, guid: 82c2590d55dd39b4984e21a54fda1650, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -1022,6 +1000,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 791230573111737158, guid: 5858c20e48c82504ba1aed3efe5d75ac, type: 3}
+      propertyPath: clips.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 791230573111737158, guid: 5858c20e48c82504ba1aed3efe5d75ac, type: 3}
+      propertyPath: clips.Array.data[15]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5424865184871243321, guid: 5858c20e48c82504ba1aed3efe5d75ac, type: 3}
       propertyPath: m_RootOrder
       value: 9
