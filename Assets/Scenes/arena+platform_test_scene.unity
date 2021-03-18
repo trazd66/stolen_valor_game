@@ -904,6 +904,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: laser_reward_manager
+      value: 
+      objectReference: {fileID: 1263834896}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
       propertyPath: hitboxes.Array.data[0]
       value: 
       objectReference: {fileID: 742358724}
