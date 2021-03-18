@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7243306801115690505, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: m_Name
-      value: Enemy1
+      value: Enemy1 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7243306801605657428, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -170,6 +170,10 @@ PrefabInstance:
     - target: {fileID: 7243306801605657428, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7243306801605657429, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}
+      propertyPath: m_TagString
+      value: Enemy_Damage_Hitbox
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7243306801115690503, guid: f15fa6492b4ecd04cb94102e9aff49f6, type: 3}

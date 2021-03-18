@@ -281,9 +281,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1691629433286514070}
   - component: {fileID: 8318147711173564922}
+  - component: {fileID: 2948047173121443518}
   m_Layer: 0
-  m_Name: ikHandle2
-  m_TagString: Untagged
+  m_Name: damage_collider_0
+  m_TagString: Player_Attack_Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315,6 +316,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2948047173121443518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777063107621096586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38ab6639481e7d458b0f10b3ab4729a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player_Controller: {fileID: 0}
+  enemy1_Controller: {fileID: 0}
+  combo_info: {fileID: 0}
+  player_health_info: {fileID: 0}
+  boss_health_info: {fileID: 0}
 --- !u!1 &795148534385890517
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,9 +928,10 @@ GameObject:
   m_Component:
   - component: {fileID: 977679163373994505}
   - component: {fileID: 1778858939640594545}
+  - component: {fileID: 4026935364426146928}
   m_Layer: 0
-  m_Name: ikHandle1
-  m_TagString: Untagged
+  m_Name: damage_collider_1
+  m_TagString: Player_Attack_Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -944,6 +963,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4026935364426146928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144163785418643061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38ab6639481e7d458b0f10b3ab4729a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player_Controller: {fileID: 0}
+  enemy1_Controller: {fileID: 0}
+  combo_info: {fileID: 0}
+  player_health_info: {fileID: 0}
+  boss_health_info: {fileID: 0}
 --- !u!1 &3176408499202632119
 GameObject:
   m_ObjectHideFlags: 0

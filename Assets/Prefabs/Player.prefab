@@ -64,8 +64,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0341506d5031f9439dac411591a0fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
-  JumpHeight: 2
   player_health_info: {fileID: 6655704994837301136}
   boss_health_info: {fileID: 0}
   combo_info: {fileID: 6507670413515583619}
