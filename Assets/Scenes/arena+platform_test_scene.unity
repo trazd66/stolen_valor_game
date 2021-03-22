@@ -282,10 +282,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -5.5
       objectReference: {fileID: 0}
+    - target: {fileID: 392230450, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 392230450, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 664f9e6876b15d3489086d343e3b422a, type: 2}
     - target: {fileID: 1702468341, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1702468343, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1702468343, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 664f9e6876b15d3489086d343e3b422a, type: 2}
     - target: {fileID: 389164302844346896, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_RootOrder
       value: 3
