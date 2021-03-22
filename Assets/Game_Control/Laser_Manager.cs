@@ -6,6 +6,8 @@ namespace Game_Control{
 
     public class Laser_Manager : MonoBehaviour
     {
+        public Player_controller player_Controller;
+        public Enemy1_controller enemy1_Controller;
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
@@ -79,7 +81,7 @@ namespace Game_Control{
             {
                 
                 boss_health_info.doDamage(100);
-                boss_health_info.setInvincible(0.3f);
+                boss_health_info.setInvincible(0.4f);
                 successful_hit = true;
 
             }
@@ -94,6 +96,8 @@ namespace Game_Control{
                 {
                     player_health_info.doDamage(50);
                     player_health_info.setInvincible(0.5f);
+
+                    player_Controller.apply_knockback(player_Controller.get_knockback_direction_right(), 50);
                 }
                 successful_hit = true;
             }
@@ -174,6 +178,8 @@ namespace Game_Control{
                     {
                         player_health_info.doDamage(50);
                         player_health_info.setInvincible(0.5f);
+
+                        player_Controller.apply_knockback(player_Controller.get_knockback_direction_right(), 50);
                     }
                     successful_hit = true;
                 }

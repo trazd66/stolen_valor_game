@@ -40,6 +40,22 @@ namespace Game_Control{
         private Vector3 laser_rapid_position;
         private Vector3 laser_rapid_direction;
 
+        public Enemy1_State_Transition_Func get_enemy1_state_transition_func
+        {
+            get
+            {
+                return enemy1_state_transition_func;
+            }
+        }
+
+        public Enemy1_State_Transition_Func.enemy1_state curr_state
+        {
+            get
+            {
+                return (Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state;
+            }
+        }
+
 
         // Start is called before the first frame update
         void Start()
@@ -233,7 +249,7 @@ namespace Game_Control{
                 }
             }
 
-            LaunchAttack(hitboxes,(Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
+            //LaunchAttack(hitboxes,(Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
 
 
         }
@@ -248,8 +264,8 @@ namespace Game_Control{
             return false;
         }
 
-        //called when an attack is launched
-        private bool LaunchAttack(Collider[] hitboxes, Enemy1_State_Transition_Func.enemy1_state state)
+        //called when an attack is launched (obsolete)
+        private void LaunchAttack(Collider[] hitboxes, Enemy1_State_Transition_Func.enemy1_state state)
         {
 
             int damage = 0;
@@ -272,7 +288,6 @@ namespace Game_Control{
                             enemy1_state_transition_func.setJustStomped();
                             break;
                         default:
-                            damage = 20;
                             break;
                     }
                 }
@@ -293,11 +308,8 @@ namespace Game_Control{
                     player_health_info.setInvincible(0.5f);
                     enemy1_state_transition_func.setJustHit();
                 }
-                
-
-
+               
             }
-            return false;
         }
     }
 }
