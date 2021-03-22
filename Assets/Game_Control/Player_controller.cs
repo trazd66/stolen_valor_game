@@ -36,6 +36,10 @@ namespace Game_Control
 
         private bool pause_visual = true;
 
+        private float knockback_timer = 0f;
+        private float knockback_speed = 0f;
+        private bool knockback_direction_right = false;
+
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
 
@@ -76,6 +80,20 @@ namespace Game_Control
             {
                 return (Attack_State_Transition_Func.attack_state)attack_controller.curr_state;
             }
+        }
+
+        //return true if the direction to apply knockback in is right, false otherwise
+        public bool get_knockback_direction_right()
+        {
+            return transform.right.x < 0;
+        }
+
+        //apply knockback, the intensity of which is based off the damage done
+        public void apply_knockback(bool direction_right, int damage)
+        {
+            knockback_direction_right = direction_right;
+            knockback_speed = 5f + (float)(damage) / 5f;
+            knockback_timer = 0.25f;
         }
 
 
@@ -213,7 +231,18 @@ namespace Game_Control
 
             update_indicators();
 
-            dodge_invuln_timer -= Time.deltaTime;
+            if(dodge_invuln_timer > 0)
+            {
+                dodge_invuln_timer -= Time.deltaTime;
+            }
+
+            if (knockback_timer > 0)
+            {
+                knockback_timer -= Time.deltaTime;
+            }
+
+
+
 
         }
 
@@ -371,6 +400,20 @@ namespace Game_Control
             }
             else
 
+            //apply backwards momentum when knocked back
+            if(knockback_timer > 0)
+            {
+                if (knockback_direction_right)
+                {
+                    move += new Vector3(1, 0, 0) * Time.deltaTime * knockback_speed;
+                }
+                else
+                {
+                    move += new Vector3(-1, 0, 0) * Time.deltaTime * knockback_speed;
+                }
+                
+            }
+
             //apply dodge movement to the player
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)
             {
@@ -385,7 +428,8 @@ namespace Game_Control
                     attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0 ||
                     attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0) &&
                     (state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_active &&
-                    state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown))
+                    state_controller.curr_state != (int)Player_State_Transition_Func.player_state.parry_cooldown) &&
+                    knockback_timer <= 0)
             {
                 //apply horizontal movement
                 move += new Vector3(horizontal_input, 0, 0) * Time.deltaTime * Speed;

@@ -14,7 +14,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!54 &1708234806
 Rigidbody:
@@ -57,7 +57,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 32357475302341076, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 333760028699938639, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: combo_info

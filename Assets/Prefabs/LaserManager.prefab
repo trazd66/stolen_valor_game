@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e090043a9d309b243b78fad4d78a8dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player_Controller: {fileID: 0}
+  enemy1_Controller: {fileID: 0}
   player_health_info: {fileID: 0}
   boss_health_info: {fileID: 0}
   combo_info: {fileID: 0}
