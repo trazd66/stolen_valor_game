@@ -146,7 +146,7 @@ public class DamageCollider : MonoBehaviour
                 player_health_info.setInvincible(0.5f);
                 enemy1_state_transition_func.setJustHit();
 
-                player_Controller.apply_knockback(player_Controller.get_knockback_direction_right(), damage);
+                player_Controller.apply_knockback(enemy1_Controller.get_knockback_direction(), damage);
             }
         }
 

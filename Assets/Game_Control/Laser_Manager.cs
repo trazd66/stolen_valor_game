@@ -97,7 +97,7 @@ namespace Game_Control{
                     player_health_info.doDamage(50);
                     player_health_info.setInvincible(0.5f);
 
-                    player_Controller.apply_knockback(player_Controller.get_knockback_direction_right(), 50);
+                    player_Controller.apply_knockback(enemy1_Controller.get_knockback_direction(), 50);
                 }
                 successful_hit = true;
             }
@@ -179,7 +179,7 @@ namespace Game_Control{
                         player_health_info.doDamage(50);
                         player_health_info.setInvincible(0.5f);
 
-                        player_Controller.apply_knockback(player_Controller.get_knockback_direction_right(), 50);
+                        player_Controller.apply_knockback(enemy1_Controller.get_knockback_direction(), 50);
                     }
                     successful_hit = true;
                 }
