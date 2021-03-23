@@ -916,6 +916,14 @@ PrefabInstance:
       value: Player 1
       objectReference: {fileID: 0}
     - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
+      propertyPath: enable_laser
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
+      propertyPath: enable_parry
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
       propertyPath: laser_manager
       value: 
       objectReference: {fileID: 2082221689}
@@ -923,6 +931,10 @@ PrefabInstance:
       propertyPath: pause_manager
       value: 
       objectReference: {fileID: 633920579}
+    - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
+      propertyPath: enable_attacks
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
       propertyPath: boss_health_info
       value: 

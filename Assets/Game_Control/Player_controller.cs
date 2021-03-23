@@ -49,6 +49,16 @@ namespace Game_Control
         public Pause_Manager pause_manager;
         public Cooldown_Manager cooldown_manager;
 
+        //true to enable attacking
+        public bool enable_attacks;
+
+        //true to enable parry and dodge
+        public bool enable_parry;
+
+        //true to enable laser; different from the laser unlock toggle, this one is needed to prevent the code that checks for the laser indicator from crashing. 
+        //setting it to true does not nessecarily unlock laser, that toggle is in comboinfo
+        public bool enable_laser;
+
         // public Renderer[] AttackVisuals;
         // public Renderer[] PlayerVisuals;
 
@@ -155,7 +165,7 @@ namespace Game_Control
             float vertical_input = Input.GetAxis("Vertical");
             bool pause_input = Input.GetButtonDown("Pause");
 
-            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info);
+            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info, enable_attacks, enable_parry, enable_laser);
 
             if (pause_manager.GetLaserPaused())
             {
@@ -480,23 +490,30 @@ namespace Game_Control
 
         private void update_indicators()
         {
-            if (cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value > 0)
+            if (enable_parry)
             {
-                cooldown_manager.dodge_ready = false;
-            }
-            else if (!cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value <= 0)
-            {
-                cooldown_manager.dodge_ready = true;
+                if (cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value > 0)
+                {
+                    cooldown_manager.dodge_ready = false;
+                }
+                else if (!cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value <= 0)
+                {
+                    cooldown_manager.dodge_ready = true;
+                }
             }
 
-            if (cooldown_manager.laser_ready && (state_controller.cooldown_timers[1].Value > 0 || !combo_info.canFireLaser()))
+            if (enable_laser)
             {
-                cooldown_manager.laser_ready = false;
+                if (cooldown_manager.laser_ready && (state_controller.cooldown_timers[1].Value > 0 || !combo_info.canFireLaser()))
+                {
+                    cooldown_manager.laser_ready = false;
+                }
+                else if (!cooldown_manager.laser_ready && state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser())
+                {
+                    cooldown_manager.laser_ready = true;
+                }
             }
-            else if (!cooldown_manager.laser_ready && state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser())
-            {
-                cooldown_manager.laser_ready = true;
-            }
+            
         }
     }
 }

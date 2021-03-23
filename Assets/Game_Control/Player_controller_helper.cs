@@ -8,17 +8,18 @@ namespace Game_Control
     public static class Player_controller_helper
     {
 
-        public static Player_Input.PlayerInput getPlayerInput(ref ComboInfo combo_info)
+        public static Player_Input.PlayerInput getPlayerInput(ref ComboInfo combo_info, bool enable_attacks, bool enable_parry, bool enable_laser)
         {
 
             Player_Input.PlayerInput input = Player_Input.PlayerInput.None;
 
             //check if player has inputed dash
-            if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetButtonDown("Dodge"))
+            if (enable_parry && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetButtonDown("Dodge"))
             {
                 input |= Player_Input.PlayerInput.Dodge;
             }
-            else if (Input.GetButtonDown("Dodge"))
+            //otherwise input parry
+            else if (enable_parry && Input.GetButtonDown("Dodge"))
             {
                 input |= Player_Input.PlayerInput.Parry;
             }
@@ -35,12 +36,12 @@ namespace Game_Control
             }
 
             //check if attack is inputted
-            if (Input.GetButtonDown("Attack"))
+            if (enable_attacks && Input.GetButtonDown("Attack"))
             {
                 input |= Player_Input.PlayerInput.Attack;
             }
             //check if laser is inputted
-            if (Input.GetButtonDown("SpecialAttack1") && combo_info.canFireLaser())
+            if (enable_laser && Input.GetButtonDown("SpecialAttack1") && combo_info.canFireLaser())
             {
                 input |= Player_Input.PlayerInput.Attack;
                 input |= Player_Input.PlayerInput.Special_attack_0;
