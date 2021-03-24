@@ -207,6 +207,49 @@ namespace Game_Control{
             }
         }
 
+        public void fire_tutorial_laser(Vector3 position, Vector3 direction, float radius, float max_distance)
+
+        {
+            RaycastHit hit = new RaycastHit();
+            Vector3 norm_direction = (new Vector3(direction.x - position.x, direction.y - position.y, direction.z - position.z)).normalized;
+            bool successful_hit = false;
+            //determine direction of laser fire
+
+            AudioManager.instance.Play("LASER FIRE 1");
+
+            //check collision with player
+            if (Physics.SphereCast(position, radius, norm_direction, out hit, max_distance, LayerMask.GetMask("PlayerHitbox")))
+            {
+                if (player_health_info.parry_ready)
+                {
+                    player_health_info.setParrySuccess(true);
+                }
+                successful_hit = true;
+            }
+            //create laser visual
+            GameObject laser_visual = new GameObject();
+            laser_visual.transform.position = position;
+            LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
+            line_renderer.material = new Material(Shader.Find("Sprites/Default"));
+            line_renderer.startColor = Color.red;
+            line_renderer.endColor = Color.red;
+            line_renderer.SetPosition(0, position);
+            float distance;
+            if (successful_hit)
+            {
+                distance = hit.distance;
+            }
+            else
+            {
+                distance = max_distance;
+            }
+
+            line_renderer.SetPosition(1, position + norm_direction * distance);
+
+            line_renderer.widthMultiplier = radius;
+            Destroy(laser_visual, 0.15f);
+        }
+
 
     }
 

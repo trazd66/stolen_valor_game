@@ -362,6 +362,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 382946630}
     - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
+      propertyPath: enable_attacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
       propertyPath: boss_health_info
       value: 
       objectReference: {fileID: 0}
@@ -676,7 +680,7 @@ GameObject:
   - component: {fileID: 482107632}
   - component: {fileID: 482107631}
   m_Layer: 5
-  m_Name: Attack_Indicator (2)
+  m_Name: Jump Attack_Indicator (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -975,6 +979,7 @@ GameObject:
   - component: {fileID: 685847640}
   - component: {fileID: 685847639}
   - component: {fileID: 685847638}
+  - component: {fileID: 685847642}
   m_Layer: 5
   m_Name: Tutorial2 UI
   m_TagString: Untagged
@@ -1065,6 +1070,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &685847642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685847637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7245409e45a19942b030f38a359d206, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  page0: {fileID: 1619738383}
+  background: {fileID: 1906899545}
+  tutorial_ui: {fileID: 977570806}
+  player_Controller: {fileID: 1044863387}
+  reward: {fileID: 1147059383}
+  attack_indicator: {fileID: 1008160219}
+  dash_attack_indicator: {fileID: 1831317059}
+  jump_attack_indicator: {fileID: 482107631}
 --- !u!1001 &967613027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1268,6 +1293,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008160217}
   m_CullTransparentMesh: 1
+--- !u!114 &1044863387 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4302333733990107383, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
+  m_PrefabInstance: {fileID: 133866162}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0341506d5031f9439dac411591a0fa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1126618574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,6 +1383,114 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126618574}
   m_CullTransparentMesh: 1
+--- !u!1 &1147059382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1147059387}
+  - component: {fileID: 1147059386}
+  - component: {fileID: 1147059385}
+  - component: {fileID: 1147059384}
+  - component: {fileID: 1147059383}
+  m_Layer: 0
+  m_Name: Tutorial2 Goal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1147059383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147059382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6be66452241190642a8b4f24b577dfb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!135 &1147059384
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147059382}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1147059385
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147059382}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1147059386
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147059382}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1147059387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147059382}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.48, y: -16.37, z: -0.558}
+  m_LocalScale: {x: 0.7266, y: 0.9131, z: 0.3776}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1550952494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1432,12 +1576,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1619738384}
   m_Layer: 5
-  m_Name: Page2
+  m_Name: Page0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1619738384
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1807,7 +1951,7 @@ GameObject:
   - component: {fileID: 1831317060}
   - component: {fileID: 1831317059}
   m_Layer: 5
-  m_Name: Attack_Indicator (1)
+  m_Name: Dash Attack_Indicator (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1887,7 +2031,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1906899546
 RectTransform:
   m_ObjectHideFlags: 0

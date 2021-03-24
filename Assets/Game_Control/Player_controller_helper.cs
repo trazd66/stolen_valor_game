@@ -8,18 +8,18 @@ namespace Game_Control
     public static class Player_controller_helper
     {
 
-        public static Player_Input.PlayerInput getPlayerInput(ref ComboInfo combo_info, bool enable_attacks, bool enable_parry, bool enable_laser)
+        public static Player_Input.PlayerInput getPlayerInput(ref ComboInfo combo_info, bool enable_attacks, bool enable_parry, bool enable_dodge, bool enable_laser)
         {
 
             Player_Input.PlayerInput input = Player_Input.PlayerInput.None;
 
             //check if player has inputed dash
-            if (enable_parry && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetButtonDown("Dodge"))
+            if (enable_dodge && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && Input.GetButtonDown("Dodge"))
             {
                 input |= Player_Input.PlayerInput.Dodge;
             }
             //otherwise input parry
-            else if (enable_parry && Input.GetButtonDown("Dodge"))
+            else if (enable_parry && (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0) && Input.GetButtonDown("Dodge"))
             {
                 input |= Player_Input.PlayerInput.Parry;
             }

@@ -54,8 +54,11 @@ namespace Game_Control
         //true to enable attacking
         public bool enable_attacks;
 
-        //true to enable parry and dodge
+        //true to enable parry
         public bool enable_parry;
+
+        //true to enable dodge
+        public bool enable_dodge;
 
         //true to enable laser; different from the laser unlock toggle, this one is needed to prevent the code that checks for the laser indicator from crashing. 
         //setting it to true does not nessecarily unlock laser, that toggle is in comboinfo
@@ -181,7 +184,7 @@ namespace Game_Control
             float vertical_input = Input.GetAxis("Vertical");
             bool pause_input = Input.GetButtonDown("Pause");
 
-            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info, enable_attacks, enable_parry, enable_laser);
+            Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info, enable_attacks, enable_parry, enable_dodge, enable_laser);
 
             if (pause_manager.GetLaserPaused())
             {
@@ -506,7 +509,7 @@ namespace Game_Control
 
         private void update_indicators()
         {
-            if (enable_parry)
+            if (enable_dodge)
             {
                 if (cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value > 0)
                 {
