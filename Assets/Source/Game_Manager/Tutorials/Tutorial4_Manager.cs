@@ -14,7 +14,7 @@ public class Tutorial4_Manager : MonoBehaviour
 
     public GameObject tutorial_ui;
 
-    public Player_controller player_Controller;
+    public Player_controller player_controller;
 
     public Tutorial4_Reward reward;
 
@@ -23,6 +23,7 @@ public class Tutorial4_Manager : MonoBehaviour
     private int dodge_counter;
     private bool dodging = false;
 
+    public bool tutorial_finished = false;
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +44,9 @@ public class Tutorial4_Manager : MonoBehaviour
         }
         else if (tutorial_state == 1)
         {
-            player_Controller.enable_control = true;
+            player_controller.enable_control = true;
 
-            Player_State_Transition_Func.player_state curr_state = player_Controller.get_curr_state;
+            Player_State_Transition_Func.player_state curr_state = player_controller.get_curr_state;
 
             if (curr_state == Player_State_Transition_Func.player_state.dodge)
             {
@@ -64,6 +65,10 @@ public class Tutorial4_Manager : MonoBehaviour
                 reward.placeReward(new Vector3(4, 2, -0.558f));
             }
 
+        }
+
+        if(tutorial_finished){
+            Game_Manager.instance.setState(4);
         }
     }
 }

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class Tutorial1_Reward : MonoBehaviour
 {
     private Collider col;
+
+    public Tutorial1_Manager tutorial1_Manager;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,7 @@ public class Tutorial1_Reward : MonoBehaviour
 
         if (cols.Length > 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            tutorial1_Manager.tutorial_finished = true;
         }
     }
 

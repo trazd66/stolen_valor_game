@@ -14,7 +14,7 @@ public class Tutorial3_Manager : MonoBehaviour
 
     public GameObject tutorial_ui;
 
-    public Player_controller player_Controller;
+    public Player_controller player_controller;
 
     public HealthInfo health_info;
 
@@ -31,6 +31,7 @@ public class Tutorial3_Manager : MonoBehaviour
 
     private bool aimed = false;
     private bool parried = false;
+    public bool tutorial_finished = false;
 
 
     // Start is called before the first frame update
@@ -54,7 +55,7 @@ public class Tutorial3_Manager : MonoBehaviour
         }
         else if (tutorial_state == 1)
         {
-            player_Controller.enable_control = true;
+            player_controller.enable_control = true;
 
             if (health_info.parry_bonus)
             {
@@ -80,6 +81,10 @@ public class Tutorial3_Manager : MonoBehaviour
                 }
             }
             
+        }
+
+        if(tutorial_finished){
+            Game_Manager.instance.setState(3);
         }
     }
 }

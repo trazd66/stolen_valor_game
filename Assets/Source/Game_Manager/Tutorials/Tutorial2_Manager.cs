@@ -15,7 +15,7 @@ public class Tutorial2_Manager : MonoBehaviour
 
     public GameObject tutorial_ui;
 
-    public Player_controller player_Controller;
+    public Player_controller player_controller;
 
     private bool attacked = false;
     private bool dash_attacked = false;
@@ -27,7 +27,8 @@ public class Tutorial2_Manager : MonoBehaviour
     public Image dash_attack_indicator;
     public Image jump_attack_indicator;
 
-    // Start is called before the first frame update
+    public bool tutorial_finished = false;
+
     void Start()
     {
         attack_indicator.color = Color.red;
@@ -47,9 +48,9 @@ public class Tutorial2_Manager : MonoBehaviour
         }
         else if(tutorial_state == 1)
         {
-            player_Controller.enable_control = true;
+            player_controller.enable_control = true;
 
-            Player_State_Transition_Func.player_state curr_state = player_Controller.get_curr_state;
+            Player_State_Transition_Func.player_state curr_state = player_controller.get_curr_state;
 
             if(curr_state == Player_State_Transition_Func.player_state.attack_basic)
             {
@@ -71,6 +72,10 @@ public class Tutorial2_Manager : MonoBehaviour
             {
                 reward.placeReward(new Vector3(4, 2, -0.558f));
             }
+        }
+
+        if(tutorial_finished){
+            Game_Manager.instance.setState(2);
         }
     }
 }

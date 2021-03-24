@@ -11,6 +11,20 @@ namespace Game_Control
     public class Player_controller : MonoBehaviour
     {
 
+        public bool enable_control;
+
+        //true to enable attacking
+        public bool enable_attacks;
+
+        //true to enable parry
+        public bool enable_parry;
+
+        //true to enable dodge
+        public bool enable_dodge;
+
+        //true to enable laser; different from the laser unlock toggle, this one is needed to prevent the code that checks for the laser indicator from crashing. 
+        //setting it to true does not nessecarily unlock laser, that toggle is in comboinfo
+        public bool enable_laser;
         private float Speed = 5.0f;
         private float JumpHeight = 2.5f;
 
@@ -49,23 +63,6 @@ namespace Game_Control
         public Pause_Manager pause_manager;
         public Cooldown_Manager cooldown_manager;
 
-        public bool enable_control;
-
-        //true to enable attacking
-        public bool enable_attacks;
-
-        //true to enable parry
-        public bool enable_parry;
-
-        //true to enable dodge
-        public bool enable_dodge;
-
-        //true to enable laser; different from the laser unlock toggle, this one is needed to prevent the code that checks for the laser indicator from crashing. 
-        //setting it to true does not nessecarily unlock laser, that toggle is in comboinfo
-        public bool enable_laser;
-
-        // public Renderer[] AttackVisuals;
-        // public Renderer[] PlayerVisuals;
 
 
         public Collider[] AttackHitboxes;
@@ -83,9 +80,6 @@ namespace Game_Control
 
         State_controller state_controller;
         State_controller attack_controller;
-        public Vector3 player_state_debug_display;
-        public Vector3 attack_state_debug_display;
-        // Start is called before the first frame update
 
         public Animator char_animator;
 
@@ -120,7 +114,7 @@ namespace Game_Control
         }
 
 
-        void Start()
+        void Awake()
         {
             _character_controller = GetComponent<CharacterController>();
             _character_controller.minMoveDistance = 0;
@@ -139,23 +133,12 @@ namespace Game_Control
             skin_material = materials[1];
 
             skin_natural = skin_material.color;
-
-            AudioManager.instance.SetLoop("leveltheme1_v2", true);
-            AudioManager.instance.ChangeVolume("leveltheme1_v2", 0.3f);
-            AudioManager.instance.Play("leveltheme1_v2");
-
+    
             AudioManager.instance.SetLoop("char_hoveridle", true);
-            AudioManager.instance.ChangeVolume("char_hoveridle", 0.2f);
             AudioManager.instance.Play("char_hoveridle");
+
         }
-        // void OnDrawGizmos()
-        // {
-        //     if (state_controller != null && attack_controller != null)
-        //     {
-        //         Handles.Label(player_state_debug_display, "movement state: " + (Player_State_Transition_Func.player_state)state_controller.curr_state);
-        //         Handles.Label(attack_state_debug_display, "attack_basic state: " + (Attack_State_Transition_Func.attack_state)attack_controller.curr_state);
-        //     }
-        // }
+
 
         public IEnumerator Flash(Color c)
 
@@ -270,9 +253,14 @@ namespace Game_Control
                 knockback_timer -= Time.deltaTime;
             }
 
+        }
 
-
-
+        public void enable_gameplay(){
+            enable_control = true;
+            enable_attacks = true;
+            enable_parry = true;
+            enable_dodge = true;
+            enable_laser = true;
         }
 
         private void process_parry(bool state_changed)
@@ -531,8 +519,7 @@ namespace Game_Control
                 {
                     cooldown_manager.laser_ready = true;
                 }
-            }
-            
+            }            
         }
     }
 }

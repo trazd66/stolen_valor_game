@@ -15,11 +15,14 @@ public class Tutorial1_Manager : MonoBehaviour
 
     public GameObject tutorial_ui;
 
-    public Player_controller player_Controller;
+    public Player_controller player_controller;
+
+    public bool tutorial_finished;
+    
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        tutorial_finished = false;
     }
 
     // Update is called once per frame
@@ -51,7 +54,11 @@ public class Tutorial1_Manager : MonoBehaviour
 
         else if(tutorial_state == 2)
         {
-            player_Controller.enable_control = true;
+            player_controller.enable_control = true;
+        }
+
+        if(tutorial_finished){
+            Game_Manager.instance.setState(1);
         }
 
     }

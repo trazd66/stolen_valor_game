@@ -8,6 +8,7 @@ public class Tutorial4_Reward : MonoBehaviour
     private Collider col;
     private bool active = false;
     // Start is called before the first frame update
+    public Tutorial4_Manager tutorial4_Manager;
     void Start()
     {
         gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
@@ -22,7 +23,7 @@ public class Tutorial4_Reward : MonoBehaviour
 
             if (cols.Length > 0)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                tutorial4_Manager.tutorial_finished = true;
             }
         }
     }

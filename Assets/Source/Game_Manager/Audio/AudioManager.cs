@@ -10,11 +10,6 @@ public class AudioManager : MonoBehaviour
     Dictionary<string, AudioSource> sound_dic = new Dictionary<string, AudioSource>();
     public AudioClip[] clips;
 
-    /// <summary>
-    /// Theme is the sound you want to play at the beginning 
-    /// </summary>
-    public string Theme;
-
     public static AudioManager instance;
 
 
@@ -37,15 +32,10 @@ public class AudioManager : MonoBehaviour
             audioSource.clip = ac;
             audioSource.loop = false;
             audioSource.volume = 1f;
-            audioSource.pitch = 1f;
             audioSource.playOnAwake = false;
             sound_dic.Add(ac.name,audioSource);
         }
 
-        if (Theme==null)
-        {
-            Theme = "";
-        }
     }
 
     void Start()
@@ -112,6 +102,23 @@ public class AudioManager : MonoBehaviour
 
         }
     }
+
+    public void SetSFXVolume(float new_volume){
+        foreach (string audio_name in sound_dic.Keys){
+            if(!audio_name.Contains("leveltheme")){
+                sound_dic[audio_name].volume = new_volume;
+            }
+        }
+    }
+
+    public void SetThemeVolume(float new_volume){
+        foreach (string audio_name in sound_dic.Keys){
+            if(audio_name.Contains("leveltheme")){
+                sound_dic[audio_name].volume = new_volume;
+            }
+        }
+    }
+
 
     /// <summary>
     /// change songs pitch
