@@ -49,6 +49,8 @@ namespace Game_Control
         public Pause_Manager pause_manager;
         public Cooldown_Manager cooldown_manager;
 
+        public bool enable_control;
+
         //true to enable attacking
         public bool enable_attacks;
 
@@ -106,6 +108,14 @@ namespace Game_Control
             knockback_timer = 0.25f;
         }
 
+        public Player_State_Transition_Func.player_state get_curr_state
+        {
+            get
+            {
+                return (Player_State_Transition_Func.player_state)state_controller.curr_state;
+            }
+        }
+
 
         void Start()
         {
@@ -161,6 +171,12 @@ namespace Game_Control
         // Update is called once per frame
         void Update()
         {
+
+            if (!enable_control)
+            {
+                return;
+            }
+
             float horizontal_input = Input.GetAxis("Horizontal");
             float vertical_input = Input.GetAxis("Vertical");
             bool pause_input = Input.GetButtonDown("Pause");
