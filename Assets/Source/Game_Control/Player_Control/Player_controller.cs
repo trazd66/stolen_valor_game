@@ -63,7 +63,7 @@ namespace Game_Control
         public Pause_Manager pause_manager;
         public Cooldown_Manager cooldown_manager;
 
-
+        public GameObject game_over;
 
         public Collider[] AttackHitboxes;
 
@@ -167,6 +167,8 @@ namespace Game_Control
             float vertical_input = Input.GetAxis("Vertical");
             bool pause_input = Input.GetButtonDown("Pause");
 
+            reload_scene_if_death();
+
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info, enable_attacks, enable_parry, enable_dodge, enable_laser);
 
             if (pause_manager.GetLaserPaused())
@@ -225,14 +227,6 @@ namespace Game_Control
                     Time.timeScale = 1f;
                 }
             }
-
-            //reset scene if player dies
-            if (player_health_info.is_dead || transform.position.y <= -2)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
-
-            reload_scene_if_death();
 
             attack_controller.process_time();
             state_controller.process_time();
@@ -399,9 +393,15 @@ namespace Game_Control
 
         private void reload_scene_if_death()
         {
+            //reset scene if player dies
             if (player_health_info.is_dead || transform.position.y <= -2)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                game_over.SetActive(true);
+                if (Input.GetButtonDown("Jump"))
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+
             }
         }
 
