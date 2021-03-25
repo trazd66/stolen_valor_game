@@ -50,19 +50,19 @@ public class Tutorial2_Manager : MonoBehaviour
         {
             player_controller.enable_control = true;
 
-            Player_State_Transition_Func.player_state curr_state = player_controller.get_curr_state;
+            Attack_State_Transition_Func.attack_state curr_state = player_controller.curr_atk_state;
 
-            if(curr_state == Player_State_Transition_Func.player_state.attack_basic)
+            if(curr_state == Attack_State_Transition_Func.attack_state.attack_basic_4)
             {
                 attacked = true;
                 attack_indicator.color = Color.green;
             }
-            else if (curr_state == Player_State_Transition_Func.player_state.attack_dash)
+            else if (curr_state == Attack_State_Transition_Func.attack_state.attack_dash_0)
             {
                 dash_attacked = true;
                 dash_attack_indicator.color = Color.green;
             }
-            else if (curr_state == Player_State_Transition_Func.player_state.attack_jump)
+            else if (curr_state == Attack_State_Transition_Func.attack_state.attack_jump_0)
             {
                 jump_attacked = true;
                 jump_attack_indicator.color = Color.green;

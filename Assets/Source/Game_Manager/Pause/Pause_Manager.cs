@@ -7,9 +7,11 @@ public class Pause_Manager : MonoBehaviour
 {
     public GameObject pause_screen;
     public GameObject laser_tutorial;
+    public GameObject combo_tutorial;
 
     private bool paused = false;
     private bool laser_paused = false;
+    private bool combo_paused = false;
 
     public void ShowPause()
     {
@@ -60,6 +62,32 @@ public class Pause_Manager : MonoBehaviour
     {
         return laser_paused;
     }
+
+    public void ShowComboTutorial()
+    {
+        combo_tutorial.SetActive(true);
+    }
+
+    public void RemoveComboTutorial()
+    {
+        combo_tutorial.SetActive(false);
+    }
+
+    public void PauseCombo()
+    {
+        combo_paused = true;
+    }
+
+    public void UnpauseCombo()
+    {
+        combo_paused = false;
+    }
+
+    public bool GetComboPaused()
+    {
+        return combo_paused;
+    }
+
 
 
 }

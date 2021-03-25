@@ -133,7 +133,7 @@ namespace Game_Control
             skin_material = materials[1];
 
             skin_natural = skin_material.color;
-    
+
             AudioManager.instance.SetLoop("char_hoveridle", true);
             AudioManager.instance.Play("char_hoveridle");
 
@@ -171,15 +171,35 @@ namespace Game_Control
 
             if (pause_manager.GetLaserPaused())
             {
-                if (Input.GetButtonDown("Jump")){
+                if (Input.GetButtonDown("Jump"))
+                {
                     pause_manager.UnpauseLaser();
                     pause_manager.RemoveLaserTutorial();
+                    pause_manager.PauseCombo();
+                    pause_manager.ShowComboTutorial();
+                }
+            }
+
+            else if (pause_manager.GetComboPaused())
+            {
+                if (Input.GetButtonDown("Jump"))
+                {
+                    pause_manager.UnpauseCombo();
+                    pause_manager.RemoveComboTutorial();
                     Time.timeScale = 1f;
+                }
+
+                if (Input.GetButtonDown("Attack"))
+                {
+                    pause_manager.UnpauseCombo();
+                    pause_manager.RemoveComboTutorial();
+                    pause_manager.PauseLaser();
+                    pause_manager.ShowLaserTutorial();
                 }
             }
 
             pause_game(pause_input);
-            
+
             if (pause_manager.GetPaused())
             {
                 if (Input.GetButtonDown("Jump") && pause_visual)
@@ -187,7 +207,7 @@ namespace Game_Control
                     pause_manager.RemovePause();
                     pause_visual = false;
                 }
-                else if(Input.GetButtonDown("Jump") && !pause_visual)
+                else if (Input.GetButtonDown("Jump") && !pause_visual)
                 {
                     pause_manager.ShowPause();
                     pause_visual = true;
@@ -243,7 +263,7 @@ namespace Game_Control
 
             update_indicators();
 
-            if(dodge_invuln_timer > 0)
+            if (dodge_invuln_timer > 0)
             {
                 dodge_invuln_timer -= Time.deltaTime;
             }
@@ -255,7 +275,8 @@ namespace Game_Control
 
         }
 
-        public void enable_gameplay(){
+        public void enable_gameplay()
+        {
             enable_control = true;
             enable_attacks = true;
             enable_parry = true;
@@ -384,7 +405,8 @@ namespace Game_Control
             }
         }
 
-        private void pause_game(bool pause_input){
+        private void pause_game(bool pause_input)
+        {
             if (pause_input && !pause_manager.GetPaused())
             {
                 Debug.Log("pause");
@@ -404,7 +426,8 @@ namespace Game_Control
 
 
 
-        private void apply_movement(float horizontal_input, float vertical_input){
+        private void apply_movement(float horizontal_input, float vertical_input)
+        {
             Vector3 move = new Vector3(0, 0, 0);
 
 
@@ -418,7 +441,7 @@ namespace Game_Control
             else
 
             //apply backwards momentum when knocked back
-            if(knockback_timer > 0)
+            if (knockback_timer > 0)
             {
                 if (knockback_direction_right)
                 {
@@ -428,7 +451,7 @@ namespace Game_Control
                 {
                     move += new Vector3(-1, 0, 0) * Time.deltaTime * knockback_speed;
                 }
-                
+
             }
 
             //apply dodge movement to the player
@@ -519,7 +542,7 @@ namespace Game_Control
                 {
                     cooldown_manager.laser_ready = true;
                 }
-            }            
+            }
         }
     }
 }

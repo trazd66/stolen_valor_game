@@ -9,6 +9,7 @@ public class Laser_Reward_Manager : MonoBehaviour
     public ComboInfo combo_info;
 
     public Pause_Manager pause_manager;
+    public GameObject combo_meter;
 
     private Collider col;
     private bool active = true;
@@ -34,6 +35,7 @@ public class Laser_Reward_Manager : MonoBehaviour
                 pause_manager.ShowLaserTutorial();
                 pause_manager.PauseLaser();
                 Time.timeScale = 0;
+                combo_meter.SetActive(true);
                 Destroy(gameObject);
             }
         }
