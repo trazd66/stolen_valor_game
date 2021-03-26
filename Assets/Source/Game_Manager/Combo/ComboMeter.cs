@@ -34,7 +34,7 @@ public class ComboMeter : MonoBehaviour
         ComboRingFiller();
 
         TextDisplay();
-        ColorChanger();
+        //ColorChanger();
         
     }
 
