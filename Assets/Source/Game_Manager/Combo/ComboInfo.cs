@@ -9,6 +9,8 @@ public class ComboInfo : MonoBehaviour
     public float combo_counter = 0;
     private float combo_points = 0;
 
+    private float max_combo_points = 500;
+
     private static float laser_cost = 500;
 
     private bool laser_unlock = false;
@@ -44,9 +46,9 @@ public class ComboInfo : MonoBehaviour
     public void addComboPoints(float amount)
     {
         combo_points += amount;
-        if (combo_points > 2000f)
+        if (combo_points > max_combo_points)
         {
-            combo_points = 2000f;
+            combo_points = max_combo_points;
         }
     }
 
