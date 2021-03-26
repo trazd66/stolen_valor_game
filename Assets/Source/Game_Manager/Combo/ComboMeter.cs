@@ -20,9 +20,9 @@ public class ComboMeter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MaxComboNum = 2000;
-        ComboPointCount.text = "0";
-        ComboCount.text = "0";
+        MaxComboNum = 500;
+        ComboPointCount.text = "500";
+        ComboCount.text = "500";
         displayNum = combo_info.getComboPoints();
     }
 
@@ -34,7 +34,7 @@ public class ComboMeter : MonoBehaviour
         ComboRingFiller();
 
         TextDisplay();
-        ColorChanger();
+        //ColorChanger();
         
     }
 

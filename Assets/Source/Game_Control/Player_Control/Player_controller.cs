@@ -35,7 +35,7 @@ namespace Game_Control
         private float dodge_invuln_timer = 0f;
 
         private float parry_active_duration = 0.2f;
-        private float parry_bonus_duration = 1.5f;
+        private float parry_bonus_duration = 3f;
 
         private bool parry_stop = false;
         private float parry_stop_initial;
@@ -520,25 +520,14 @@ namespace Game_Control
 
         private void update_indicators()
         {
-            if (enable_dodge)
-            {
-                if (cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value > 0)
-                {
-                    cooldown_manager.dodge_ready = false;
-                }
-                else if (!cooldown_manager.dodge_ready && state_controller.cooldown_timers[0].Value <= 0)
-                {
-                    cooldown_manager.dodge_ready = true;
-                }
-            }
 
             if (enable_laser)
             {
-                if (cooldown_manager.laser_ready && (state_controller.cooldown_timers[1].Value > 0 || !combo_info.canFireLaser()))
+                if (cooldown_manager.laser_ready && !combo_info.canFireLaser())
                 {
                     cooldown_manager.laser_ready = false;
                 }
-                else if (!cooldown_manager.laser_ready && state_controller.cooldown_timers[1].Value <= 0 && combo_info.canFireLaser())
+                else if (!cooldown_manager.laser_ready && combo_info.canFireLaser())
                 {
                     cooldown_manager.laser_ready = true;
                 }

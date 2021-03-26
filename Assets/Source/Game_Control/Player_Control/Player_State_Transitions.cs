@@ -55,9 +55,6 @@ namespace Game_Control
         float dodge_cooldown = 1.0f;
         public Float_ref dodge_cd_timer;
 
-        float laser_cooldown = 2.0f;
-        public Float_ref laser_cd_timer;
-
         CharacterController player_characterController;
         HealthInfo player_health_info;
         // CharacterController enemy_characterController;
@@ -92,8 +89,6 @@ namespace Game_Control
             duration = 0;
             dodge_cd_timer = new Float_ref(dodge_cooldown);
             cooldown_timers.Add(dodge_cd_timer);
-            laser_cd_timer = new Float_ref(laser_cooldown);
-            cooldown_timers.Add(laser_cd_timer);
         }
 
         public bool process_state_with_player_input(ref int curr_state, ref List<int> prev_states, ref float duration, Player_Input.PlayerInput input)
@@ -144,18 +139,7 @@ namespace Game_Control
                     curr_state == (int)player_state.dash ||
                     curr_state == (int)player_state.airborne) && input.HasFlag(Player_Input.PlayerInput.Special_attack_0))
                     {
-                        //only shoot laser if cooldown is expired
-                        if(laser_cd_timer.Value <= 0) {
-                            update_state((int)player_state.attack_special_0, 0, ref curr_state, ref prev_states, ref duration);
-                            laser_cd_timer.Value = laser_cooldown;
-                        }
-                        else
-                        //do nothing if cooldown isn't expired
-                        {
-                            return false;
-                        }
-                        
-
+                        update_state((int)player_state.attack_special_0, 0, ref curr_state, ref prev_states, ref duration);                     
                     }
                     else
                     if (curr_state == (int)player_state.airborne || input.HasFlag(Player_Input.PlayerInput.Jump))

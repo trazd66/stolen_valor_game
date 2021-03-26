@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 172597363}
   - component: {fileID: 172597362}
   m_Layer: 5
-  m_Name: Combo Meter Caption
+  m_Name: Combo Empty Caption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,8 +361,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -113}
-  m_SizeDelta: {x: 222.417, y: 48.2164}
+  m_AnchoredPosition: {x: 222, y: -80}
+  m_SizeDelta: {x: 324.6424, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &172597362
 MonoBehaviour:
@@ -397,7 +397,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Combo Meter
+  m_Text: Empty Combo Meter
 --- !u!222 &172597363
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -556,7 +556,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -206}
-  m_SizeDelta: {x: 767.4825, y: 45.6999}
+  m_SizeDelta: {x: 863.4492, y: 45.6999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &326943549
 MonoBehaviour:
@@ -580,7 +580,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 32
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -612,7 +612,7 @@ GameObject:
   - component: {fileID: 330698974}
   - component: {fileID: 330698973}
   m_Layer: 5
-  m_Name: Combo Counter Caption
+  m_Name: Combo Full Caption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -634,8 +634,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 375}
-  m_SizeDelta: {x: 248.69, y: 48.1931}
+  m_AnchoredPosition: {x: -257, y: -80}
+  m_SizeDelta: {x: 282.0696, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &330698973
 MonoBehaviour:
@@ -670,7 +670,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Combo Counter
+  m_Text: Full Combo Meter
 --- !u!222 &330698974
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1227,7 +1227,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -377}
-  m_SizeDelta: {x: 1134.3777, y: 76.85}
+  m_SizeDelta: {x: 998.7727, y: 76.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1504650858
 MonoBehaviour:
@@ -1251,7 +1251,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 32
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1262,8 +1262,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: As you progress, you will unlock Special Moves like the Laser. Spend the
-    Combo Meter to use these moves!
+  m_Text: When the Combo Meter fills, you will be able to fire the Laser!
 --- !u!222 &1504650859
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1368,7 +1367,7 @@ GameObject:
   - component: {fileID: 1607690295}
   - component: {fileID: 1607690294}
   m_Layer: 5
-  m_Name: Combo Counter
+  m_Name: Combo Empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1383,15 +1382,15 @@ RectTransform:
   m_GameObject: {fileID: 1607690292}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 62279580}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 312}
-  m_SizeDelta: {x: 100, y: 39}
+  m_AnchoredPosition: {x: 227, y: 102}
+  m_SizeDelta: {x: 47, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1607690294
 MonoBehaviour:
@@ -1413,7 +1412,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 69102b1775a272a4bb049a3044435fde, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f79da186c2c70e145b611f2b7b5124fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1540,8 +1539,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -283}
-  m_SizeDelta: {x: 1134.3777, y: 76.85}
+  m_AnchoredPosition: {x: 0, y: -286}
+  m_SizeDelta: {x: 1263.7239, y: 50.1891}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1695974645
 MonoBehaviour:
@@ -1565,7 +1564,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 32
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1576,8 +1575,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Landing attacks in quick succession increase the Combo Counter, which will
-    make the Combo Meter fill even faster!
+  m_Text: Landing attacks in quick succession will make the Combo Meter fill even
+    faster!
 --- !u!222 &1695974646
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1807,7 +1806,7 @@ GameObject:
   - component: {fileID: 1975799064}
   - component: {fileID: 1975799063}
   m_Layer: 5
-  m_Name: Combo meter
+  m_Name: Combo Full
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1822,15 +1821,15 @@ RectTransform:
   m_GameObject: {fileID: 1975799061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 62279580}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 91}
-  m_SizeDelta: {x: 193, y: 185}
+  m_AnchoredPosition: {x: -250, y: 103}
+  m_SizeDelta: {x: 46, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1975799063
 MonoBehaviour:
@@ -1852,7 +1851,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b0e7f69fedde717479dd73a338d78fd6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 53c5bfee02f0cc3429b2738ad9619167, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1984,6 +1983,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 306516751858491593, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_Text
+      value: The indicator near the combo meter will turn red when you're able to
+        fire!
+      objectReference: {fileID: 0}
     - target: {fileID: 1113622798801050197, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: boss_health
       value: 
@@ -1992,9 +1996,33 @@ PrefabInstance:
       propertyPath: character_health
       value: 
       objectReference: {fileID: 249195719}
+    - target: {fileID: 1175996599241204867, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175996599241204867, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 348
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175996600579309188, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175996600724639003, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 803
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175996600724639003, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 309
+      objectReference: {fileID: 0}
     - target: {fileID: 1414319679931907079, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830664621500450168, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1937439826468244523, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2018,6 +2046,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4816679010182768258, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5835667160442822549, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1130.731
+      objectReference: {fileID: 0}
+    - target: {fileID: 5835667160442822549, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422279642389534503, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1165.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422279642389534503, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7298794544358584948, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
@@ -2027,6 +2071,10 @@ PrefabInstance:
     - target: {fileID: 7837992211101816546, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8718622678612132490, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_Text
+      value: The Laser costs 500 combo points to fire, which is a full Combo Meter
       objectReference: {fileID: 0}
     - target: {fileID: 8800185468239802625, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_Name
@@ -2075,6 +2123,10 @@ PrefabInstance:
     - target: {fileID: 8800185468239802627, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9048517324477439951, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9075511987093889584, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_Sprite
