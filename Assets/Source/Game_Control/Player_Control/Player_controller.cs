@@ -25,12 +25,12 @@ namespace Game_Control
         //true to enable laser; different from the laser unlock toggle, this one is needed to prevent the code that checks for the laser indicator from crashing. 
         //setting it to true does not nessecarily unlock laser, that toggle is in comboinfo
         public bool enable_laser;
-        private float Speed = 5.0f;
+        private float Speed = 6.0f;
         private float JumpHeight = 2.5f;
 
         private float dodge_horizontal;
         private float dodge_vertical;
-        private float dodge_speed = 12.0f;
+        private float dodge_speed = 15.0f;
 
         private float dodge_invuln_timer = 0f;
 
