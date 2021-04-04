@@ -37,6 +37,8 @@ namespace Game_Control{
         private Vector3[] laser_rain_positions = new Vector3[10];
         private Vector3[] laser_rain_directions = new Vector3[10];
 
+        private Vector3 laser_player_pos;
+
         private Vector3 laser_rapid_position;
         private Vector3 laser_rapid_direction;
 
@@ -124,14 +126,18 @@ namespace Game_Control{
                 //call laser aim function if laser attack state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
                 {
+                    laser_player_pos = new Vector3(player.transform.position.x, player.transform.position.y + 0.5f, player.transform.position.z);
 
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z), 0.2f, 30f);
+                        
+                        laser_manager.aim_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), 
+                           laser_player_pos, 0.2f, 30f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), 0.2f, 30f);
+                        laser_manager.aim_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z),
+                            laser_player_pos, 0.2f, 30f);
                     }
                 }
                 //call laser function if laser attack state is entered
@@ -140,11 +146,13 @@ namespace Game_Control{
 
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z), 0.2f, 30f);
+                        laser_manager.fire_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), true,
+                           laser_player_pos, 0.2f, 30f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), 0.2f, 30f);
+                        laser_manager.fire_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), true,
+                            laser_player_pos, 0.2f, 30f);
                     }
                 }
                 //call laser rain aim function of laser rain aim state is entered

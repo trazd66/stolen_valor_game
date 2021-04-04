@@ -13,6 +13,9 @@ namespace Game_Control{
         public HealthInfo boss_health_info;
 
         public ComboInfo combo_info;
+        public Texture laser_texture;
+
+        private Color laser_colour = new Color(1f, 0f, 0f);
         // Start is called before the first frame update
         void Start()
         {
@@ -105,9 +108,10 @@ namespace Game_Control{
             GameObject laser_visual = new GameObject();
             laser_visual.transform.position = position;
             LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
-            line_renderer.material = new Material(Shader.Find("Sprites/Default"));
-            line_renderer.startColor = Color.red;
-            line_renderer.endColor = Color.red;
+            line_renderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
+            line_renderer.material.SetTexture("_MainTex", laser_texture);
+            line_renderer.startColor = laser_colour;
+            line_renderer.endColor = laser_colour;
             line_renderer.SetPosition(0, position);
             float distance;
             if (successful_hit)
@@ -187,9 +191,10 @@ namespace Game_Control{
                 GameObject laser_visual = new GameObject();
                 laser_visual.transform.position = positions[i];
                 LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
-                line_renderer.material = new Material(Shader.Find("Sprites/Default"));
-                line_renderer.startColor = Color.red;
-                line_renderer.endColor = Color.red;
+                line_renderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
+                line_renderer.material.SetTexture("_MainTex", laser_texture);
+                line_renderer.startColor = laser_colour;
+                line_renderer.endColor = laser_colour;
                 line_renderer.SetPosition(0, positions[i]);
                 AudioManager.instance.Play("LASER FIRE 1");
 
@@ -230,9 +235,10 @@ namespace Game_Control{
             GameObject laser_visual = new GameObject();
             laser_visual.transform.position = position;
             LineRenderer line_renderer = laser_visual.AddComponent<LineRenderer>();// A simple 2 color gradient with a fixed alpha of 1.0f.
-            line_renderer.material = new Material(Shader.Find("Sprites/Default"));
-            line_renderer.startColor = Color.red;
-            line_renderer.endColor = Color.red;
+            line_renderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
+            line_renderer.material.SetTexture("_MainTex", laser_texture);
+            line_renderer.startColor = laser_colour;
+            line_renderer.endColor = laser_colour;
             line_renderer.SetPosition(0, position);
             float distance;
             if (successful_hit)
