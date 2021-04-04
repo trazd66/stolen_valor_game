@@ -67,8 +67,8 @@ public class Game_Manager : MonoBehaviour
         }
 
         if(AudioManager.instance != null){
-            AudioManager.instance.SetThemeVolume(game_volume_theme);
-            AudioManager.instance.SetThemeVolume(game_volume_SFX);
+            //AudioManager.instance.SetThemeVolume(game_volume_theme);
+            //AudioManager.instance.SetThemeVolume(game_volume_SFX);
         }
     }
 

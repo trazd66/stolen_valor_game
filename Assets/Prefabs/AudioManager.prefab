@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7459166714431552246
+--- !u!1 &6347226520730634828
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8104609964654384446}
-  - component: {fileID: 3587858129027756097}
+  - component: {fileID: 3995584247947260536}
+  - component: {fileID: 5651779478546972694}
   m_Layer: 0
-  m_Name: AudioManager 1
+  m_Name: AudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8104609964654384446
+--- !u!4 &3995584247947260536
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7459166714431552246}
+  m_GameObject: {fileID: 6347226520730634828}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,13 +31,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3587858129027756097
+--- !u!114 &5651779478546972694
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7459166714431552246}
+  m_GameObject: {fileID: 6347226520730634828}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7f5c1ad88fc60349b3aa86f909bbd14, type: 3}
@@ -55,6 +55,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 515b8a070a5a1ff44b3beb3a19b71a9c, type: 3}
   - {fileID: 8300000, guid: 601706f11ff69da46af604b195dea048, type: 3}
   - {fileID: 8300000, guid: 9cda220331fcf6c4e9d3a2256d57e2b0, type: 3}
+  - {fileID: 8300000, guid: d4ad10379cde738499b77ba8c2e38202, type: 3}
+  - {fileID: 8300000, guid: 6d2bf1a10dab0e04a90d7c2e19cd2c74, type: 3}
+  - {fileID: 8300000, guid: 33831231364c9c746b19252f79d5a2bc, type: 3}
+  - {fileID: 8300000, guid: 36339e448f61bef479c8c3b140f9e208, type: 3}
   - {fileID: 8300000, guid: f713445d1a03b044690ff65a19db1318, type: 3}
-  - {fileID: 8300000, guid: 27f0a1746595ed647b98aaea26332a33, type: 3}
-  Theme: 
