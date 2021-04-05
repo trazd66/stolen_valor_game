@@ -20,8 +20,7 @@ namespace Game_Control
             attack_basic_2,
             [Description("attack_basic_3")]
             attack_basic_3,
-            [Description("attack_basic_4")]
-            attack_basic_4,
+
             [Description("attack_dash_0")]
             attack_dash_0,
             [Description("attack_jump_0")]
@@ -53,6 +52,14 @@ namespace Game_Control
             attack_queue = new Queue<int>(8);
         }
 
+        public void improve_attack_interval(float factor){
+            basic_attack_interval /= factor;
+            strong_attack_interval /= factor;
+            jump_attack_interval /= factor;
+            dash_attack_interval /= factor;
+            special_attack_interval_0 /= factor;
+        }
+
 
 
         //dequeue from attack queue and proceed with state machine
@@ -71,18 +78,13 @@ namespace Game_Control
                     {
                         if (curr_state < (int)attack_state.attack_basic_3)
                         {
-                            //AudioManager.instance.Play("game jam 3 impact");
                             update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
                         else if (curr_state == (int)attack_state.attack_basic_3)
                         {
-                            AudioManager.instance.Play("char_spinattk");
-                            update_state((int)curr_state + 1, strong_attack_interval, ref curr_state, ref prev_states, ref duration);
+                            update_state(curr_state + 1, strong_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
-                        else if (curr_state == (int)attack_state.attack_basic_4)
-                        {
-                            //AudioManager.instance.Play("game jam 3 impact");
-                        }
+
                     }
                     else
                     //special attack 0

@@ -76,12 +76,14 @@ namespace Game_Control
         private Color invincible_colour = new Color(1f, 1f, 1f, 0.0f);
         private Color hurt_colour = new Color(1f, 0f, 0f, 0.5f);
 
-
+        private Vector3 move = new Vector3(0, 0, 0);
 
         State_controller state_controller;
         State_controller attack_controller;
 
         public Animator char_animator;
+
+        private Attack_State_Transition_Func attack_transitions;
 
         public Attack_State_Transition_Func.attack_state curr_atk_state
         {
@@ -90,7 +92,16 @@ namespace Game_Control
                 return (Attack_State_Transition_Func.attack_state)attack_controller.curr_state;
             }
         }
+        public bool player_alive
+        {
+            get
+            {
+                return player_health_info.curr_health > 0;
+            }
+        }
 
+        private bool initial_boost = false;
+        private bool delayed_boost = false;
         //return true if the direction to apply knockback in is right, false otherwise
         public bool get_knockback_direction_right()
         {
@@ -123,7 +134,8 @@ namespace Game_Control
             state_controller.initialize(new Player_State_Transition_Func(_character_controller, player_health_info));
 
             attack_controller = new State_controller();
-            attack_controller.initialize(new Attack_State_Transition_Func());
+            attack_transitions = new Attack_State_Transition_Func();
+            attack_controller.initialize(attack_transitions);
 
 
             rot = Quaternion.Euler(0, 0, 0);
@@ -154,6 +166,17 @@ namespace Game_Control
         {
         }
 
+        public void improve_attack_interval(){
+                attack_transitions.improve_attack_interval(2f);
+                StartCoroutine(slow_attack_interval());
+        }
+        public IEnumerator slow_attack_interval()
+
+        {
+            yield return new WaitForSeconds(2f);
+            attack_transitions.improve_attack_interval(0.5f);
+            StopCoroutine(slow_attack_interval());
+        }
         // Update is called once per frame
         void Update()
         {
@@ -166,8 +189,6 @@ namespace Game_Control
             float horizontal_input = Input.GetAxis("Horizontal");
             float vertical_input = Input.GetAxis("Vertical");
             bool pause_input = Input.GetButtonDown("Pause");
-
-            reload_scene_if_death();
 
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info, enable_attacks, enable_parry, enable_dodge, enable_laser);
 
@@ -330,19 +351,23 @@ namespace Game_Control
             {
                 state_controller.state_duration = attack_controller.state_duration;
                 if (attack_controller.curr_state != 0 &&
-                    attack_controller.curr_state <= (int)Attack_State_Transition_Func.attack_state.attack_basic_4)
+                    attack_controller.curr_state <= (int)Attack_State_Transition_Func.attack_state.attack_basic_3)
                 {
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_basic;
-                }
+                }else 
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_dash_0)
                 {
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_dash;
-                }
+                }else
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_jump_0)
                 {
                     state_controller.curr_state = (int)Player_State_Transition_Func.player_state.attack_jump;
                 }
-
+                
+                if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3){
+                    initial_boost = true;
+                }
+                
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
                 {
                     state_controller.state_duration = attack_controller.state_duration;
@@ -391,20 +416,8 @@ namespace Game_Control
             }
         }
 
-        private void reload_scene_if_death()
-        {
-            //reset scene if player dies
-            if (player_health_info.is_dead || transform.position.y <= -2)
-            {
-                game_over.SetActive(true);
-                if (Input.GetButtonDown("Jump"))
-                {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                }
 
-            }
-        }
-
+        
         private void pause_game(bool pause_input)
         {
             if (pause_input && !pause_manager.GetPaused())
@@ -424,11 +437,17 @@ namespace Game_Control
             }
         }
 
+        public IEnumerator wait()
 
+        {
+            initial_boost = false;
+            yield return new WaitForSeconds(0.2f);
+            delayed_boost = true;
+        }
 
         private void apply_movement(float horizontal_input, float vertical_input)
         {
-            Vector3 move = new Vector3(0, 0, 0);
+            move = new Vector3(0, 0, 0);
 
 
 
@@ -453,6 +472,19 @@ namespace Game_Control
                 }
 
             }
+             if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3){
+                if(initial_boost == true && delayed_boost == false){                
+                    StartCoroutine(wait());
+                }else
+                if(initial_boost == false && delayed_boost == true){
+                    move += new Vector3(0, 1, 0) * 0.5f * Time.deltaTime * dodge_speed;
+                }else{
+                    initial_boost = false;
+                    delayed_boost = false;
+                }
+
+             }
+  
 
             //apply dodge movement to the player
             if (state_controller.curr_state == (int)Player_State_Transition_Func.player_state.dodge)

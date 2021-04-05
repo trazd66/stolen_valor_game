@@ -13,8 +13,8 @@ public class Game_Manager : MonoBehaviour
     public string tutorial4_scene_name;
     public string main_game_scene_name;
 
-    public float game_volume_theme = 0.1f;
-    public float game_volume_SFX = 0.3f;
+    public float game_volume_theme = 0.0f;
+    public float game_volume_SFX = 0.0f;
 
     public static Game_Manager instance;
 
@@ -22,58 +22,117 @@ public class Game_Manager : MonoBehaviour
     public int game_state;
 
     private bool manager_enabled;
+    private bool game_over_screen_shown;
+
+    private bool on_fighting_scene;
     void Start()
-    {   
-        instance = this;     
+    {
+        instance = this;
         manager_enabled = true;
+        on_fighting_scene = false;
+        game_over_screen_shown = false;
     }
-    
+
 
     // Update is called once per frame
     void Update()
     {
-        if(!manager_enabled) return;
+        if(on_fighting_scene){
+            
+            if(player_controller.player_health_info.is_dead){
+                if(!game_over_screen_shown){
+                    game_over_screen_shown = true;
+                    StartCoroutine(delayedDeath());
+                }
+                if (Input.GetButtonDown("Jump"))
+                {
+                    game_over_screen_shown = false;
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+            }
 
-        
-        if(game_state == 0 && SceneManager.GetActiveScene().name != tutorial1_scene_name){
+        }
+
+        if (!manager_enabled) return;
+
+
+        if (game_state == 0 && SceneManager.GetActiveScene().name != tutorial1_scene_name)
+        {
             SceneManager.LoadScene(tutorial1_scene_name);
-            manager_enabled = false;            
+            if (AudioManager.instance != null)
+            {
+                AudioManager.instance.SetLoop("tutorial theme 2", true);
+                AudioManager.instance.Play("tutorial theme 2");
+            }
+            manager_enabled = false;
         }
 
-        if(game_state == 1 && SceneManager.GetActiveScene().name != tutorial2_scene_name){
+        if (game_state == 1 && SceneManager.GetActiveScene().name != tutorial2_scene_name)
+        {
             SceneManager.LoadScene(tutorial2_scene_name);
-            manager_enabled = false;            
-    }
-        if(game_state == 2 && SceneManager.GetActiveScene().name != tutorial3_scene_name){
+            manager_enabled = false;
+        }
+        if (game_state == 2 && SceneManager.GetActiveScene().name != tutorial3_scene_name)
+        {
             SceneManager.LoadScene(tutorial3_scene_name);
-            manager_enabled = false;            
+            manager_enabled = false;
         }
-        if(game_state == 3 && SceneManager.GetActiveScene().name != tutorial4_scene_name){
+        if (game_state == 3 && SceneManager.GetActiveScene().name != tutorial4_scene_name)
+        {
             SceneManager.LoadScene(tutorial4_scene_name);
-            manager_enabled = false;            
-    }
-        if(game_state == 4 && SceneManager.GetActiveScene().name != main_game_scene_name ){
+            manager_enabled = false;
+        }
+        if (game_state == 4 && SceneManager.GetActiveScene().name != main_game_scene_name)
+        {
             SceneManager.LoadScene(main_game_scene_name);
-            manager_enabled = false;            
+            manager_enabled = false;
 
         }
 
-        if(SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null){
+        if (SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null)
+        {
             player_controller.enable_gameplay();
             AudioManager.instance.SetLoop("leveltheme1_v2", true);
+            AudioManager.instance.Stop("tutorial theme 2");
             AudioManager.instance.Play("leveltheme1_v2");
-            manager_enabled = false;            
-
+            manager_enabled = false;
+            on_fighting_scene = true;
         }
-
-        if(AudioManager.instance != null){
+        if (AudioManager.instance != null)
+        {
             AudioManager.instance.SetThemeVolume(game_volume_theme);
             AudioManager.instance.SetThemeVolume(game_volume_SFX);
         }
+
+
     }
 
 
-    public void setState(int state){
+
+        private void reload_scene_if_death()
+        {
+            //reset scene if player dies
+            if (player_controller.player_health_info.is_dead)
+            {
+                
+                if (Input.GetButtonDown("Jump"))
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+            }
+        }
+
+        public IEnumerator delayedDeath(){
+
+            Time.timeScale = 0.2f;
+            yield return new WaitForSeconds(0.3f);
+            Time.timeScale = 1;
+            player_controller.game_over.SetActive(true);
+ 
+        }
+
+    public void setState(int state)
+    {
         manager_enabled = true;
         game_state = state;
     }

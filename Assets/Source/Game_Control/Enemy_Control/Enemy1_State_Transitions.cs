@@ -35,7 +35,9 @@ namespace Game_Control
             laser_rapid_attack,
             stomp_windup,
             stomp_charge,
-            stomp_attack
+            stomp_attack,
+            [Description("phase_change_powerup_1")]
+            phase_change_powerup_1
         }
 
         private HealthInfo boss_health_info;
@@ -45,19 +47,19 @@ namespace Game_Control
         private bool just_stomped = false;
 
         private float base_idle_duration = 3.0f;
-        private float hurt_idle_duration = 1.5f;
+        private float hurt_idle_duration = 1.25f;
 
         private float stomp_attack_range = 2.5f;
 
-        private float laser_rapid_max = 3;
-        private float laser_rapid_fires = 0;
 
+        private int phase;
 
         public Enemy1_State_Transition_Func(GameObject player_ref, GameObject enemy1_ref, HealthInfo boss_health_info_ref)
         {
             boss_health_info = boss_health_info_ref;
             player = player_ref;
             enemy1 = enemy1_ref;
+            phase = 1;
         }
 
         private void update_state(int new_state, float new_duration, ref int curr_state, ref List<int> prev_states, ref float duration)
@@ -72,8 +74,6 @@ namespace Game_Control
             curr_state = 0;
             duration = 3.0f;
         }
-
-        
 
         public bool process_state(ref int curr_state, ref List<int> prev_states, ref float duration)
         {
@@ -96,9 +96,20 @@ namespace Game_Control
                 just_stomped = false;
             }
 
-            if (boss_health_info.curr_health / boss_health_info.max_health <= 0.5f)
+            if(phase == 1 && boss_health_info.curr_health / boss_health_info.max_health <= 0.5f){
+                phase = 2;
+                update_state((int)enemy1_state.phase_change_powerup_1, 4f, ref curr_state, ref prev_states, ref duration);
+                return true;
+            }
+
+            if (idle_duration != hurt_idle_duration && phase == 2)
             {
                 idle_duration = hurt_idle_duration;
+            }
+
+            if(curr_state == (int)enemy1_state.phase_change_powerup_1 && duration <= 0){
+                update_state((int)enemy1_state.idle, 0f, ref curr_state, ref prev_states, ref duration);
+                return true;
             }
 
             //turn around if doing run attack and collided with player
@@ -144,7 +155,7 @@ namespace Game_Control
                     invalid_rolls.Add(0);
                 }
 
-                if(boss_health_info.curr_health / boss_health_info.max_health > 0.5f)
+                if(phase == 1)
                 {
                     bool valid = false;
                     while (!valid)
@@ -172,7 +183,6 @@ namespace Game_Control
                     {
                         AudioManager.instance.Play("boss_slam");
                         update_state((int)enemy1_state.stomp_windup, 0.3f, ref curr_state, ref prev_states, ref duration);
-                        //Debug.Log("state changed 3");
                     }
                     //perform laser attack
                     else
@@ -184,7 +194,7 @@ namespace Game_Control
                     state_changed = true;
                 }
                 //select attack during phase 2
-                else
+                else if (phase == 2)
                 {
                     bool valid = false;
                     while (!valid)
@@ -296,25 +306,14 @@ namespace Game_Control
             //boss has completed laser rapid charge
             else if (curr_state == (int)enemy1_state.laser_rapid_charge && duration <= 0)
             {
-                update_state((int)enemy1_state.laser_rapid_attack, 0.5f, ref curr_state, ref prev_states, ref duration);
+                update_state((int)enemy1_state.laser_rapid_attack, 1.25f, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
                 state_changed = true;
             }
             //boss has completed laser rapid attack
             else if (curr_state == (int)enemy1_state.laser_rapid_attack && duration <= 0)
             {
-                laser_rapid_fires++;
-                if (laser_rapid_fires >= laser_rapid_max)
-                {
-                    laser_rapid_fires = 0;
-                    update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
-                }
-                else
-                {
-                    AudioManager.instance.Play("boss_chargeattk");
-                    update_state((int)enemy1_state.laser_rapid_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
-                }
-                //Debug.Log("state changed 0");
+                update_state((int)enemy1_state.idle, 0f, ref curr_state, ref prev_states, ref duration);
                 state_changed = true;
             }
             else if (curr_state == (int)enemy1_state.stomp_windup && duration <= 0)

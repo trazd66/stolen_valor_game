@@ -13,15 +13,70 @@ ModelImporter:
       name: ashblack
     second: {fileID: 2100000, guid: 44dfba1a199a1f740b154689a07bc0fa, type: 2}
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: circlefloor
+    second: {fileID: 2100000, guid: 3511024b71936d944bea701330c2c3a8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: b28fd72c01adf3c4188536abd4ae8923, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__aiStandardSurface4
+    second: {fileID: 2100000, guid: 0a0ed8ec065bf2944a5611d57f43a877, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__black
+    second: {fileID: 2100000, guid: 35536ba297d40674498ecfac4642e1e9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__glass
+    second: {fileID: 2100000, guid: 44c1d96d14f3d2a4ab5c2b63ce19e752, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__grey
+    second: {fileID: 2100000, guid: fe69d49948e7637458117a00d52d0727, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__light_grey
+    second: {fileID: 2100000, guid: 789508406b269544680d2396f7957b62, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__white_gloss
+    second: {fileID: 2100000, guid: b621cec14819d444b83f22800fe28ba4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__yellow
+    second: {fileID: 2100000, guid: 324821b5a521f6c4d9181b562979fe3c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ring_sides
+    second: {fileID: 2100000, guid: a51d76bf1ac37d646a10d04208fcd823, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: water
+    second: {fileID: 2100000, guid: bdfda6ebd4e2f984d91b1ef71630e58b, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: iron
-    second: {fileID: 2800000, guid: e9cb2c231e5026d419eb884dc9af48d1, type: 3}
+    second: {fileID: 2800000, guid: fc8e74fb842a7e140bb7c6ce68da5247, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: stone
-    second: {fileID: 2800000, guid: 50c147e46579c8846a554c1eeb9320aa, type: 3}
+    second: {fileID: 2800000, guid: be8317e36ddfbd84a815e7d3219b17f1, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0

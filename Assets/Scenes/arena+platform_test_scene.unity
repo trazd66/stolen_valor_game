@@ -2124,6 +2124,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8909473088646058441, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a4c45cb0d17c4d541b6c1b7110fd12ef, type: 3}
     - target: {fileID: 9048517324477439951, guid: 0f6b701b2b849b04882c9bdfe4393d2f, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2381,54 +2385,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3517537114237015069, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: max_health
-      value: 3000
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517537114237015069, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: curr_health
-      value: 3000
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 437468939235716418}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: laser_manager
-      value: 
-      objectReference: {fileID: 2082221689}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: reward_manager
-      value: 
-      objectReference: {fileID: 1004236271}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: player_health_info
-      value: 
-      objectReference: {fileID: 249195719}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: hitboxes.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: laser_reward_manager
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: hitboxes.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: hitboxes.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: hitboxes.Array.data[2]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6076948499756499637, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 6274260155668461747, guid: 5af10e63a63a92a418839b62b610c5d4, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -2476,6 +2432,54 @@ PrefabInstance:
     - target: {fileID: 7685659196601973558, guid: 5af10e63a63a92a418839b62b610c5d4, type: 3}
       propertyPath: m_Name
       value: Particle_system_controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517537114237015069, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: max_health
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517537114237015069, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: curr_health
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 437468939235716418}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: laser_manager
+      value: 
+      objectReference: {fileID: 2082221689}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: reward_manager
+      value: 
+      objectReference: {fileID: 1004236271}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: player_health_info
+      value: 
+      objectReference: {fileID: 249195719}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: hitboxes.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: laser_reward_manager
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: hitboxes.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: hitboxes.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076948499756499636, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: hitboxes.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076948499756499637, guid: d790fc97e610c2d4f86aec40b0b1f578, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5af10e63a63a92a418839b62b610c5d4, type: 3}
@@ -2583,14 +2587,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 791230573111737158, guid: 5858c20e48c82504ba1aed3efe5d75ac, type: 3}
-      propertyPath: clips.Array.size
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 791230573111737158, guid: 5858c20e48c82504ba1aed3efe5d75ac, type: 3}
-      propertyPath: clips.Array.data[15]
-      value: 
-      objectReference: {fileID: 8300000, guid: f713445d1a03b044690ff65a19db1318, type: 3}
     - target: {fileID: 5424865184871243321, guid: 5858c20e48c82504ba1aed3efe5d75ac, type: 3}
       propertyPath: m_RootOrder
       value: 9

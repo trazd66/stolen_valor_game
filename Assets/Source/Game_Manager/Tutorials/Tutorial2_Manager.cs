@@ -52,7 +52,7 @@ public class Tutorial2_Manager : MonoBehaviour
 
             Attack_State_Transition_Func.attack_state curr_state = player_controller.curr_atk_state;
 
-            if(curr_state == Attack_State_Transition_Func.attack_state.attack_basic_4)
+            if(curr_state == Attack_State_Transition_Func.attack_state.attack_basic_3)
             {
                 attacked = true;
                 attack_indicator.color = Color.green;

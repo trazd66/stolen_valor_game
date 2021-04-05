@@ -23,6 +23,14 @@ public class DamageCollider : MonoBehaviour
         
     }
 
+    public IEnumerator tempHalt()
+
+    {
+        Time.timeScale = 0.2f;
+        yield return new WaitForSeconds(0.006f);
+        Time.timeScale = 1;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (this.tag == "Player_Attack_Hitbox"){
@@ -37,7 +45,7 @@ public class DamageCollider : MonoBehaviour
         if(collision.collider.tag != "Enemy_Damage_Hitbox"){
             return;
         }
-
+        float boss_invincible_time = 0.2f;
         int damage = 0;
         if(collision.contacts.Length > 0){
             ContactPoint contact = collision.contacts[0];
@@ -53,13 +61,11 @@ public class DamageCollider : MonoBehaviour
                     damage = 50;
                     break;
                 case Attack_State_Transition_Func.attack_state.attack_basic_3:
-                    damage = 50;
-                    break;
-                case Attack_State_Transition_Func.attack_state.attack_basic_4:
-                    damage = 50;
+                    boss_invincible_time = 0.1f;
+                    damage = 60;
                     break;
                 case Attack_State_Transition_Func.attack_state.attack_dash_0:
-                    damage = 40;
+                    damage = 20;
                     break;
                 case Attack_State_Transition_Func.attack_state.attack_jump_0:
                     damage = 40;
@@ -72,7 +78,7 @@ public class DamageCollider : MonoBehaviour
             if (damage > 0 && !boss_health_info.is_invincible)
             {
                 Particle_system_controller.Instance.set_particle(CONTROL_CONFIG.VFX_HIT_PREFAB_NAME_1,contact.point,0.2f);
-
+                StartCoroutine(tempHalt());
                 if (player_health_info.parry_bonus)
                 {
                     damage = (int)(damage * 1.5);
@@ -81,7 +87,7 @@ public class DamageCollider : MonoBehaviour
                 boss_health_info.doDamage(damage);
                 AudioManager.instance.Play("game jam 3 impact");
 
-                boss_health_info.setInvincible(0.4f);
+                boss_health_info.setInvincible(boss_invincible_time);
                 combo_info.setComboTimer(1.5f);
                     
                 cur_combo_points = damage;                   
@@ -138,6 +144,7 @@ public class DamageCollider : MonoBehaviour
             if (player_health_info.parry_ready)
             {
                 player_health_info.setParrySuccess(true);
+                player_Controller.improve_attack_interval();
                 enemy1_state_transition_func.setJustHit();
             }
             else if (!player_health_info.is_invincible)

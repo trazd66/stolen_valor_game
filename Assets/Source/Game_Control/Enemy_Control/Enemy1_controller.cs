@@ -23,6 +23,10 @@ namespace Game_Control{
         public Laser_Reward_Manager laser_reward_manager;
         public Reward_Manager reward_manager;
 
+
+        private float lerpSpeed;
+
+        private Quaternion rot;
         private int phase = 1;
 
         private float run_windup_speed = 1f;
@@ -70,6 +74,48 @@ namespace Game_Control{
 
         }
 
+        public IEnumerator delayed_pulses()
+
+        {
+            var pos = transform.position;
+            pos.y -= 2f;
+            Particle_system_controller.Instance.set_particle(CONTROL_CONFIG.VFX_SHOCK_WAVE,pos,0.5f);
+            yield return new WaitForSeconds(0.05f);
+            StopCoroutine(delayed_pulses());
+        }
+
+        public void slerp_rotate(){
+            lerpSpeed = 20 * Time.deltaTime;
+                rot = Quaternion.Euler(0, 180, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, lerpSpeed);
+        }
+
+        public IEnumerator fire_laser_with_delay(Vector3 position, bool is_enemy, Vector3 direction, float radius, float max_distance, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            laser_manager.fire_laser(position,is_enemy,direction,radius,max_distance);
+            StopCoroutine(fire_laser_with_delay(laser_rapid_position, is_enemy, laser_rapid_direction, 0.5f, 30f,delay));        }
+
+        public IEnumerator aim_laser_with_delay(Vector3 position, Vector3 direction, float radius, float max_distance, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            laser_manager.aim_laser(position,direction,radius,max_distance);
+            StopCoroutine(aim_laser_with_delay(laser_rapid_position, laser_rapid_direction, 0.5f, 30f,delay));
+        }
+
+        public void laser_consecutive_fire(bool is_enemy, float radius, float max_distance, int num_laser_fired, float delay_in_between){
+            for (int i = 0; i < num_laser_fired; i++)
+            {
+                float rand_x = (Random.value * 20) - 10;
+
+                laser_rapid_position = new Vector3(rand_x, 10f, -0.558f);
+                laser_rapid_direction = player.transform.position;
+
+                StartCoroutine(aim_laser_with_delay(laser_rapid_position, laser_rapid_direction, 0.5f, 30f,delay_in_between*i));
+                StartCoroutine(fire_laser_with_delay(laser_rapid_position, is_enemy, laser_rapid_direction, 0.5f, 30f,delay_in_between*i + 1.25f));
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -84,6 +130,7 @@ namespace Game_Control{
             {
                 phase = 2;
                 laser_reward_manager.placeReward();
+                StartCoroutine(delayed_pulses());
             }
 
             state_controller.process_time();
@@ -93,7 +140,8 @@ namespace Game_Control{
 
             //if state just changed
             if (state_changed)
-            {   
+            {
+    
                 //rotate if idle state was just entered from run attack state
                 if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.idle && 
                     state_controller.prev_states[state_controller.prev_states.Count - 1] == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_right)
@@ -170,18 +218,9 @@ namespace Game_Control{
                 //call laser rapid aim function if laser rapid aim state is entered
                 else if((state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rapid_charge))
                 {
-                    float rand_x = (Random.value * 20) - 10;
-
-                    laser_rapid_position = new Vector3(rand_x, 10f, -0.558f);
-                    laser_rapid_direction = player.transform.position;
-
-                    laser_manager.aim_laser(laser_rapid_position, laser_rapid_direction, 0.5f, 30f);
+                    laser_consecutive_fire(true, 0.2f, 10f, 3, 2.25f);
                 }
-                //call laser rapid fire function if laser rapid fire state is entered
-                else if ((state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rapid_attack))
-                {
-                    laser_manager.fire_laser(laser_rapid_position, true, laser_rapid_direction, 0.5f, 30f);
-                }
+
             }
 
                 string desc = Utility_methods.GetDescription<Enemy1_State_Transition_Func.enemy1_state>((Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
@@ -253,9 +292,6 @@ namespace Game_Control{
                 }
             }
 
-            //LaunchAttack(hitboxes,(Enemy1_State_Transition_Func.enemy1_state)state_controller.curr_state);
-
-
         }
 
         private bool CheckPlayerBehind()
@@ -268,52 +304,6 @@ namespace Game_Control{
             return false;
         }
 
-        //called when an attack is launched (obsolete)
-        private void LaunchAttack(Collider[] hitboxes, Enemy1_State_Transition_Func.enemy1_state state)
-        {
-
-            int damage = 0;
-
-            foreach (Collider col in hitboxes)
-            {
-                Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("PlayerHitbox"));
-                if (cols.Length > 0)
-                {
-                    switch (state)
-                    {
-                        case  Enemy1_State_Transition_Func.enemy1_state.run_attack_left:
-                            damage = 30;
-                            break;
-                        case Enemy1_State_Transition_Func.enemy1_state.run_attack_right:
-                            damage = 30;
-                            break;
-                        case Enemy1_State_Transition_Func.enemy1_state.stomp_attack:
-                            damage = 50;
-                            enemy1_state_transition_func.setJustStomped();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            
-            //return true if attack landed, false otherwise
-            if (damage > 0)
-            {
-                AudioManager.instance.Play("boss_bonk");
-                if (player_health_info.parry_ready)
-                {
-                    player_health_info.setParrySuccess(true);
-                    enemy1_state_transition_func.setJustHit();
-                }
-                else if (!player_health_info.is_invincible)
-                {
-                    player_health_info.doDamage(damage);
-                    player_health_info.setInvincible(0.5f);
-                    enemy1_state_transition_func.setJustHit();
-                }
-               
-            }
-        }
+    
     }
 }

@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3587858129027756097, guid: 8afe0a0e6a642c94f946c34d735297dd, type: 3}
       propertyPath: clips.Array.size
-      value: 16
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 3587858129027756097, guid: 8afe0a0e6a642c94f946c34d735297dd, type: 3}
       propertyPath: clips.Array.data[11]
@@ -30,7 +30,11 @@ PrefabInstance:
     - target: {fileID: 3587858129027756097, guid: 8afe0a0e6a642c94f946c34d735297dd, type: 3}
       propertyPath: clips.Array.data[15]
       value: 
-      objectReference: {fileID: 8300000, guid: 673a48693dffb9c4793e564975fc882f, type: 3}
+      objectReference: {fileID: 8300000, guid: f713445d1a03b044690ff65a19db1318, type: 3}
+    - target: {fileID: 3587858129027756097, guid: 8afe0a0e6a642c94f946c34d735297dd, type: 3}
+      propertyPath: clips.Array.data[16]
+      value: 
+      objectReference: {fileID: 8300000, guid: 00f849acc848472489a2815b50a6aad0, type: 3}
     - target: {fileID: 7459166714431552246, guid: 8afe0a0e6a642c94f946c34d735297dd, type: 3}
       propertyPath: m_Name
       value: AudioManager

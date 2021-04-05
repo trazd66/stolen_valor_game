@@ -57,6 +57,7 @@ namespace Game_Control{
             Destroy(laser_visual, 1.0f);
         }
 
+
         public void fire_laser(Vector3 position, bool is_enemy, Vector3 direction, float radius, float max_distance)
 
         {
@@ -90,7 +91,10 @@ namespace Game_Control{
             {
                 if (player_health_info.parry_ready)
                 {
+                    player_Controller.improve_attack_interval();
                     player_health_info.setParrySuccess(true);
+                }else if (player_Controller.get_curr_state == Player_State_Transition_Func.player_state.dodge){
+
                 }
                 else
                 {
@@ -98,8 +102,8 @@ namespace Game_Control{
                     player_health_info.setInvincible(0.5f);
 
                     player_Controller.apply_knockback(enemy1_Controller.get_knockback_direction(), 50);
+                    successful_hit = true;
                 }
-                successful_hit = true;
             }
             //create laser visual
             GameObject laser_visual = new GameObject();
@@ -170,18 +174,21 @@ namespace Game_Control{
                 Vector3 direction = (new Vector3(directions[i].x - positions[i].x, directions[i].y - positions[i].y, directions[i].z - positions[i].z)).normalized;
                 if (Physics.SphereCast(positions[i], 0.4f, direction, out hit, 100, LayerMask.GetMask("PlayerHitbox")))
                 {
-                    if (player_health_info.parry_ready)
-                    {
-                        player_health_info.setParrySuccess(true);
-                    }
-                    else
-                    {
-                        player_health_info.doDamage(50);
-                        player_health_info.setInvincible(0.5f);
+                if (player_health_info.parry_ready)
+                {
+                    player_Controller.improve_attack_interval();
+                    player_health_info.setParrySuccess(true);
+                }else if (player_Controller.get_curr_state == Player_State_Transition_Func.player_state.dodge){
 
-                        player_Controller.apply_knockback(enemy1_Controller.get_knockback_direction(), 50);
-                    }
+                }
+                else
+                {
+                    player_health_info.doDamage(50);
+                    player_health_info.setInvincible(0.5f);
+
+                    player_Controller.apply_knockback(enemy1_Controller.get_knockback_direction(), 50);
                     successful_hit = true;
+                }
                 }
                 //create laser visual
                 GameObject laser_visual = new GameObject();

@@ -47,9 +47,7 @@ public class Particle_system_controller : MonoBehaviour
 
     private IEnumerator _disable_obj_after_duration(string name, GameObject gameObject, float duration)
      {        
-         //Wait for 14 secs.
          yield return new WaitForSeconds(duration);
-         //Turn My game object that is set to false(off) to True(on).
          gameObject.SetActive(false);
          disabled_pool[name].Push(gameObject);
      }
