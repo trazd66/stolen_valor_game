@@ -134,8 +134,8 @@ namespace Game_Control
 
             skin_natural = skin_material.color;
 
-            AudioManager.instance.SetLoop("char_hoveridle", true);
-            AudioManager.instance.Play("char_hoveridle");
+            //AudioManager.instance.SetLoop("char_hoveridle", true);
+            //AudioManager.instance.Play("char_hoveridle");
 
         }
 

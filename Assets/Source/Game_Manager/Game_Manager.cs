@@ -60,8 +60,8 @@ public class Game_Manager : MonoBehaviour
 
         if(SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null){
             player_controller.enable_gameplay();
-            AudioManager.instance.SetLoop("leveltheme1_v2", true);
-            AudioManager.instance.Play("leveltheme1_v2");
+            //AudioManager.instance.SetLoop("leveltheme1_v2", true);
+            //AudioManager.instance.Play("leveltheme1_v2");
             manager_enabled = false;            
 
         }

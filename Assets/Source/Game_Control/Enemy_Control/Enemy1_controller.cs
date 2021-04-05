@@ -136,7 +136,7 @@ namespace Game_Control{
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.aim_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z),
+                        laser_manager.aim_laser(new Vector3(transform.position.x - 0.5f, transform.position.y + 1, transform.position.z),
                             laser_player_pos, 0.2f, 30f);
                     }
                 }
@@ -151,7 +151,7 @@ namespace Game_Control{
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), true,
+                        laser_manager.fire_laser(new Vector3(transform.position.x - 0.5f, transform.position.y + 1, transform.position.z), true,
                             laser_player_pos, 0.2f, 30f);
                     }
                 }
