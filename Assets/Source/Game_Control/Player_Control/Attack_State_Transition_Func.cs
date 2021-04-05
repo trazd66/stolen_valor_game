@@ -76,13 +76,15 @@ namespace Game_Control
                     //basic attack
                     if (atk == (int)Player_Input.PlayerInput.Attack)
                     {
-                        if (curr_state < (int)attack_state.attack_basic_3)
+                        if (curr_state < (int)attack_state.attack_basic_2)
                         {
                             update_state(curr_state + 1, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
-                        else if (curr_state == (int)attack_state.attack_basic_3)
+                        else if (curr_state == (int)attack_state.attack_basic_2)
                         {
                             update_state(curr_state + 1, strong_attack_interval, ref curr_state, ref prev_states, ref duration);
+                        }else{
+                            update_state((int)attack_state.attack_basic_0, basic_attack_interval, ref curr_state, ref prev_states, ref duration);
                         }
 
                     }

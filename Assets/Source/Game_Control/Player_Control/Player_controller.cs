@@ -366,6 +366,7 @@ namespace Game_Control
                 
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3){
                     initial_boost = true;
+                    delayed_boost = false;
                 }
                 
                 if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_special_0)
@@ -437,7 +438,7 @@ namespace Game_Control
             }
         }
 
-        public IEnumerator wait()
+        public IEnumerator wait_for_boost()
 
         {
             initial_boost = false;
@@ -474,12 +475,11 @@ namespace Game_Control
             }
              if (attack_controller.curr_state == (int)Attack_State_Transition_Func.attack_state.attack_basic_3){
                 if(initial_boost == true && delayed_boost == false){                
-                    StartCoroutine(wait());
+                    StartCoroutine(wait_for_boost());
                 }else
                 if(initial_boost == false && delayed_boost == true){
                     move += new Vector3(0, 1, 0) * 0.5f * Time.deltaTime * dodge_speed;
                 }else{
-                    initial_boost = false;
                     delayed_boost = false;
                 }
 
