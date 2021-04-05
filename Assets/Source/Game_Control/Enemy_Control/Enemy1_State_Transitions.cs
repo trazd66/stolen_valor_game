@@ -176,7 +176,7 @@ namespace Game_Control
                     if (rand < 1)
                     {
                         AudioManager.instance.Play("boss_hoveridle");
-                        update_state((int)enemy1_state.run_windup, 0.75f, ref curr_state, ref prev_states, ref duration);
+                        update_state((int)enemy1_state.run_windup, 1f, ref curr_state, ref prev_states, ref duration);
                     }
                     //perform stomp attack
                     else if (rand < 2)
@@ -255,14 +255,14 @@ namespace Game_Control
             }
             
             //boss has completed run attack to the right
-            else if (curr_state == (int)enemy1_state.run_attack_right && enemy1.transform.position.x == 4f)
+            else if (curr_state == (int)enemy1_state.run_attack_right && enemy1.transform.position.x == 8f)
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
                 state_changed = true;
             }
             //boss has completed run attack to the left
-            else if (curr_state == (int)enemy1_state.run_attack_left && enemy1.transform.position.x == -4f)
+            else if (curr_state == (int)enemy1_state.run_attack_left && enemy1.transform.position.x == -8f)
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");

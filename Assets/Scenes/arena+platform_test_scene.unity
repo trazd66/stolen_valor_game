@@ -837,9 +837,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 392230447, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 392230448, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.5
+      value: -9.5
       objectReference: {fileID: 0}
     - target: {fileID: 392230450, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_Enabled
@@ -849,9 +853,13 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 664f9e6876b15d3489086d343e3b422a, type: 2}
+    - target: {fileID: 1702468340, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1702468341, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.5
+      value: 9.5
       objectReference: {fileID: 0}
     - target: {fileID: 1702468343, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_Enabled
@@ -910,6 +918,18 @@ PrefabInstance:
       value: arena_with_collider
       objectReference: {fileID: 0}
     - target: {fileID: 1021550152449300650, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4922337473006008265, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7291895131917765136, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9212524441223108635, guid: 476266193cf2cd840bd8f4e11b8e0df6, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1777,6 +1797,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1136582173}
     - target: {fileID: 477298934347590669, guid: 08e9084f6c36ea34abbfd2e6b2d81c3b, type: 3}
+      propertyPath: laser_texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 4f22ebef4e68c0e45ae3172f5d500782, type: 3}
+    - target: {fileID: 477298934347590669, guid: 08e9084f6c36ea34abbfd2e6b2d81c3b, type: 3}
       propertyPath: boss_health_info
       value: 
       objectReference: {fileID: 565907007}
@@ -2174,6 +2198,14 @@ PrefabInstance:
       propertyPath: player_health_info
       value: 
       objectReference: {fileID: 249195719}
+    - target: {fileID: 1418950807671983238, guid: 8e95fde4db1392147ba4b2a74e89632f, type: 3}
+      propertyPath: max_health
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418950807671983238, guid: 8e95fde4db1392147ba4b2a74e89632f, type: 3}
+      propertyPath: curr_health
+      value: 3000
+      objectReference: {fileID: 0}
     - target: {fileID: 8589566346218904098, guid: 8e95fde4db1392147ba4b2a74e89632f, type: 3}
       propertyPath: m_Name
       value: Enemy1
@@ -2372,6 +2404,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 437468939235716419}
+    - target: {fileID: 2415967944056083682, guid: e68918871b0e15a47ae90da3dd4d9baf, type: 3}
+      propertyPath: maxDistance
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2415967944056083686, guid: e68918871b0e15a47ae90da3dd4d9baf, type: 3}
       propertyPath: m_Name
       value: Main Camera

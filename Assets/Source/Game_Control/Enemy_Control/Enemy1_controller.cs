@@ -29,8 +29,8 @@ namespace Game_Control{
         private Quaternion rot;
         private int phase = 1;
 
-        private float run_windup_speed = 1f;
-        private float run_attack_speed = 5f;
+        private float run_windup_speed = 2f;
+        private float run_attack_speed = 7.5f;
 
         private float stomp_windup_speed = 2f;
 
@@ -38,8 +38,10 @@ namespace Game_Control{
         private float stomp_charge_vertical_speed = 2.5f;
         private float stomp_attack_speed = 9.0f;
 
-        private Vector3[] laser_rain_positions = new Vector3[6];
-        private Vector3[] laser_rain_directions = new Vector3[6];
+        private Vector3[] laser_rain_positions = new Vector3[10];
+        private Vector3[] laser_rain_directions = new Vector3[10];
+
+        private Vector3 laser_player_pos;
 
         private Vector3 laser_rapid_position;
         private Vector3 laser_rapid_direction;
@@ -172,14 +174,18 @@ namespace Game_Control{
                 //call laser aim function if laser attack state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_charge)
                 {
+                    laser_player_pos = new Vector3(player.transform.position.x, player.transform.position.y + 0.5f, player.transform.position.z);
 
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z), 0.2f, 10f);
+                        
+                        laser_manager.aim_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), 
+                           laser_player_pos, 0.2f, 30f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.aim_laser(transform.position, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), 0.2f, 10f);
+                        laser_manager.aim_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z),
+                            laser_player_pos, 0.2f, 30f);
                     }
                 }
                 //call laser function if laser attack state is entered
@@ -188,18 +194,20 @@ namespace Game_Control{
 
                     if (transform.right.x >= 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x + 10, transform.position.y, transform.position.z), 0.2f, 10f);
+                        laser_manager.fire_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), true,
+                           laser_player_pos, 0.2f, 30f);
                     }
                     if (transform.right.x < 0)
                     {
-                        laser_manager.fire_laser(transform.position, true, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), 0.2f, 10f);
+                        laser_manager.fire_laser(new Vector3(transform.position.x + 0.5f, transform.position.y + 1, transform.position.z), true,
+                            laser_player_pos, 0.2f, 30f);
                     }
                 }
                 //call laser rain aim function of laser rain aim state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rain_charge)
                 {
-                    float x = -5f;
-                    for (int i = 0; i < 6; i++)
+                    float x = -9f;
+                    for (int i = 0; i < 10; i++)
                     {
                         float rand_x = (x - 0.5f) + (Random.value);
                         laser_rain_positions[i] = new Vector3(rand_x, 10, -0.558f);
@@ -241,23 +249,32 @@ namespace Game_Control{
             else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_windup)
             {
                 transform.Translate(Time.deltaTime * -run_windup_speed, 0, 0);
+
+                if (transform.position.x >= 9.5)
+                {
+                    transform.position = new Vector3(9.5f, transform.position.y, transform.position.z);
+                }
+                else if (transform.position.x <= -9.5)
+                {
+                    transform.position = new Vector3(-9.5f, transform.position.y, transform.position.z);
+                }
             }
             //enemy is running to the right
             else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_right)
             {
                 transform.Translate(Time.deltaTime * run_attack_speed, 0, 0);
-                if (transform.position.x >= 4)
+                if (transform.position.x >= 8)
                 {
-                    transform.position = new Vector3(4f, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(8f, transform.position.y, transform.position.z);
                 }
             }
             //enemy is running to the left
             else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.run_attack_left)
             {
                 transform.Translate(Time.deltaTime * run_attack_speed, 0, 0);
-                if (transform.position.x <= -4)
+                if (transform.position.x <= -8)
                 {
-                    transform.position = new Vector3(-4f, transform.position.y, transform.position.z);                  
+                    transform.position = new Vector3(-8f, transform.position.y, transform.position.z);                  
                 }
             }
             else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.stomp_windup)
@@ -272,13 +289,13 @@ namespace Game_Control{
                 {
                     transform.position = new Vector3(transform.position.x, 3f, transform.position.z);
                 }
-                if (transform.position.x >= 4.5f && transform.right.x > 0)
+                if (transform.position.x >= 8.5f && transform.right.x > 0)
                 {
-                    transform.position = new Vector3(4.5f, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(8.5f, transform.position.y, transform.position.z);
                 }
-                if (transform.position.x <= -4.5f && transform.right.x < 0)
+                if (transform.position.x <= -8.5f && transform.right.x < 0)
                 {
-                    transform.position = new Vector3(-4.5f, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(-8.5f, transform.position.y, transform.position.z);
                 }
 
             }
