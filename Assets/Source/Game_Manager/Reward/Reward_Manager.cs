@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Game_Control;
 
 public class Reward_Manager : MonoBehaviour
 {
+    public Player_controller player_Controller;
 
     private Collider col;
     private bool active = false;
@@ -23,7 +25,7 @@ public class Reward_Manager : MonoBehaviour
 
             if(cols.Length > 0)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                player_Controller.set_win();
             }
         }
     }

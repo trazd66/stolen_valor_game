@@ -49,6 +49,7 @@ namespace Game_Control
         private Vector3 _velocity;
 
         private bool pause_visual = true;
+        private bool control_visual = false;
 
         private float knockback_timer = 0f;
         private float knockback_speed = 0f;
@@ -64,6 +65,9 @@ namespace Game_Control
         public Cooldown_Manager cooldown_manager;
 
         public GameObject game_over;
+        public GameObject win_screen;
+
+        private bool win = false;
 
         public Collider[] AttackHitboxes;
 
@@ -111,6 +115,11 @@ namespace Game_Control
             {
                 return (Player_State_Transition_Func.player_state)state_controller.curr_state;
             }
+        }
+
+        public void set_win()
+        {
+            win = true;
         }
 
 
@@ -169,6 +178,18 @@ namespace Game_Control
 
             reload_scene_if_death();
 
+            if (win)
+            {
+                win_screen.SetActive(true);
+                AudioManager.instance.Stop("char_hoveridle");
+                if (Input.GetButtonDown("Jump"))
+                {
+                    Time.timeScale = 1f;
+                    Game_Manager.instance.setState(5);
+                }
+
+            }
+
             Player_Input.PlayerInput input = Player_controller_helper.getPlayerInput(ref combo_info, enable_attacks, enable_parry, enable_dodge, enable_laser);
 
             if (pause_manager.GetLaserPaused())
@@ -213,6 +234,26 @@ namespace Game_Control
                 {
                     pause_manager.ShowPause();
                     pause_visual = true;
+                }
+                else if(Input.GetButtonDown("Attack") && pause_visual && !control_visual)
+                {
+                    pause_manager.RemovePause();
+                    pause_manager.ShowControls();
+                    pause_visual = false;
+                    control_visual = true;
+                }
+                else if (Input.GetButtonDown("Attack") && control_visual && !pause_visual)
+                {
+                    pause_manager.RemoveControls();
+                    pause_manager.ShowPause();
+                    pause_visual = true;
+                    control_visual = false;
+                }
+                else if (Input.GetButtonDown("Dodge") && pause_visual)
+                {
+                    Time.timeScale = 1f;
+                    AudioManager.instance.Stop("char_hoveridle");
+                    Game_Manager.instance.setState(5);
                 }
                 return;
             }
@@ -399,7 +440,9 @@ namespace Game_Control
                 game_over.SetActive(true);
                 if (Input.GetButtonDown("Jump"))
                 {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                    Time.timeScale = 1f;
+                    AudioManager.instance.Stop("char_hoveridle");
+                    Game_Manager.instance.setState(5);
                 }
 
             }
@@ -419,7 +462,9 @@ namespace Game_Control
                 Debug.Log("unpause");
                 pause_manager.UnpauseGame();
                 pause_manager.RemovePause();
+                pause_manager.RemoveControls();
                 pause_visual = true;
+                control_visual = false;
                 Time.timeScale = 1f;
             }
         }

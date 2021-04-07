@@ -178,6 +178,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game_Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 6784190457592967752, guid: e7efba6fe9bcd194e9f0a315856adb1c, type: 3}
+      propertyPath: game_state
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6784190457592967752, guid: e7efba6fe9bcd194e9f0a315856adb1c, type: 3}
+      propertyPath: menu_scene_name
+      value: Main_menu
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7efba6fe9bcd194e9f0a315856adb1c, type: 3}
 --- !u!1 &1046764078

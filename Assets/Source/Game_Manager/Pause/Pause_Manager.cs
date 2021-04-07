@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Pause_Manager : MonoBehaviour
 {
     public GameObject pause_screen;
+    public GameObject control_screen;
     public GameObject laser_tutorial;
     public GameObject combo_tutorial;
 
@@ -21,6 +22,16 @@ public class Pause_Manager : MonoBehaviour
     public void RemovePause()
     {
         pause_screen.SetActive(false);
+    }
+
+    public void ShowControls()
+    {
+        control_screen.SetActive(true);
+    }
+
+    public void RemoveControls()
+    {
+        control_screen.SetActive(false);
     }
 
     public void PauseGame()

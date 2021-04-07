@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Game_Control;
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,12 +11,12 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(5);
+        Game_Manager.instance.setState(4);
     }
 
     public void PlayTutorial()
     {
-        SceneManager.LoadScene(1);
+        Game_Manager.instance.setState(0);
     }
 
     public void QuitGame()

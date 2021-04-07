@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class Game_Manager : MonoBehaviour
 {
 
+    public string menu_scene_name;
     public string tutorial1_scene_name;
     public string tutorial2_scene_name;
     public string tutorial3_scene_name;
@@ -22,6 +23,7 @@ public class Game_Manager : MonoBehaviour
     public int game_state;
 
     private bool manager_enabled;
+    private string prev_scene_name;
     void Start()
     {   
         instance = this;     
@@ -34,8 +36,9 @@ public class Game_Manager : MonoBehaviour
     {
         if(!manager_enabled) return;
 
-        
-        if(game_state == 0 && SceneManager.GetActiveScene().name != tutorial1_scene_name){
+        prev_scene_name = SceneManager.GetActiveScene().name;
+
+        if (game_state == 0 && SceneManager.GetActiveScene().name != tutorial1_scene_name){
             SceneManager.LoadScene(tutorial1_scene_name);
             manager_enabled = false;            
         }
@@ -58,12 +61,23 @@ public class Game_Manager : MonoBehaviour
 
         }
 
-        if(SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null){
+        if(game_state == 5 && SceneManager.GetActiveScene().name != menu_scene_name)
+        {
+            SceneManager.LoadScene(menu_scene_name);
+            manager_enabled = false;
+        }
+
+        if (SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null)
+        {
             player_controller.enable_gameplay();
             AudioManager.instance.SetLoop("leveltheme1_v2", true);
             AudioManager.instance.Play("leveltheme1_v2");
-            manager_enabled = false;            
-
+            manager_enabled = false;
+        }
+        else if (prev_scene_name != "Game_Init")
+        {
+            AudioManager.instance.Stop("leveltheme1_v2");
+            manager_enabled = false;
         }
 
         if(AudioManager.instance != null){
