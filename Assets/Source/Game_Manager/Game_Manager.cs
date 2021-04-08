@@ -28,6 +28,7 @@ public class Game_Manager : MonoBehaviour
 
     private bool on_fighting_scene;
     private bool game_over_screen_shown;
+    private bool dying_finished;
     
     void Start()
     {
@@ -39,6 +40,7 @@ public class Game_Manager : MonoBehaviour
             on_fighting_scene = true;
         }
         game_over_screen_shown = false;
+        dying_finished = false;
     }
 
 
@@ -52,7 +54,7 @@ public class Game_Manager : MonoBehaviour
                     game_over_screen_shown = true;
                     StartCoroutine(delayedDeath());
                 }
-                if (Input.GetButtonDown("Jump"))
+                if (Input.GetButtonDown("Jump") && dying_finished)
                 {
                     game_over_screen_shown = false;
                     AudioManager.instance.Stop("leveltheme1_v3");
@@ -169,8 +171,9 @@ public class Game_Manager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             Time.timeScale = 1;
             player_controller.game_over.SetActive(true);
- 
-        }
+            dying_finished = true;
+
+    }
 
     public void setState(int state)
     {
