@@ -60,3 +60,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 33831231364c9c746b19252f79d5a2bc, type: 3}
   - {fileID: 8300000, guid: 36339e448f61bef479c8c3b140f9e208, type: 3}
   - {fileID: 8300000, guid: f713445d1a03b044690ff65a19db1318, type: 3}
+  - {fileID: 8300000, guid: 25a1913cd80dbec4782cfd140da7604a, type: 3}
+  - {fileID: 8300000, guid: 323d26964c6543a499b7c2bad8bbabdb, type: 3}
+  - {fileID: 8300000, guid: fe4d16623829c004486b62bb33bfe995, type: 3}
+  Theme_vol: 0
+  SFX_vol: 0
