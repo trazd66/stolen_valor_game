@@ -22,6 +22,7 @@ namespace Game_Control{
         public Laser_Manager laser_manager;
         public Laser_Reward_Manager laser_reward_manager;
         public Reward_Manager reward_manager;
+        public Player_controller player_controller;
 
 
         private float lerpSpeed;
@@ -132,6 +133,7 @@ namespace Game_Control{
             {
                 phase = 2;
                 laser_reward_manager.placeReward();
+                player_controller.cannon.SetActive(true);
                 StartCoroutine(delayed_pulses());
             }
 

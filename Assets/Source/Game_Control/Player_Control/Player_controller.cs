@@ -58,7 +58,7 @@ namespace Game_Control
         public HealthInfo boss_health_info;
 
         public ComboInfo combo_info;
-
+        public GameObject cannon;
         public Laser_Manager laser_manager;
         public Pause_Manager pause_manager;
         public Cooldown_Manager cooldown_manager;
