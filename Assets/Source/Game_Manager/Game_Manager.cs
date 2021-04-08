@@ -14,6 +14,7 @@ public class Game_Manager : MonoBehaviour
     public string tutorial4_scene_name;
     public string main_game_scene_name;
 
+
     public float game_volume_theme = 0.1f;
     public float game_volume_SFX = 0.3f;
 
@@ -80,7 +81,20 @@ public class Game_Manager : MonoBehaviour
             manager_enabled = false;
         }
 
-        if(AudioManager.instance != null){
+        if (SceneManager.GetActiveScene().name == menu_scene_name && player_controller != null)
+        {
+            player_controller.enable_gameplay();
+            AudioManager.instance.SetLoop("leveltheme1_v2", true);
+            AudioManager.instance.Play("leveltheme1_v2");
+            manager_enabled = false;
+        }
+        else if (prev_scene_name != "Game_Init")
+        {
+            AudioManager.instance.Stop("leveltheme1_v2");
+            manager_enabled = false;
+        }
+
+        if (AudioManager.instance != null){
             //AudioManager.instance.SetThemeVolume(game_volume_theme);
             //AudioManager.instance.SetThemeVolume(game_volume_SFX);
         }

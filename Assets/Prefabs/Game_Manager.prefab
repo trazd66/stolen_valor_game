@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffb9c8c17435a4844946950b3c3f64e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menu_scene_name: Main_menu
   tutorial1_scene_name: action_tutorial_1
   tutorial2_scene_name: action_tutorial_2
   tutorial3_scene_name: action_tutorial_3
@@ -50,4 +51,5 @@ MonoBehaviour:
   main_game_scene_name: arena+platform_test_scene
   game_volume_theme: 0.1
   game_volume_SFX: 0.3
+  player_controller: {fileID: 0}
   game_state: 0
