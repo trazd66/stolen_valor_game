@@ -106,14 +106,14 @@ public class Game_Manager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null)
         {
             player_controller.enable_gameplay();
-            AudioManager.instance.SetLoop("leveltheme1_v2", true);
+            AudioManager.instance.SetLoop("leveltheme1_v3", true);
             AudioManager.instance.Stop("tutorial theme 2");
-            AudioManager.instance.Play("leveltheme1_v2");
+            AudioManager.instance.Play("leveltheme1_v3");
             manager_enabled = false;
         }
         else if (prev_scene_name != "Game_Init")
         {
-            AudioManager.instance.Stop("leveltheme1_v2");
+            AudioManager.instance.Stop("leveltheme1_v3");
             AudioManager.instance.Stop("leveltheme_phase2");
             manager_enabled = false;
         }
