@@ -51,6 +51,8 @@ namespace Game_Control
 
         private float stomp_attack_range = 2.5f;
 
+        private float stomp_count = 1;
+
 
         private int phase;
 
@@ -133,11 +135,11 @@ namespace Game_Control
             }
 
             //go back to idle after stomp attack
-            if (curr_state == (int)enemy1_state.stomp_attack && enemy1.transform.position.y == 0.66f)
-            {
-                update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
-                return true;
-            }
+            //if (curr_state == (int)enemy1_state.stomp_attack && enemy1.transform.position.y == 0.66f)
+            //{
+                //update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
+                //return true;
+            //}
 
             //boss is idle and has not attacked in three seconds
             if (curr_state == (int)enemy1_state.idle && duration <= 0)
@@ -146,7 +148,9 @@ namespace Game_Control
 
                 List<int> invalid_rolls = new List<int>();
 
-                if (!PlayerIsWithinRange(stomp_attack_range))
+                bool in_range = PlayerIsWithinRange(stomp_attack_range);
+
+                if (!in_range)
                 {
                     invalid_rolls.Add(1);
                 }
@@ -172,25 +176,41 @@ namespace Game_Control
                         }
                     }
 
-                    //perform run attack in appropriate direction
-                    if (rand < 1)
+                    if (in_range)
                     {
-                        AudioManager.instance.Play("boss_hoveridle");
-                        update_state((int)enemy1_state.run_windup, 1f, ref curr_state, ref prev_states, ref duration);
+                        if(rand < 1.13)
+                        {
+                            AudioManager.instance.Play("boss_hoveridle");
+                            update_state((int)enemy1_state.run_windup, 1f, ref curr_state, ref prev_states, ref duration);
+                        }
+                        else if(rand < 2.25)
+                        {
+                            AudioManager.instance.Play("boss_slam");
+                            update_state((int)enemy1_state.stomp_windup, 0.3f, ref curr_state, ref prev_states, ref duration);
+                            stomp_count = 1;
+                        }
+                        else
+                        {
+                            AudioManager.instance.Play("boss_chargeattk");
+                            update_state((int)enemy1_state.laser_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
+                        }
                     }
-                    //perform stomp attack
-                    else if (rand < 2)
+                    else //1 cannot be rolled in this case
                     {
-                        AudioManager.instance.Play("boss_slam");
-                        update_state((int)enemy1_state.stomp_windup, 0.3f, ref curr_state, ref prev_states, ref duration);
+                        //perform run attack in appropriate direction
+                        if (rand < 0.50)
+                        {
+                            AudioManager.instance.Play("boss_hoveridle");
+                            update_state((int)enemy1_state.run_windup, 1f, ref curr_state, ref prev_states, ref duration);
+                        }
+                        //perform laser attack
+                        else
+                        {
+                            AudioManager.instance.Play("boss_chargeattk");
+                            update_state((int)enemy1_state.laser_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
+                        }
                     }
-                    //perform laser attack
-                    else
-                    {
-                        AudioManager.instance.Play("boss_chargeattk");
-                        update_state((int)enemy1_state.laser_charge, 1.25f, ref curr_state, ref prev_states, ref duration);
-                        //Debug.Log("state changed 4");
-                    }
+                    
                     state_changed = true;
                 }
                 //select attack during phase 2
@@ -221,6 +241,7 @@ namespace Game_Control
                     {
                         AudioManager.instance.Play("boss_slam");
                         update_state((int)enemy1_state.stomp_windup, 0.3f, ref curr_state, ref prev_states, ref duration);
+                        stomp_count = (int)(Random.value * 3);
                         //Debug.Log("state changed 3");
                     }
                     //perform laser attack
@@ -333,7 +354,18 @@ namespace Game_Control
             //go back to idle after stomp attack
             else if (curr_state == (int)enemy1_state.stomp_attack && enemy1.transform.position.y == 0.66f)
             {
-                update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
+                stomp_count--;
+                if(stomp_count <= 0)
+                {
+                    Debug.Log("done stomp");
+                    update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
+                }
+                else
+                {
+                    Debug.Log("continue stomp");
+                    update_state((int)enemy1_state.stomp_charge, 0, ref curr_state, ref prev_states, ref duration);
+                }
+                
                 state_changed = true;
             }
 
