@@ -52,7 +52,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="name">song name</param>
     public void PlayOnce(string name)
     {
-        Debug.Log(name);
+        
         if (sound_dic.ContainsKey(name))
         {
             sound_dic[name].PlayOneShot(sound_dic[name].clip);
