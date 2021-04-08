@@ -33,7 +33,7 @@ public class AudioManager : MonoBehaviour
 
             audioSource.clip = ac;
             audioSource.loop = false;
-            audioSource.volume = 1f;
+            audioSource.volume = 0.5f;
             audioSource.playOnAwake = false;
             sound_dic.Add(ac.name,audioSource);
         }

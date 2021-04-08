@@ -81,16 +81,15 @@ public class Game_Manager : MonoBehaviour
             manager_enabled = false;
         }
 
-        if (SceneManager.GetActiveScene().name == menu_scene_name && player_controller != null)
+        if (SceneManager.GetActiveScene().name == menu_scene_name)
         {
-            player_controller.enable_gameplay();
-            AudioManager.instance.SetLoop("leveltheme1_v2", true);
-            AudioManager.instance.Play("leveltheme1_v2");
+            AudioManager.instance.SetLoop("leveltheme_menu", true);
+            AudioManager.instance.Play("leveltheme_menu");
             manager_enabled = false;
         }
         else if (prev_scene_name != "Game_Init")
         {
-            AudioManager.instance.Stop("leveltheme1_v2");
+            AudioManager.instance.Stop("leveltheme_menu");
             manager_enabled = false;
         }
 
