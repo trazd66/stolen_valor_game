@@ -200,7 +200,7 @@ namespace Game_Control
             float vertical_input = Input.GetAxis("Vertical");
             bool pause_input = Input.GetButtonDown("Pause");
 
-            reload_scene_if_death();
+            //reload_scene_if_death();
 
             if (win)
             {

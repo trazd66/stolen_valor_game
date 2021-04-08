@@ -26,14 +26,18 @@ public class Game_Manager : MonoBehaviour
     private bool manager_enabled;
     private string prev_scene_name;
 
-    public bool on_fighting_scene;
-    public bool game_over_screen_shown;
+    private bool on_fighting_scene;
+    private bool game_over_screen_shown;
     
     void Start()
     {
         instance = this;
         manager_enabled = true;
         on_fighting_scene = false;
+        if (SceneManager.GetActiveScene().name == main_game_scene_name)
+        {
+            on_fighting_scene = true;
+        }
         game_over_screen_shown = false;
     }
 
@@ -41,8 +45,8 @@ public class Game_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if(on_fighting_scene){
-            
             if(player_controller.player_health_info.is_dead){
                 if(!game_over_screen_shown){
                     game_over_screen_shown = true;
@@ -132,29 +136,28 @@ public class Game_Manager : MonoBehaviour
             AudioManager.instance.Play("leveltheme_tutorial");
             manager_enabled = false;
         }
-        else if (!SceneManager.GetActiveScene().name.Contains("tutorial"))
+        else if (!SceneManager.GetActiveScene().name.Contains("tutorial") && prev_scene_name != "Game_Init")
         {
             AudioManager.instance.Stop("leveltheme_tutorial");
             manager_enabled = false;
         }
 
-
     }
 
 
 
-        private void reload_scene_if_death()
-        {
+        //private void reload_scene_if_death()
+        //{
             //reset scene if player dies
-            if (player_controller.player_health_info.is_dead)
-            {
+            //if (player_controller.player_health_info.is_dead)
+            //{
                 
-                if (Input.GetButtonDown("Jump"))
-                {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                }
-            }
-        }
+                //if (Input.GetButtonDown("Jump"))
+                //{
+                    //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                //}
+            //}
+        //}
 
         public IEnumerator delayedDeath(){
 
