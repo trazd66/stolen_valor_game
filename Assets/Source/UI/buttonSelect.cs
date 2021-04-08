@@ -24,7 +24,6 @@ public class buttonSelect : MonoBehaviour
         if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && (c_inuse==false))
         {
             
-            Debug.Log("123123");
             if (is_in_play)
             {
                 start.Select();
