@@ -12,6 +12,8 @@ namespace Game_Control{
 
         public HealthInfo player_health_info;
         public HealthInfo boss_health_info;
+
+        public GameObject broken_particle;
         private HealthBarApi ui;
 
         public GameObject player;
@@ -114,8 +116,8 @@ namespace Game_Control{
                 laser_rapid_position = new Vector3(rand_x, 10f, -0.558f);
                 laser_rapid_direction = player.transform.position;
 
-                StartCoroutine(aim_laser_with_delay(laser_rapid_position, laser_rapid_direction, 0.5f, 30f,delay_in_between*i));
-                StartCoroutine(fire_laser_with_delay(laser_rapid_position, is_enemy, laser_rapid_direction, 0.5f, 30f,delay_in_between*i + 1.25f));
+                StartCoroutine(aim_laser_with_delay(laser_rapid_position, laser_rapid_direction, radius, 30f,delay_in_between*i));
+                StartCoroutine(fire_laser_with_delay(laser_rapid_position, is_enemy, laser_rapid_direction, radius, 30f,delay_in_between*i + 1.25f));
             }
         }
 
@@ -134,6 +136,7 @@ namespace Game_Control{
                 phase = 2;
                 laser_reward_manager.placeReward();
                 player_controller.cannon.SetActive(true);
+                broken_particle.SetActive(true);
                 StartCoroutine(delayed_pulses());
             }
 
@@ -218,7 +221,7 @@ namespace Game_Control{
 
                     }
 
-                    laser_manager.laser_rain_aim(laser_rain_positions, laser_rain_directions);
+                    laser_manager.laser_rain_aim(laser_rain_positions, laser_rain_directions, 0.4f);
                 }
                 //call laser rain attack function if laser rain aim state is entered
                 else if (state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rain_attack)
@@ -228,7 +231,7 @@ namespace Game_Control{
                 //call laser rapid aim function if laser rapid aim state is entered
                 else if((state_controller.curr_state == (int)Enemy1_State_Transition_Func.enemy1_state.laser_rapid_charge))
                 {
-                    laser_consecutive_fire(true, 0.2f, 10f, 3, 2.25f);
+                    laser_consecutive_fire(true, 0.4f, 10f, 3, 2.25f);
                 }
 
             }

@@ -57,8 +57,22 @@ namespace Game_Control{
             line_renderer.SetPosition(1, position + norm_direction * max_distance);
 
             line_renderer.widthMultiplier = radius;
-            Destroy(laser_visual, 1.0f);
+            StartCoroutine(laser_aim_delayed_animation(laser_visual,line_renderer,radius/(1.0f/0.05f)));
         }
+
+        public IEnumerator laser_aim_delayed_animation(GameObject laser_visual, LineRenderer laser_line_renderer, float radius_step)
+
+        {
+            
+            if(laser_line_renderer.widthMultiplier > 0){
+                laser_line_renderer.widthMultiplier-= radius_step;
+                yield return new WaitForSeconds(0.05f);
+                StartCoroutine(laser_aim_delayed_animation(laser_visual,laser_line_renderer,radius_step));
+            }else{
+                Destroy(laser_visual);
+            }            
+        }
+
 
 
         public void fire_laser(Vector3 position, bool is_enemy, Vector3 direction, float radius, float max_distance)
@@ -132,7 +146,7 @@ namespace Game_Control{
         }
 
 
-        public void laser_rain_aim(Vector3[] positions, Vector3[] directions)
+        public void laser_rain_aim(Vector3[] positions, Vector3[] directions, float radius)
         {
             for(int i = 0; i < positions.Length; i++)
             {
@@ -161,8 +175,8 @@ namespace Game_Control{
                 line_renderer.SetPosition(0, positions[i]);
                 line_renderer.SetPosition(1, directions[i]);
 
-                line_renderer.widthMultiplier = 0.5f;
-                Destroy(laser_visual, 1.50f);
+                line_renderer.widthMultiplier = radius;
+                StartCoroutine(laser_aim_delayed_animation(laser_visual,line_renderer,radius/(1.0f/0.05f)));
             }
         }
 
