@@ -110,6 +110,7 @@ public class Game_Manager : MonoBehaviour
         else if (prev_scene_name != "Game_Init")
         {
             AudioManager.instance.Stop("leveltheme1_v2");
+            AudioManager.instance.Stop("leveltheme_phase2");
             manager_enabled = false;
         }
 
@@ -125,9 +126,16 @@ public class Game_Manager : MonoBehaviour
             manager_enabled = false;
         }
 
-        if (AudioManager.instance != null){
-            //AudioManager.instance.SetThemeVolume(game_volume_theme);
-            //AudioManager.instance.SetThemeVolume(game_volume_SFX);
+        if(SceneManager.GetActiveScene().name == tutorial1_scene_name)
+        {
+            AudioManager.instance.SetLoop("leveltheme_tutorial", true);
+            AudioManager.instance.Play("leveltheme_tutorial");
+            manager_enabled = false;
+        }
+        else if (!SceneManager.GetActiveScene().name.Contains("tutorial"))
+        {
+            AudioManager.instance.Stop("leveltheme_tutorial");
+            manager_enabled = false;
         }
 
 

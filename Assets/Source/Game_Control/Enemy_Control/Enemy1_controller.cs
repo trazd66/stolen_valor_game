@@ -138,6 +138,9 @@ namespace Game_Control{
                 player_controller.cannon.SetActive(true);
                 broken_particle.SetActive(true);
                 StartCoroutine(delayed_pulses());
+                AudioManager.instance.Stop("leveltheme1_v2");
+                AudioManager.instance.SetLoop("leveltheme_phase2", true);
+                AudioManager.instance.Play("leveltheme_phase2");
             }
 
             state_controller.process_time();
