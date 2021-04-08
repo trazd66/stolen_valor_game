@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game_Control;
 
 public class Laser_Reward_Manager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Laser_Reward_Manager : MonoBehaviour
     public ComboInfo combo_info;
 
     public Pause_Manager pause_manager;
+    public Player_controller player_controller;
     public GameObject combo_meter;
 
     private Collider col;
@@ -35,6 +37,7 @@ public class Laser_Reward_Manager : MonoBehaviour
                 pause_manager.PauseLaser();
                 Time.timeScale = 0;
                 combo_meter.SetActive(true);
+                player_controller.cannon.SetActive(true);
                 Destroy(gameObject);
             }
         }

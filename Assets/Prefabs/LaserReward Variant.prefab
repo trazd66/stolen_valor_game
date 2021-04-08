@@ -120,6 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   combo_info: {fileID: 0}
   pause_manager: {fileID: 0}
+  player_controller: {fileID: 0}
   combo_meter: {fileID: 0}
 --- !u!1001 &1900546032242105189
 PrefabInstance:

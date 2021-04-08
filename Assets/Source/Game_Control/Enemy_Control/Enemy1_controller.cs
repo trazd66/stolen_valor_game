@@ -135,7 +135,6 @@ namespace Game_Control{
             {
                 phase = 2;
                 laser_reward_manager.placeReward();
-                player_controller.cannon.SetActive(true);
                 broken_particle.SetActive(true);
                 StartCoroutine(delayed_pulses());
                 AudioManager.instance.Stop("leveltheme1_v2");
