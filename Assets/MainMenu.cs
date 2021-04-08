@@ -7,8 +7,12 @@ using Game_Control;
 
 public class MainMenu : MonoBehaviour
 {
-
-
+    
+    // void Start()
+    // {
+    //     startButton.Select();
+    // }
+    
     public void PlayGame()
     {
         Game_Manager.instance.setState(4);
