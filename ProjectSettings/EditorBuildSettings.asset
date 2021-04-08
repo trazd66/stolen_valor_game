@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game_Init.unity
     guid: 38771f2e39865b34995e5879cdc0f133
   - enabled: 1
+    path: Assets/Scenes/Main_menu.unity
+    guid: 42897e0f30ffb954a911155adccfc702
+  - enabled: 1
     path: Assets/Scenes/action_tutorial_1.unity
     guid: 9a40132b7f521e840890718038df9790
   - enabled: 1
@@ -23,7 +26,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/arena+platform_test_scene.unity
     guid: 6cc56b04ca9a0f940aeb7978e30ac371
-  - enabled: 1
-    path: Assets/Scenes/Main_menu.unity
-    guid: 42897e0f30ffb954a911155adccfc702
   m_configObjects: {}
