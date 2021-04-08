@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class Game_Manager : MonoBehaviour
 {
 
+    public string menu_scene_name;
     public string tutorial1_scene_name;
     public string tutorial2_scene_name;
     public string tutorial3_scene_name;
@@ -22,9 +23,11 @@ public class Game_Manager : MonoBehaviour
     public int game_state;
 
     private bool manager_enabled;
-    private bool game_over_screen_shown;
+    private string prev_scene_name;
 
-    private bool on_fighting_scene;
+    public bool on_fighting_scene;
+    public bool game_over_screen_shown;
+    
     void Start()
     {
         instance = this;
@@ -55,9 +58,9 @@ public class Game_Manager : MonoBehaviour
 
         if (!manager_enabled) return;
 
+        prev_scene_name = SceneManager.GetActiveScene().name;
 
-        if (game_state == 0 && SceneManager.GetActiveScene().name != tutorial1_scene_name)
-        {
+        if (game_state == 0 && SceneManager.GetActiveScene().name != tutorial1_scene_name){
             SceneManager.LoadScene(tutorial1_scene_name);
             if (AudioManager.instance != null)
             {
@@ -89,6 +92,12 @@ public class Game_Manager : MonoBehaviour
 
         }
 
+        if(game_state == 5 && SceneManager.GetActiveScene().name != menu_scene_name)
+        {
+            SceneManager.LoadScene(menu_scene_name);
+            manager_enabled = false;
+        }
+
         if (SceneManager.GetActiveScene().name == main_game_scene_name && player_controller != null)
         {
             player_controller.enable_gameplay();
@@ -96,12 +105,16 @@ public class Game_Manager : MonoBehaviour
             AudioManager.instance.Stop("tutorial theme 2");
             AudioManager.instance.Play("leveltheme1_v2");
             manager_enabled = false;
-            on_fighting_scene = true;
         }
-        if (AudioManager.instance != null)
+        else if (prev_scene_name != "Game_Init")
         {
-            AudioManager.instance.SetThemeVolume(game_volume_theme);
-            AudioManager.instance.SetThemeVolume(game_volume_SFX);
+            AudioManager.instance.Stop("leveltheme1_v2");
+            manager_enabled = false;
+        }
+
+        if(AudioManager.instance != null){
+            //AudioManager.instance.SetThemeVolume(game_volume_theme);
+            //AudioManager.instance.SetThemeVolume(game_volume_SFX);
         }
 
 

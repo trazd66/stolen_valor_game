@@ -280,6 +280,7 @@ namespace Game_Control
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
+                AudioManager.instance.Stop("boss_hoveridle");
                 state_changed = true;
             }
             //boss has completed run attack to the left
@@ -287,6 +288,7 @@ namespace Game_Control
             {
                 update_state((int)enemy1_state.idle, idle_duration, ref curr_state, ref prev_states, ref duration);
                 //Debug.Log("state changed 0");
+                AudioManager.instance.Stop("boss_hoveridle");
                 state_changed = true;
             }
             //boss has completed front attack

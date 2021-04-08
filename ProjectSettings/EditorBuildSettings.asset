@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/arena+platform_test_scene.unity
     guid: 6cc56b04ca9a0f940aeb7978e30ac371
+  - enabled: 1
+    path: Assets/Scenes/Main_menu.unity
+    guid: 42897e0f30ffb954a911155adccfc702
   m_configObjects: {}
