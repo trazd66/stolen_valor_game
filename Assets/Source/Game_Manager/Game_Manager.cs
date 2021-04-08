@@ -55,6 +55,10 @@ public class Game_Manager : MonoBehaviour
                 if (Input.GetButtonDown("Jump"))
                 {
                     game_over_screen_shown = false;
+                    AudioManager.instance.Stop("leveltheme1_v3");
+                    AudioManager.instance.Stop("leveltheme_phase2");
+                    AudioManager.instance.SetLoop("leveltheme1_v3", true);
+                    AudioManager.instance.Play("leveltheme1_v3");
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
             }
