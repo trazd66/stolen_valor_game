@@ -18,8 +18,7 @@ public class Laser_Reward_Manager : MonoBehaviour
 
     void Start()
     {
-        gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.gray);
-        col = gameObject.GetComponent<Collider>();
+        col = gameObject.GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame

@@ -227,7 +227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6507670414685177365, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: m_Name
-      value: Player 1
+      value: Player 1 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6507670414685177375, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: m_RootOrder
@@ -296,6 +296,30 @@ PrefabInstance:
     - target: {fileID: 6655704993709682717, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
       propertyPath: m_TagString
       value: Player_Damage_Hitbox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703097796603237186, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703097796603237186, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899313267002200000, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466405605533330662, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466405605533330662, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631096151405473892, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f34f0ccf184bdce45af4596d693469f2, type: 3}
