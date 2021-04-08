@@ -3237,6 +3237,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4442455866315770227, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
+      propertyPath: curr_health
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 7303385614197080492, guid: db045cf6cd6160b45b99324d94d1e116, type: 3}
       propertyPath: boss_health_info
       value: 
